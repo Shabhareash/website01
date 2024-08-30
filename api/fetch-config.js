@@ -1,28 +1,18 @@
 import kv from '@vercel/kv';
 
 export default async function handler(req, res) {
+    // Set CORS headers
+    res.setHeader('Access-Control-Allow-Origin', 'https://amritacybernation.com');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+
+    // Handle OPTIONS method for preflight requests
+    if (req.method === 'OPTIONS') {
+        res.status(200).end();
+        return;
+    }
+
     try {
-        // Define allowed origin
-        const allowedOrigin = 'https://amritacybernation.com';
-
-        // Check if the request origin matches the allowed origin
-        if (req.headers.origin !== allowedOrigin) {
-            res.status(403).json({ error: 'Forbidden' });
-            return;
-        }
-
-        // Add CORS headers to the response
-        res.setHeader('Access-Control-Allow-Origin', allowedOrigin);
-        res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
-        res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-
-        // Handle preflight OPTIONS request
-        if (req.method === 'OPTIONS') {
-            res.status(204).end();
-            return;
-        }
-
-        // Fetch Firebase configuration
         const firebaseConfig = {
             apiKey: await kv.get("FIREBASE_API_KEY"),
             authDomain: await kv.get("FIREBASE_AUTH_DOMAIN"),
@@ -39,4 +29,3 @@ export default async function handler(req, res) {
         res.status(500).json({ error: 'Failed to fetch Firebase configuration' });
     }
 }
-
