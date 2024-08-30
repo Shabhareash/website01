@@ -531,7 +531,6 @@ function resizeAndUploadImage(file) {
     };
     reader.readAsDataURL(file);
 }
-
 function uploadToFirebaseStorage(blob) {
     if (!firebase.apps.length) {
         console.error('Firebase is not initialized');
@@ -543,28 +542,33 @@ function uploadToFirebaseStorage(blob) {
     const filename = `payment_screenshots/${Date.now()}_${Math.random().toString(36).substring(7)}.jpg`;
     const fileRef = storageRef.child(filename);
 
-    fileRef.put(blob).then((snapshot) => {
-        console.log('Uploaded a blob or file!');
-        return snapshot.ref.getDownloadURL();
-    }).then((downloadURL) => {
-        console.log('File available at', downloadURL);
-        return updateFirebaseDocument({ 
-            screenshotUrl: downloadURL,
-            registrationComplete: true,
-            timestamp: firebase.firestore.FieldValue.serverTimestamp()
+    fileRef.put(blob)
+        .then((snapshot) => {
+            console.log('Uploaded a blob or file!');
+            return snapshot.ref.getDownloadURL();  // return the download URL
+        })
+        .then((downloadURL) => {  // correctly pass downloadURL to next .then block
+            console.log('File available at', downloadURL);
+            return updateFirebaseDocument({ 
+                screenshotUrl: downloadURL,
+                registrationComplete: true,
+                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            }).then(() => downloadURL);  // Pass downloadURL further down the promise chain
+        })
+        .then((downloadURL) => {  // receive downloadURL again here
+            alert('File uploaded successfully!');
+            return generatePDF(downloadURL, registrationDocRef.id);  // pass downloadURL to generatePDF
+        })
+        .then(() => {
+            // Redirect to events page after PDF generation
+            window.location.href = 'events.html?registration=success';
+        })
+        .catch((error) => {
+            console.error("Error code:", error.code);
+            console.error("Error message:", error.message);
+            console.error("Full error:", error);
+            alert(`Error uploading file: ${error.message}`);
         });
-    }).then(() => {
-        alert('File uploaded successfully!');
-        return generatePDF(screenshotUrl, registrationDocRef.id);
-    }).then(() => {
-        // Redirect to events page after PDF generation
-        window.location.href = 'events.html?registration=success';
-    }).catch((error) => {
-        console.error("Error code:", error.code);
-        console.error("Error message:", error.message);
-        console.error("Full error:", error);
-        alert(`Error uploading file: ${error.message}`);
-    });
 }
 
 function generatePDF(screenshotUrl, registrationId) {
@@ -592,6 +596,7 @@ function generatePDF(screenshotUrl, registrationId) {
         }
     });
 }
+
 // UPI QR code generation
 const upiId = "saranya.gopu7-1@okhdfcbank";
 const name = "ACN";
