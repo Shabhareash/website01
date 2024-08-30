@@ -40,7 +40,7 @@ async function initializeApp() {
         const config2 = await getFirebaseConfig(token, 'firebase-config?configType=config1');
         const app1 = firebase.initializeApp(config2, "app1");
         db1 = app1.firestore();
-        auth1 = app1.auth();
+        auth1 = app1.auth();  // Ensure auth1 is properly initialized
 
         console.log("Both Firebase apps initialized successfully");
 
