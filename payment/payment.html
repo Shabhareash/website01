@@ -328,15 +328,18 @@ const teamMembers = [];
 let registrationDocRef = null;
 
 const events = {
-    "event1": { name: "Gaming Fusion 4.0", price: 50, maxTeamSize: 4 },
-    "event2": { name: "Crypto Shield", price: 75, maxTeamSize: 2 },
-    "event3": { name: "ACN CTF 24", price: 100, maxTeamSize: 4 },
-    "event4": { name: "FIC 2", price: 80, maxTeamSize: 1 },
-    "event5": { name: "Ideathon", price: 60, maxTeamSize: 4 },
-    "event6": { name: "Juegoswag", price: 70, maxTeamSize: 2 },
-    "event7": { name: "morphX", price: 90, maxTeamSize: 1 },
-    "event8": { name: "MalQuest", price: 85, maxTeamSize: 2 },
-    "event9": { name: "Cyber Diplomacy Summit", price: 110, maxTeamSize: 1 }
+    "event1": { name: "Gaming Fusion 4.0-Valorant", price: 250, maxTeamSize: 5 },
+    "event2": { name: "Gaming Fusion 4.0-COD-Mobile", price: 250, maxTeamSize: 4 },
+    "event3": { name: "Gaming Fusion 4.0-Clash-Of-Clans", price: 250, maxTeamSize: 5 },
+    "event4": { name: "Gaming Fusion 4.0-BGMI", price: 200, maxTeamSize: 4 },
+    "event5": { name: "Gaming Fusion 4.0-FIFA", price: 100, maxTeamSize: 1 },
+    "event6": { name: "ACN CTF 24", price: 200, maxTeamSize: 4 },
+    "event7": { name: "Forensic Files", price: 200, maxTeamSize: 4 },
+    "event8": { name: "IdeAte", price: 100, maxTeamSize: 2 },
+    "event9": { name: "Gameathon", price: 150, maxTeamSize: 3 },
+    "event10": { name: "morphX", price: 150, maxTeamSize: 2 },
+    "event11": { name: "MalQuest", price: 100, maxTeamSize: 2 },
+    "event12": { name: "Forensic Triage Forum", price: 100, maxTeamSize: 2 }
 };
 
 function updateTeamMembers() {
@@ -431,7 +434,7 @@ function updatePaymentAmount() {
     if (eventSelect.value && teamSizeSelect.value) {
         const eventPrice = events[eventSelect.value].price;
         const teamSize = parseInt(teamSizeSelect.value);
-        const totalAmount = eventPrice * teamSize;
+        const totalAmount = eventPrice;
         paymentAmountSpan.textContent = totalAmount;
         updateUPIQRCode(totalAmount);
     } else {
