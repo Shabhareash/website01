@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Registration Form</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-storage.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+<style>
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
+:root {
+    --primary-color: #b22049;
+    --primary-light: #d4436d;
+    --primary-dark: #8c1a3a;
+    --white: #ffffff;
+    --light-gray: #f4f4f4;
+    --dark-gray: #333333;
+    --transition: all 0.3s ease-in-out;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    line-height: 1.6;
+    background-color: var(--light-gray);
+    color: var(--dark-gray);
+}
+
+.container {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background-color: var(--white);
+    border-radius: 10px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    transition: var(--transition);
+    position: relative;
+}
+
+.container:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+}
+
+h1, h2 {
+    color: var(--primary-color);
+    text-align: center;
+    margin-bottom: 1.5rem;
+    position: relative;
+}
+
+h1::after, h2::after {
+    content: '';
+    display: block;
+    width: 50px;
+    height: 3px;
+    background-color: var(--primary-color);
+    margin: 0.5rem auto;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+label {
+    margin-top: 1rem;
+    font-weight: 600;
+    color: var(--primary-dark);
+}
+
+input, select {
+    margin-bottom: 1rem;
+    padding: 0.8rem;
+    border: 2px solid var(--light-gray);
+    border-radius: 5px;
+    font-size: 1rem;
+    transition: var(--transition);
+}
+
+input:focus, select:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px rgba(178, 32, 73, 0.2);
+}
+
+button {
+    background-color: var(--primary-color);
+    color: var(--white);
+    padding: 1rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: var(--transition);
+    margin-top: 1rem;
+}
+
+button:hover {
+    background-color: var(--primary-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(178, 32, 73, 0.3);
+}
+
+.hidden {
+    display: none;
+}
+
+.pay {
+    text-align: center;
+    margin-top: 2rem;
+}
+
+#upi-qr {
+    width: 200px;
+    height: 200px;
+    margin: 1rem auto;
+    border-radius: 10px;
+    transition: var(--transition);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+#upi-qr:hover {
+    transform: scale(1.05);
+    box-shadow: 0 10px 25px rgba(178, 32, 73, 0.2);
+}
+
+#paymentAmount {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--primary-color);
+}
+
+#teamMembersContainer {
+    border: 2px solid var(--light-gray);
+    border-radius: 5px;
+    padding: 1rem;
+    margin-top: 1rem;
+    transition: var(--transition);
+}
+
+#teamMembersContainer:focus-within {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px rgba(178, 32, 73, 0.2);
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+#page1, #page2, #page3 {
+    animation: fadeIn 0.5s ease-out;
+}
+
+.nav-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 2rem;
+    color: var(--primary-color);
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.nav-arrow:hover {
+    color: var(--primary-dark);
+}
+
+.nav-arrow.left {
+    left: 1rem;
+}
+
+.nav-arrow.right {
+    right: 1rem;
+}
+
+@media (max-width: 600px) {
+    .container {
+        padding: 1rem;
+        margin: 1rem;
+    }
+
+    input, select, button {
+        font-size: 0.9rem;
+    }
+
+    .nav-arrow {
+        font-size: 1.5rem;
+    }
+}
+
+</style>
+</head>
+<body>
+    <div id="arrow">
+        <i class="fas fa-arrow-left nav-arrow left" onclick="prevPage()"></i>
+    </div>
+    <div class="container">
+        <h1>Event Registration</h1>
+        <div id="page1">
+            <form id="basicInfoForm">
+                <label for="name">Name:</label>
+                <input type="text" id="name" required>
+
+                <label for="email">Email:</label>
+                <input type="email" id="email" required>
+
+                <label for="event">Select Event:</label>
+                <select id="event" required onchange="updateEventInfo()">
+                    <option value="">Choose an event</option>
+                    <option value="event1">Gaming Fusion 4.0</option>
+                    <option value="event2">Crypto Shield</option>
+                    <option value="event3">ACN CTF 24</option>
+                    <option value="event4">FIC 2</option>
+                    <option value="event5">Ideathon</option>
+                    <option value="event6">Juegoswag</option>
+                    <option value="event7">morphX</option>
+                    <option value="event8">MalQuest</option>
+                    <option value="event9">Cyber Diplomacy Summit</option>
+                </select>
+                <p id="eventInfo" style="display: none;"></p>
+
+                <label for="teamSize">Number of Team Members:</label>
+                <select id="teamSize" required onchange="updateTeamMembers()">
+                    <option value="">Select team size</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                </select>
+
+                <div id="teamMembersContainer"></div>
+
+                <button type="button" onclick="nextPage()">Next</button>
+            </form>
+        </div>
+
+        <!-- Page 2: Payment -->
+        <div id="page2" class="hidden">
+            <h2>Payment Information</h2>
+            <p>Please make a payment of ₹<span id="paymentAmount">0</span> to complete your registration.</p>
+            <div class="pay">
+                <h1>Scan to Pay</h1>
+                <a id="upi-link" target="_blank">
+                    <div id="upi-qr"></div>
+                </a>
+            </div>
+            <button type="button" onclick="nextPage(3)">I've made the payment</button>
+        </div>
+
+        <!-- Page 3: Transaction Details -->
+        <div id="page3" class="hidden">
+            <form id="screenshotForm">
+                <label for="screenshot">Upload Payment Screenshot:</label>
+                <input type="file" id="screenshot" accept="image/*" required>
+                <div id="preview"></div>
+                <button type="button" onclick="submitForm()">Submit</button>
+            </form>
+        </div>
+    </div>
+
+<script>
+
+
+async function fetchFirebaseConfig() {
+  try {
+    const response = await fetch('/api/getFirebaseConfig');
+    console.log('Fetching Firebase config from:', '/api/getFirebaseConfig'); // Debugging line
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    const config = await response.json();
+    console.log('Firebase config fetched successfully:', config); // Debugging line
+    return config;
+  } catch (error) {
+    console.error('Error fetching Firebase config:', error);
+    throw error;
+  }
+}
+
+let db;
+
+async function initializeFirebase() {
+  try {
+    const firebaseConfig = await fetchFirebaseConfig();
+    if (!firebaseConfig) {
+      throw new Error('Firebase configuration is missing');
+    }
+    firebase.initializeApp(firebaseConfig);
+    console.log('Firebase initialized successfully');
+    
+    // Initialize Firestore
+    db = firebase.firestore();
+    console.log('Firestore initialized successfully');
+  } catch (error) {
+    console.error('Failed to initialize Firebase:', error);
+    alert('Failed to initialize Firebase. Please try again later.');
+  }
+}
+
+// Call the function to initialize Firebase
+initializeFirebase();
+    
+let currentPage = 1;
+const totalPages = 3;
+const teamMembers = [];
+let registrationDocRef = null;
+
+// Event details
+const events = {
+    "event1": { name: "Gaming Fusion 4.0", price: 50, maxTeamSize: 4 },
+    "event2": { name: "Crypto Shield", price: 75, maxTeamSize: 2 },
+    "event3": { name: "ACN CTF 24", price: 100, maxTeamSize: 4 },
+    "event4": { name: "FIC 2", price: 80, maxTeamSize: 1 },
+    "event5": { name: "Ideathon", price: 60, maxTeamSize: 4 },
+    "event6": { name: "Juegoswag", price: 70, maxTeamSize: 2 },
+    "event7": { name: "morphX", price: 90, maxTeamSize: 1 },
+    "event8": { name: "MalQuest", price: 85, maxTeamSize: 2 },
+    "event9": { name: "Cyber Diplomacy Summit", price: 110, maxTeamSize: 1 }
+};
+
+function updateTeamMembers() {
+    const container = document.getElementById('teamMembersContainer');
+    container.innerHTML = '';
+    const teamSize = parseInt(document.getElementById('teamSize').value);
+    for (let i = 1; i <= teamSize; i++) {
+        container.innerHTML += `
+            <label for="teamMember${i}">Team Member ${i} Name:</label>
+            <input type="text" id="teamMember${i}" required>
+        `;
+    }
+    updatePaymentAmount();
+}
+
+function validateBasicInfo() {
+    const form = document.getElementById('basicInfoForm');
+    if (!form.checkValidity()) {
+        alert('Please fill out all required fields.');
+        return false;
+    }
+
+    const teamSize = parseInt(document.getElementById('teamSize').value);
+    if (isNaN(teamSize) || teamSize < 1) {
+        alert('Please select a valid team size.');
+        return false;
+    }
+
+    teamMembers.length = 0;
+    for (let i = 1; i <= teamSize; i++) {
+        const memberInput = document.getElementById(`teamMember${i}`);
+        if (!memberInput) {
+            alert(`Team member input fields are missing. Please select the team size again.`);
+            return false;
+        }
+        const memberName = memberInput.value.trim();
+        if (!memberName) {
+            alert(`Please enter a name for Team Member ${i}`);
+            return false;
+        }
+        teamMembers.push(memberName);
+    }
+    updateFirebaseDocument({ teamMembers: teamMembers });
+    return true;
+}
+
+function nextPage() {
+    if (currentPage < totalPages) {
+        if (currentPage === 1 && !validateBasicInfo()) return;
+        document.getElementById(`page${currentPage}`).classList.add('hidden');
+        currentPage++;
+        document.getElementById(`page${currentPage}`).classList.remove('hidden');
+        if (currentPage === 2) {
+            updatePaymentAmount();
+        }
+    }
+}
+function updateEventInfo() {
+    const eventSelect = document.getElementById('event');
+    const eventInfo = document.getElementById('eventInfo');
+    const teamSizeSelect = document.getElementById('teamSize');
+    
+    if (eventSelect.value) {
+        const selectedEvent = events[eventSelect.value];
+        eventInfo.textContent = `Event: ${selectedEvent.name}, Price: ₹${selectedEvent.price}, Max Team Size: ${selectedEvent.maxTeamSize}`;
+        eventInfo.style.display = 'block';
+        
+        // Update team size options based on max team size for the event
+        teamSizeSelect.innerHTML = '';
+        for (let i = 1; i <= selectedEvent.maxTeamSize; i++) {
+            const option = document.createElement('option');
+            option.value = i;
+            option.textContent = i;
+            teamSizeSelect.appendChild(option);
+        }
+    } else {
+        eventInfo.style.display = 'none';
+        teamSizeSelect.innerHTML = '<option value="">Select team size</option>';
+    }
+    
+    updateTeamMembers();
+    updatePaymentAmount();
+}
+
+
+
+function updatePaymentAmount() {
+    const eventSelect = document.getElementById('event');
+    const teamSizeSelect = document.getElementById('teamSize');
+    const paymentAmountSpan = document.getElementById('paymentAmount');
+    
+    if (eventSelect.value && teamSizeSelect.value) {
+        const eventPrice = events[eventSelect.value].price;
+        const teamSize = parseInt(teamSizeSelect.value);
+        const totalAmount = eventPrice * teamSize;
+        paymentAmountSpan.textContent = totalAmount;
+        updateUPIQRCode(totalAmount);
+    } else {
+        paymentAmountSpan.textContent = '0';
+        updateUPIQRCode(0);
+    }
+}
+
+
+
+function prevPage() {
+    if (currentPage > 1) {
+        document.getElementById(`page${currentPage}`).classList.add('hidden');
+        currentPage--;
+        document.getElementById(`page${currentPage}`).classList.remove('hidden');
+    }
+}
+
+function updateFirebaseDocument(data) {
+    if (!db) {
+        console.error('Firestore is not initialized');
+        return;
+    }
+
+    if (registrationDocRef) {
+        registrationDocRef.update(data)
+            .then(() => console.log("Document successfully updated"))
+            .catch((error) => console.error("Error updating document: ", error));
+    } else {
+        db.collection("registrations").add(data)
+            .then((docRef) => {
+                console.log("Document written with ID: ", docRef.id);
+                registrationDocRef = docRef;
+            })
+            .catch((error) => console.error("Error adding document: ", error));
+    }
+}
+
+
+function submitForm() {
+    const screenshot = document.getElementById('screenshot').files[0];
+
+    if (!screenshot) {
+        alert('Please upload a screenshot of your payment.');
+        return;
+    }
+
+    resizeAndUploadImage(screenshot);
+}
+
+function resizeAndUploadImage(file) {
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        const img = new Image();
+        img.onload = function() {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+
+            let width = img.width;
+            let height = img.height;
+            const maxWidth = 800;
+            const maxHeight = 600;
+
+            if (width > height) {
+                if (width > maxWidth) {
+                    height *= maxWidth / width;
+                    width = maxWidth;
+                }
+            } else {
+                if (height > maxHeight) {
+                    width *= maxHeight / height;
+                    height = maxHeight;
+                }
+            }
+
+            canvas.width = width;
+            canvas.height = height;
+
+            ctx.drawImage(img, 0, 0, width, height);
+
+            canvas.toBlob(function(blob) {
+                uploadToFirebaseStorage(blob);
+            }, 'image/jpeg', 0.7);
+        };
+        img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+}
+
+function uploadToFirebaseStorage(blob) {
+    const storageRef = firebase.storage().ref();
+    const filename = `payment_screenshots/${registrationDocRef.id}.jpg`;
+    const fileRef = storageRef.child(filename);
+
+    fileRef.put(blob).then((snapshot) => {
+        console.log('Uploaded a blob or file!');
+        snapshot.ref.getDownloadURL().then((downloadURL) => {
+            console.log('File available at', downloadURL);
+            updateFirebaseDocument({ 
+                screenshotUrl: downloadURL,
+                registrationComplete: true,
+                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            });
+            generatePDF(downloadURL, registrationDocRef.id);
+        });
+    }).catch((error) => {
+        console.error("Error uploading file: ", error);
+        alert("Error uploading file. Please try again.");
+    });
+}
+
+function generatePDF(screenshotUrl, registrationId) {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+
+    doc.text('Event Registration Report', 10, 10);
+    doc.text(`Registration ID: ${registrationId}`, 10, 20);
+    doc.text(`Name: ${document.getElementById('name').value}`, 10, 30);
+    doc.text(`Email: ${document.getElementById('email').value}`, 10, 40);
+    doc.text(`Event: ${events[document.getElementById('event').value].name}`, 10, 50);
+    doc.text(`Team Size: ${document.getElementById('teamSize').value}`, 10, 60);
+    doc.text(`Payment Amount: ₹${document.getElementById('paymentAmount').textContent}`, 10, 70);
+    doc.text(`Screenshot URL: ${screenshotUrl}`, 10, 80);
+
+    doc.save('event_registration_report.pdf');
+
+    alert('Registration complete! Your report has been generated and downloaded.');
+}
+
+// UPI QR code generation
+const upiId = "aravindpradeep7046@okhdfcbank";
+const name = "ACN";
+const transactionNote = "Payment for Event Registration";
+
+function updateUPIQRCode(amount) {
+    const upiUrl = `upi://pay?pa=${upiId}&pn=${name}&am=${amount}&cu=INR&tn=${transactionNote}`;
+
+    // Clear previous QR code
+    document.getElementById("upi-qr").innerHTML = '';
+
+    // Generate new QR code
+    new QRCode(document.getElementById("upi-qr"), {
+        text: upiUrl,
+        width: 200,
+        height: 200,
+        colorDark: "#000000",
+        colorLight: "#ffffff",
+        correctLevel: QRCode.CorrectLevel.H
+    });
+
+    // Update UPI link
+    document.getElementById("upi-link").href = upiUrl;
+}
+document.addEventListener('DOMContentLoaded', function() {
+    document.getElementById('screenshot').addEventListener('change', function(event) {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const preview = document.getElementById('preview');
+                preview.innerHTML = `<img src="${e.target.result}" style="max-width: 100%; max-height: 200px;">`;
+            }
+            reader.readAsDataURL(file);
+        }
+    });
+});
+// Add event listeners
+document.addEventListener('DOMContentLoaded', function() {
+    document.getElementById('event').addEventListener('change', updateEventInfo);
+    document.getElementById('teamSize').addEventListener('change', updateTeamMembers);
+    
+    // Add listeners for all input fields
+    document.querySelectorAll('input, select').forEach(input => {
+        input.addEventListener('change', function() {
+            const data = {
+                [this.id]: this.value,
+                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            };
+            updateFirebaseDocument(data);
+        });
+    });
+});
+</script>
+</body>
+</html>
