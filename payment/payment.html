@@ -276,47 +276,58 @@ button:hover {
     </div>
 
 <script>
-
-
-async function fetchFirebaseConfig() {
-  try {
-    const response = await fetch('/api/firebase-config');
-    console.log('Fetching Firebase config from:', '/api/firbase-config'); // Debugging line
+async function getToken() {
+    const response = await fetch('http://localhost:3000/api/get-token', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    });
     if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
+        throw new Error(`HTTP error! status: ${response.status}`);
     }
-    const config = await response.json();
-    console.log('Firebase config fetched successfully:', config); // Debugging line
-    return config;
-  } catch (error) {
-    console.error('Error fetching Firebase config:', error);
-    throw error;
-  }
+    const data = await response.json();
+    console.log('Token:', data.token); // Logging the token
+    return data.token;
 }
 
-let db;
-
-async function initializeFirebase() {
-  try {
-    const firebaseConfig = await fetchFirebaseConfig();
-    if (!firebaseConfig) {
-      throw new Error('Firebase configuration is missing');
+async function getFirebaseConfig(token) {
+    const response = await fetch('http://localhost:3000/api/firebase-config', {
+        headers: {
+            'Authorization': token
+        }
+    });
+    if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
     }
-    firebase.initializeApp(firebaseConfig);
-    console.log('Firebase initialized successfully');
-    
-    // Initialize Firestore
-    db = firebase.firestore();
-    console.log('Firestore initialized successfully');
-  } catch (error) {
-    console.error('Failed to initialize Firebase:', error);
-    alert('Failed to initialize Firebase. Please try again later.');
-  }
+    return await response.json();
 }
 
-// Call the function to initialize Firebase
-initializeFirebase();
-    
+let db; // Declare db in the global scope
+
+async function initializeApp() {
+    try {
+        const token = await getToken();
+        const config = await getFirebaseConfig(token);
+        // Initialize Firebase with the config
+        firebase.initializeApp(config);
+        
+        // Initialize Firestore
+        db = firebase.firestore();
+        
+        console.log("Firebase and Firestore initialized successfully");
+    } catch (error) {
+        console.error("Error initializing app:", error);
+    }
+}
+
+// Usage:
+initializeApp();
+
+// Now you can use db in your functions, for example:
+function updateFirebaseDocument(collection, document, data) {
+    return db.collection(collection).doc(document).set(data, { merge: true });
+}
 let currentPage = 1;
 const totalPages = 3;
 const teamMembers = [];
