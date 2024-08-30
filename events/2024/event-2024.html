@@ -705,97 +705,106 @@
       })
     </script>
 
-    <script>
-      document.addEventListener('DOMContentLoaded', () => {
-        const profileCircle = document.getElementById('profileCircle');
-        const profileDropdown = document.getElementById('profileDropdown');
-        const profileImage = document.getElementById('profileImage');
-        const userName = document.getElementById('userName');
-        const userEmail = document.getElementById('userEmail');
-        const purchaseList = document.getElementById('purchaseList');
-        const loginButton = document.getElementById('loginButton');
-        const logoutButton = document.getElementById('logoutButton');
-        const closeButton = document.getElementById('closeButton');
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const profileCircle = document.getElementById('profileCircle');
+    const profileDropdown = document.getElementById('profileDropdown');
+    const profileImage = document.getElementById('profileImage');
+    const userName = document.getElementById('userName');
+    const userEmail = document.getElementById('userEmail');
+    const purchaseList = document.getElementById('purchaseList');
+    const loginButton = document.getElementById('loginButton');
+    const logoutButton = document.getElementById('logoutButton');
+    const closeButton = document.getElementById('closeButton');
 
-        profileCircle.addEventListener('click', () => {
-          profileDropdown.style.display = profileDropdown.style.display === 'none' ? 'block' : 'none';
-        });
-        closeButton.addEventListener('click', () => {
-          profileDropdown.style.display = 'none';
-        });
+    profileCircle.addEventListener('click', () => {
+      profileDropdown.style.display = profileDropdown.style.display === 'none' ? 'block' : 'none';
+    });
 
-        loginButton.addEventListener('click', () => {
-          const provider = new firebase.auth.GoogleAuthProvider();
-          auth1.signInWithPopup(provider)
-            .catch((error) => {
-              console.error('Error during login:', error);
-            });
-        });
+    closeButton.addEventListener('click', () => {
+      profileDropdown.style.display = 'none';
+    });
 
-        // Handle logout
-        logoutButton.addEventListener('click', () => {
-          auth1.signOut().then(() => {
+    loginButton.addEventListener('click', () => {
+      const provider = new firebase.auth.GoogleAuthProvider();
+      auth1.signInWithPopup(provider)
+        .then((result) => {
+          const user = result.user;
+          updateProfileInfo(user);
+          fetchPurchaseHistory(user.email);
+        })
+        .catch((error) => {
+          console.error('Error during login:', error);
+        });
+    });
+
+    logoutButton.addEventListener('click', () => {
+      auth1.signOut().then(() => {
+        resetProfileInfo();
+      }).catch((error) => {
+        console.error('Error logging out:', error);
+      });
+    });
+
+    document.addEventListener('firebaseInitialized', () => {
+      if (auth1) {
+        auth1.onAuthStateChanged(user => {
+          if (user) {
+            updateProfileInfo(user);
+            fetchPurchaseHistory(user.email);
+          } else {
             resetProfileInfo();
-          }).catch((error) => {
-            console.error('Error logging out:', error);
-          });
+          }
         });
-        document.addEventListener('firebaseInitialized', function() {
-        if (auth1) {
-          auth1.onAuthStateChanged(user => {
-            if (user) {
-              console.log('User is signed in:');
-            } else {
-              console.log('No user is signed in');
-            }
-          });
-        } else {
-          console.error('Firebase Authentication not initialized properly.');
-        }
-      });
+      } else {
+        console.error('Firebase Authentication not initialized properly.');
+      }
+    });
 
+    function updateProfileInfo(user) {
+      profileImage.src = user.photoURL || 'https://via.placeholder.com/50';
+      userName.textContent = user.displayName || 'Anonymous User';
+      userEmail.textContent = user.email || 'No email available';
+      loginButton.style.display = 'none';
+      logoutButton.style.display = 'block';
+    }
 
-        function updateProfileInfo(user) {
-          profileImage.src = user.photoURL || 'https://via.placeholder.com/50';
-          userName.textContent = user.displayName || 'Anonymous User';
-          userEmail.textContent = user.email || 'No email available';
-          loginButton.style.display = 'none';
-          logoutButton.style.display = 'block';
-        }
+    function resetProfileInfo() {
+      profileImage.src = 'https://via.placeholder.com/50';
+      userName.textContent = 'User Name';
+      userEmail.textContent = 'user@example.com';
+      loginButton.style.display = 'block';
+      logoutButton.style.display = 'none';
+      purchaseList.innerHTML = '';
+    }
 
-        function resetProfileInfo() {
-          profileImage.src = 'https://via.placeholder.com/50';
-          userName.textContent = 'User Name';
-          userEmail.textContent = 'user@example.com';
-          loginButton.style.display = 'block';
-          logoutButton.style.display = 'none';
+    function fetchPurchaseHistory(email) {
+      if (!db1) {
+        console.error('Firestore database not initialized.');
+        return;
+      }
+      db1.collection('registrations')
+        .where('email', '==', email)
+        .get()
+        .then((querySnapshot) => {
           purchaseList.innerHTML = '';
-        }
+          querySnapshot.forEach((doc) => {
+            const data = doc.data();
+            const timestamp = data.timestamp.toDate();
+            const formattedDate = timestamp.toLocaleString();
+            const purchaseItem = document.createElement('div');
+            purchaseItem.classList.add('purchase-item');
+            purchaseItem.textContent = `Event: ${data.event}, Date: ${formattedDate}`;
+            purchaseList.appendChild(purchaseItem);
+          });
+        })
+        .catch((error) => {
+          console.error("Error fetching purchase history: ", error);
+        });
+    }
+  });
+</script>
 
-        // Fetch purchase history
-        function fetchPurchaseHistory(email) {
-          db1.collection('registrations')
-            .where('email', '==', email)
-            .get()
-            .then((querySnapshot) => {
-              purchaseList.innerHTML = '';
-              querySnapshot.forEach((doc) => {
-                const data = doc.data();
-                const timestamp = data.timestamp.toDate();
-                const formattedDate = timestamp.toLocaleString();
-                const purchaseItem = document.createElement('div');
-                purchaseItem.classList.add('purchase-item');
-                purchaseItem.textContent = `Event: ${data.event}, Date: ${formattedDate}`;
-                purchaseList.appendChild(purchaseItem);
-              });
-            })
-            .catch((error) => {
-              console.error("Error fetching purchase history: ", error);
-            });
-        }
-      });
-
-    </script>
     <script>
       document.getElementById('closeButton').addEventListener('click', () => {
         profileDropdown.style.display = 'none';
