@@ -555,7 +555,7 @@ function uploadToFirebaseStorage(blob) {
         });
     }).then(() => {
         alert('File uploaded successfully!');
-        return generatePDF(downloadURL, registrationDocRef.id);
+        return generatePDF(screenshotUrl, registrationDocRef.id);
     }).then(() => {
         // Redirect to events page after PDF generation
         window.location.href = 'events.html?registration=success';
