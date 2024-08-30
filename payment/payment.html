@@ -311,11 +311,12 @@ button:hover {
             <label for="qr2">Option 2</label>
             
             <div class="qr-codes">
-                <div id="upi-qr1" class="qr-code"></div>
-                <div id="upi-qr2" class="qr-code hidden"></div>
+                <a id="upi-link" target="_blank">
+                <div id="upi-qr1" class="qr-code"></div></a>
+                <a id="upi-link1" target="_blank">
+                <div id="upi-qr2" class="qr-code hidden"></div></a>
             </div>
         </div>
-        <a id="upi-link" target="_blank">Click here to pay</a>
     </div>
     <button type="button" onclick="nextPage(3)">I've made the payment</button>
     <p class="info">Do not refresh the page, After Payment Upload the Screenshot</p>
@@ -704,6 +705,7 @@ const transactionNote = "Payment for Event Registration";
     });
 
     document.getElementById("upi-link").href = upiUrl1;
+    document.getElementById("upi-link1").href = upiUrl2;
 }
 
 document.addEventListener('DOMContentLoaded', function() {
