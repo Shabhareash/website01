@@ -1,9 +1,58 @@
-const app = firebase.initializeApp(firebaseConfig, "app");
-const db = app.firestore();
-const storage = app.storage();
-const app1 = firebase.initializeApp(firebaseConfig1, "app1");
-const db1 = app1.firestore();
-const auth1 = app1.auth();
+async function getToken() {
+    const response = await fetch('https://backend-server-black.vercel.app/api/get-token', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    });
+    if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    const data = await response.json();
+    return data.token;
+}
+
+async function getFirebaseConfig(token, configEndpoint) {
+    const response = await fetch(`https://backend-server-black.vercel.app/api/${configEndpoint}`, {
+        headers: {
+            'Authorization': token
+        }
+    });
+    if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    return await response.json();
+}
+
+let db, db1, auth1, storage;
+
+async function initializeApp() {
+    try {
+        const token = await getToken();
+
+        // Fetch and initialize the first Firebase app
+        const config1 = await getFirebaseConfig(token, 'firebase-config');
+        const app = firebase.initializeApp(config1, "app");
+        db = app.firestore();
+        storage = app.storage();
+
+        // Fetch and initialize the second Firebase app
+        const config2 = await getFirebaseConfig(token, 'firebase-config1');
+        const app1 = firebase.initializeApp(config2, "app1");
+        db1 = app1.firestore();
+        auth1 = app1.auth();
+
+        console.log("Both Firebase apps initialized successfully");
+    } catch (error) {
+        console.error("Error initializing apps:", error);
+    }
+}
+
+initializeApp();
+
+function updateFirebaseDocument(collection, document, data) {
+    return db.collection(collection).doc(document).set(data, { merge: true });
+}
 
 async function fetchAndDisplayImages() {
     try {
