@@ -211,6 +211,32 @@ button:hover {
     font-size: 14px;
 }
 
+.qr-code-container {
+    position: relative;
+    width: 200px;
+    height: 200px;
+}
+
+.qr-codes {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.qr-code {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    transition: opacity 0.5s ease;
+}
+
+.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+
 </style>
 </head>
 <body>
@@ -260,7 +286,7 @@ button:hover {
             </form>
         </div>
 
-        <!-- Page 2: Payment -->
+        <!-- Page 2: Payment
         <div id="page2" class="hidden">
             <h2>Payment Information</h2>
             <p>Please make a payment of ₹<span id="paymentAmount">0</span> to complete your registration.</p>
@@ -271,7 +297,30 @@ button:hover {
                 </a>
             </div>
             <button type="button" onclick="nextPage(3)">I've made the payment</button><p class="info">Dont not refresh the page,After Payment Upload the ScreenShot</p>
+        </div>-->
+        <!-- Page 2: Payment -->
+<div id="page2" class="hidden">
+    <h2>Payment Information</h2>
+    <p>Please make a payment of ₹<span id="paymentAmount">0</span> to complete your registration.</p>
+    <div class="pay">
+        <h1>Scan to Pay</h1>
+        <div class="qr-code-container">
+            <input type="radio" id="qr1" name="qrSelect" value="1" checked>
+            <label for="qr1">Option 1</label>
+            <input type="radio" id="qr2" name="qrSelect" value="2">
+            <label for="qr2">Option 2</label>
+            
+            <div class="qr-codes">
+                <div id="upi-qr1" class="qr-code"></div>
+                <div id="upi-qr2" class="qr-code hidden"></div>
+            </div>
         </div>
+        <a id="upi-link" target="_blank">Click here to pay</a>
+    </div>
+    <button type="button" onclick="nextPage(3)">I've made the payment</button>
+    <p class="info">Do not refresh the page, After Payment Upload the Screenshot</p>
+</div>
+
 
         <!-- Page 3: Transaction Details -->
         <div id="page3" class="hidden">
@@ -589,7 +638,7 @@ function generatePDF(screenshotUrl, registrationId) {
 }
 
 // UPI QR code generation
-const upiId = "saranya.gopu7-1@okhdfcbank";
+/*const upiId = "saranya.gopu7-1@okhdfcbank";
 const name = "ACN";
 const transactionNote = "Payment for Event Registration";
 
@@ -611,7 +660,48 @@ function updateUPIQRCode(amount) {
 
     // Update UPI link
     document.getElementById("upi-link").href = upiUrl;
+}*/
+
+document.querySelectorAll('input[name="qrSelect"]').forEach(radio => {
+    radio.addEventListener('change', function() {
+        if (this.value === "1") {
+            document.getElementById('upi-qr1').classList.remove('hidden');
+            document.getElementById('upi-qr2').classList.add('hidden');
+        } else {
+            document.getElementById('upi-qr1').classList.add('hidden');
+            document.getElementById('upi-qr2').classList.remove('hidden');
+        }
+    });
+});
+
+function updateUPIQRCode(amount) {
+    const upiUrl1 = `upi://pay?pa=${upiId1}&pn=${name}&am=${amount}&cu=INR&tn=${transactionNote}`;
+    const upiUrl2 = `upi://pay?pa=${upiId2}&pn=${name}&am=${amount}&cu=INR&tn=${transactionNote}`;
+
+    document.getElementById("upi-qr1").innerHTML = '';
+    document.getElementById("upi-qr2").innerHTML = '';
+
+    new QRCode(document.getElementById("upi-qr1"), {
+        text: upiUrl1,
+        width: 200,
+        height: 200,
+        colorDark: "#000000",
+        colorLight: "#ffffff",
+        correctLevel: QRCode.CorrectLevel.H
+    });
+
+    new QRCode(document.getElementById("upi-qr2"), {
+        text: upiUrl2,
+        width: 200,
+        height: 200,
+        colorDark: "#000000",
+        colorLight: "#ffffff",
+        correctLevel: QRCode.CorrectLevel.H
+    });
+
+    document.getElementById("upi-link").href = upiUrl1;
 }
+
 document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('screenshot').addEventListener('change', function(event) {
         const file = event.target.files[0];
