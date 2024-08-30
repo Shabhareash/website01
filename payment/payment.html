@@ -675,6 +675,10 @@ document.querySelectorAll('input[name="qrSelect"]').forEach(radio => {
 });
 
 function updateUPIQRCode(amount) {
+    const upiId1 = "saranya.gopu7-1@okhdfcbank";
+    const upiId2 = "aravindmohan1883-1@okhdfcbank";
+const name = "ACN";
+const transactionNote = "Payment for Event Registration";
     const upiUrl1 = `upi://pay?pa=${upiId1}&pn=${name}&am=${amount}&cu=INR&tn=${transactionNote}`;
     const upiUrl2 = `upi://pay?pa=${upiId2}&pn=${name}&am=${amount}&cu=INR&tn=${transactionNote}`;
 
