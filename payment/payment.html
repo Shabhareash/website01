@@ -280,7 +280,7 @@ button:hover {
 
 async function fetchFirebaseConfig() {
   try {
-    const response = await fetch('https://backend-server-black.vercel.app/api/firebase-config'); 
+    const response = await fetch('/api/getFirebaseConfig'); 
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
