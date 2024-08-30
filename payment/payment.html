@@ -538,39 +538,25 @@ function uploadToFirebaseStorage(blob) {
     }
 
     const storage = firebase.storage();
-    const storageRef = storage.ref();
-    const filename = `payment_screenshots/${Date.now()}_${Math.random().toString(36).substring(7)}.jpg`;
+    const storageRef = firebase.storage().ref();
+    const filename = `payment_screenshots/${registrationDocRef.id}.jpg`;
     const fileRef = storageRef.child(filename);
 
-    fileRef.put(blob)
-        .then((snapshot) => {
-            console.log('Uploaded a blob or file!');
-            return snapshot.ref.getDownloadURL();  // Return the download URL
-        })
-        .then((downloadURL) => {
+    fileRef.put(blob).then((snapshot) => {
+        console.log('Uploaded a blob or file!');
+        snapshot.ref.getDownloadURL().then((downloadURL) => {
             console.log('File available at', downloadURL);
-            return updateFirebaseDocument({ 
+            updateFirebaseDocument({ 
                 screenshotUrl: downloadURL,
                 registrationComplete: true,
                 timestamp: firebase.firestore.FieldValue.serverTimestamp()
-            }).then((registrationDocRef) => {
-                return { downloadURL, registrationDocRef };  // Return both downloadURL and registrationDocRef
             });
-        })
-        .then(({ downloadURL, registrationDocRef }) => {
-            alert('File uploaded successfully!');
-            return generatePDF(downloadURL, registrationDocRef.id);  // Pass downloadURL and registrationDocRef.id to generatePDF
-        })
-        .then(() => {
-            // Redirect to events page after PDF generation
-            window.location.href = 'events.html?registration=success';
-        })
-        .catch((error) => {
-            console.error("Error code:", error.code);
-            console.error("Error message:", error.message);
-            console.error("Full error:", error);
-            alert(`Error uploading file: ${error.message}`);
+            generatePDF(downloadURL, registrationDocRef.id);
         });
+    }).catch((error) => {
+        console.error("Error uploading file: ", error);
+        alert("Error uploading file. Please try again.");
+    });
 }
 
 function generatePDF(screenshotUrl, registrationId) {
