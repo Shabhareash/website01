@@ -277,10 +277,10 @@ button:hover {
 
 <script>
 
-// Fetch Firebase configuration from the backend
+
 async function fetchFirebaseConfig() {
   try {
-    const response = await fetch('https://backend-server-black.vercel.app/api/firebase-config');
+    const response = await fetch('https://backend-server-black.vercel.app'); 
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
@@ -311,7 +311,7 @@ async function initializeFirebase() {
 
 // Call the function to initialize Firebase
 initializeFirebase();
-
+    
 let currentPage = 1;
 const totalPages = 3;
 const teamMembers = [];
