@@ -80,6 +80,7 @@ async function fetchAndDisplayImages() {
         console.error('Error fetching and displaying images:', error);
     }
 }
+
 function displayImage(imgElementId, imageUrl) {
     const imgElement = document.getElementById(imgElementId);
     if (imgElement) {
@@ -100,31 +101,31 @@ function displayText(textElementId, text) {
     }
 }
 
-function displayHeader(headerElementId, head){
+function displayHeader(headerElementId, head) {
     const headerElement = document.getElementById(headerElementId);
-    if(headerElement){
+    if (headerElement) {
         headerElement.textContent = head;
         console.info("done")
-    } else{
+    } else {
         console.error(`No element found with ID: ${headerElementId}`);
     }
 }
 
-function displayEvents(eventsElementId,eventdetailsElementId, events,eventdetails){
+function displayEvents(eventsElementId, eventdetailsElementId, events, eventdetails) {
     const eventsdetailsElement = document.getElementById(eventsElementId);
     const eventsElement = document.getElementById(eventdetailsElementId);
-    if(eventsElement){
+    if (eventsElement) {
         eventsdetailsElement.textContent = eventdetails;
-        console.info("done")
-    } else{
+        console.info("done");
+    } else {
         console.error(`No element found with ID: ${eventdetailsElementId}`);
     }
-    if(eventsdetailsElement){
+    if (eventsdetailsElement) {
         eventsElement.textContent = events;
-        console.info("done")
-    } else{
+        console.info("done");
+    } else {
         console.error(`No element found with ID: ${eventsElementId}`);
     }
 }
 
-document.addEventListener('DOMContentLoaded', fetchAndDisplayImages);
+

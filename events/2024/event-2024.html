@@ -11,6 +11,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <meta http-equiv="Cross-Origin-Opener-Policy" content="same-origin-allow-popups">
 
     <style>
       .navbar {
@@ -682,7 +683,6 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-storage.js"></script>
 
     <script src="script.js"></script>
-    <script src="firebase.js"></script>
     <script src="events.js"></script>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
@@ -740,14 +740,18 @@
           });
         });
 
-        auth1.onAuthStateChanged((user) => {
-          if (user) {
-            updateProfileInfo(user);
-            fetchPurchaseHistory(user.email);
-          } else {
-            resetProfileInfo();
-          }
-        });
+        if (auth1) {
+          auth1.onAuthStateChanged(user => {
+            if (user) {
+              console.log('User is signed in:', user);
+            } else {
+              console.log('No user is signed in');
+            }
+          });
+        } else {
+          console.error('Firebase Authentication not initialized properly.');
+        }
+
 
         function updateProfileInfo(user) {
           profileImage.src = user.photoURL || 'https://via.placeholder.com/50';
