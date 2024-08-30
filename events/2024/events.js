@@ -37,12 +37,16 @@ async function initializeApp() {
         storage = app.storage();
 
         // Fetch and initialize the second Firebase app
-        const config2 = await getFirebaseConfig(token, 'firebase-config1');
+        const config2 = await getFirebaseConfig(token, 'firebase-config?configType=config1');
         const app1 = firebase.initializeApp(config2, "app1");
         db1 = app1.firestore();
         auth1 = app1.auth();
 
         console.log("Both Firebase apps initialized successfully");
+
+        // Now that Firebase is initialized, call your fetch function
+        fetchAndDisplayImages();
+
     } catch (error) {
         console.error("Error initializing apps:", error);
     }
@@ -50,12 +54,12 @@ async function initializeApp() {
 
 initializeApp();
 
-function updateFirebaseDocument(collection, document, data) {
-    return db.collection(collection).doc(document).set(data, { merge: true });
-}
-
 async function fetchAndDisplayImages() {
     try {
+        if (!db || !storage) {
+            throw new Error("Firebase is not initialized properly.");
+        }
+
         const collectionRef = db.collection('images');
         const querySnapshot = await collectionRef.get();
         const docs = querySnapshot.docs;
@@ -67,7 +71,6 @@ async function fetchAndDisplayImages() {
             const text = doc.data().about;
             const header = doc.data().name;
 
-
             displayImage(`day${i + 1}Image`, imageUrl);
             displayText(`card-text${i + 1}`, text);
             displayHeader(`header${i + 1}`, header);
@@ -77,7 +80,6 @@ async function fetchAndDisplayImages() {
         console.error('Error fetching and displaying images:', error);
     }
 }
-
 function displayImage(imgElementId, imageUrl) {
     const imgElement = document.getElementById(imgElementId);
     if (imgElement) {
