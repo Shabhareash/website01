@@ -739,7 +739,7 @@
             console.error('Error logging out:', error);
           });
         });
-
+        document.addEventListener('firebaseInitialized', function() {
         if (auth1) {
           auth1.onAuthStateChanged(user => {
             if (user) {
@@ -751,6 +751,7 @@
         } else {
           console.error('Firebase Authentication not initialized properly.');
         }
+      });
 
 
         function updateProfileInfo(user) {

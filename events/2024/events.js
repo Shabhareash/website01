@@ -46,6 +46,7 @@ async function initializeApp() {
 
         // Now that Firebase is initialized, call your fetch function
         fetchAndDisplayImages();
+        document.dispatchEvent(new Event('firebaseInitialized'));
 
     } catch (error) {
         console.error("Error initializing apps:", error);
