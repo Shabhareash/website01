@@ -280,7 +280,7 @@ button:hover {
 // Fetch Firebase configuration from the backend
 async function fetchFirebaseConfig() {
   try {
-    const response = await fetch('https://backend-server-black.vercel.app/api/firebase-config');
+    const response = await fetch('https://cors-anywhere.herokuapp.com/https://backend-server-kvzmaz4fl-trafficracers-projects.vercel.app');
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
