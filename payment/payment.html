@@ -545,19 +545,19 @@ function uploadToFirebaseStorage(blob) {
     fileRef.put(blob)
         .then((snapshot) => {
             console.log('Uploaded a blob or file!');
-            return snapshot.ref.getDownloadURL();  // return the download URL
+            return snapshot.ref.getDownloadURL();  // Return the download URL
         })
-        .then((downloadURL) => {  // correctly pass downloadURL to next .then block
+        .then((downloadURL) => {
             console.log('File available at', downloadURL);
             return updateFirebaseDocument({ 
                 screenshotUrl: downloadURL,
                 registrationComplete: true,
                 timestamp: firebase.firestore.FieldValue.serverTimestamp()
-            }).then(() => downloadURL);  // Pass downloadURL further down the promise chain
+            }).then((registrationDocRef) => ({ downloadURL, registrationDocRef }));  // Pass both downloadURL and registrationDocRef
         })
-        .then((downloadURL, registrationDocRef) => {  // receive downloadURL again here
+        .then(({ downloadURL, registrationDocRef }) => {  // Receive both downloadURL and registrationDocRef
             alert('File uploaded successfully!');
-            return generatePDF(downloadURL, registrationDocRef.id);  // pass downloadURL to generatePDF
+            return generatePDF(downloadURL, registrationDocRef.id);  // Pass downloadURL and registrationDocRef.id to generatePDF
         })
         .then(() => {
             // Redirect to events page after PDF generation
