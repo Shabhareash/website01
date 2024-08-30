@@ -287,7 +287,6 @@ async function getToken() {
         throw new Error(`HTTP error! status: ${response.status}`);
     }
     const data = await response.json();
-    console.log('Token:', data.token); // Logging the token
     return data.token;
 }
 
@@ -303,16 +302,13 @@ async function getFirebaseConfig(token) {
     return await response.json();
 }
 
-let db; // Declare db in the global scope
+let db;
 
 async function initializeApp() {
     try {
         const token = await getToken();
         const config = await getFirebaseConfig(token);
-        // Initialize Firebase with the config
         firebase.initializeApp(config);
-        
-        // Initialize Firestore
         db = firebase.firestore();
         
         console.log("Firebase and Firestore initialized successfully");
@@ -321,10 +317,8 @@ async function initializeApp() {
     }
 }
 
-// Usage:
 initializeApp();
 
-// Now you can use db in your functions, for example:
 function updateFirebaseDocument(collection, document, data) {
     return db.collection(collection).doc(document).set(data, { merge: true });
 }
@@ -333,7 +327,6 @@ const totalPages = 3;
 const teamMembers = [];
 let registrationDocRef = null;
 
-// Event details
 const events = {
     "event1": { name: "Gaming Fusion 4.0", price: 50, maxTeamSize: 4 },
     "event2": { name: "Crypto Shield", price: 75, maxTeamSize: 2 },
