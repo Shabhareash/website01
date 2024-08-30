@@ -553,9 +553,11 @@ function uploadToFirebaseStorage(blob) {
                 screenshotUrl: downloadURL,
                 registrationComplete: true,
                 timestamp: firebase.firestore.FieldValue.serverTimestamp()
-            }).then((registrationDocRef) => ({ downloadURL, registrationDocRef }));  // Pass both downloadURL and registrationDocRef
+            }).then((registrationDocRef) => {
+                return { downloadURL, registrationDocRef };  // Return both downloadURL and registrationDocRef
+            });
         })
-        .then(({ downloadURL, registrationDocRef }) => {  // Receive both downloadURL and registrationDocRef
+        .then(({ downloadURL, registrationDocRef }) => {
             alert('File uploaded successfully!');
             return generatePDF(downloadURL, registrationDocRef.id);  // Pass downloadURL and registrationDocRef.id to generatePDF
         })
