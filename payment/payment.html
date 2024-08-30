@@ -551,7 +551,10 @@ function uploadToFirebaseStorage(blob) {
                 registrationComplete: true,
                 timestamp: firebase.firestore.FieldValue.serverTimestamp()
             });
-            generatePDF(downloadURL, registrationDocRef.id);
+            generatePDF(downloadURL, registrationDocRef.id).then(() => {
+                
+                window.location.href = '/events/2024/event-2024.html?registration=success';
+            });
         });
     }).catch((error) => {
         console.error("Error uploading file: ", error);
