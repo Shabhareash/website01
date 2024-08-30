@@ -555,7 +555,7 @@ function uploadToFirebaseStorage(blob) {
                 timestamp: firebase.firestore.FieldValue.serverTimestamp()
             }).then(() => downloadURL);  // Pass downloadURL further down the promise chain
         })
-        .then((downloadURL) => {  // receive downloadURL again here
+        .then((downloadURL, registrationDocRef) => {  // receive downloadURL again here
             alert('File uploaded successfully!');
             return generatePDF(downloadURL, registrationDocRef.id);  // pass downloadURL to generatePDF
         })
