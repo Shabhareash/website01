@@ -280,8 +280,8 @@ button:hover {
 
 async function fetchFirebaseConfig() {
   try {
-    const response = await fetch('/api/getFirebaseConfig');
-    console.log('Fetching Firebase config from:', '/api/getFirebaseConfig'); // Debugging line
+    const response = await fetch('/api/firebase-config');
+    console.log('Fetching Firebase config from:', '/api/firbase-config'); // Debugging line
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
