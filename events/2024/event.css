@@ -15,9 +15,13 @@
 
 .col, .col-12, .col-md-4 {
   padding: 0 15px;
+  
 }
 a{
   text-decoration:none;
+}
+.col-12{
+  z-index:1;
 }
 
 body {
