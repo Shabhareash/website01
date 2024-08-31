@@ -624,7 +624,7 @@
                 name: document.getElementById('name').value,
                 email: document.getElementById('email').value,
                 event: document.getElementById('event').value,
-                teamName: document.getElementById('teamName').value,
+                teamName: document.getElementById('teamName').value.name,
                 teamSize: document.getElementById('teamSize').value,
                 teamMembers: teamMembers,
                 timestamp: firebase.firestore.FieldValue.serverTimestamp()
