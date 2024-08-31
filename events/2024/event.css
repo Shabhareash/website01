@@ -290,15 +290,15 @@ h1{
 }
 
 #a1 {
-  color: rgb(210,18,23);
-  box-shadow: 1px 1px 0 rgb(210,18,23), 
-              -1px -1px 0 rgb(210,18,23), 
-              -1px 1px 0 rgb(210,18,23), 
-              1px -1px 0 rgb(210,18,23);
+  color: rgb(30,30,30);
+  box-shadow: 1px 1px 0 rgb(30,30,30), 
+              -1px -1px 0 rgb(30,30,30), 
+              -1px 1px 0 rgb(30,30,30), 
+              1px -1px 0 rgb(30,30,30);
 }
 
 #a1::before {
-  background-color: rgb(210,18,23);
+  background-color: #b69033;
   z-index: 0;
 }
 
@@ -316,28 +316,28 @@ h1{
 }
 
 #a4 {
-  color: rgb(15,175,199);
-  box-shadow: 1px 1px 0 rgb(15,175,199), 
-              -1px -1px 0 rgb(15,175,199), 
-              -1px 1px 0 rgb(15,175,199), 
-              1px -1px 0 rgb(15,175,199);
+  color: rgb(210,18,23);
+  box-shadow: 1px 1px 0 rgb(210,18,23), 
+              -1px -1px 0 rgb(210,18,23), 
+              -1px 1px 0 rgb(210,18,23), 
+              1px -1px 0 rgb(210,18,23);
 }
 
 #a4::before {
-  background-color: rgb(15,175,199);
+  background-color: rgb(210,18,23);
   z-index: 0;
 }
 
 #a5 {
-  color: rgb(30,191,165);
-  box-shadow: 1px 1px 0 rgb(30,191,165), 
-              -1px -1px 0 rgb(30,191,165), 
-              -1px 1px 0 rgb(30,191,165), 
-              1px -1px 0 rgb(30,191,165);
+  color: rgb(115,189,233);
+  box-shadow: 1px 1px 0 rgb(115,189,233), 
+              -1px -1px 0 rgb(115,189,233), 
+              -1px 1px 0 rgb(115,189,233), 
+              1px -1px 0 rgb(115,189,233);
 }
 
 #a5::before {
-  background-color: rgb(30,191,165);
+  background-color: #22d992;
   z-index: 0;
 }
 
@@ -365,6 +365,51 @@ h1{
   transition: top 0.3s;
   top: 100%;
 }
+#a10 {
+  color: rgb(141,119,189);
+  box-shadow: 1px 1px 0 rgb(155,219,243), 
+              -1px -1px 0 rgb(155,219,243), 
+              -1px 1px 0 rgb(155,219,243), 
+              1px -1px 0 rgb(155,219,243);
+}
+#a10::before{
+  background-color: rgb(141,119,189);
+  z-index:0;
+}
+#a08 {
+  color: rgb(82, 214, 255);
+  box-shadow: 1px 1px 0 rgb(82, 214, 255), 
+              -1px -1px 0 rgb(82, 214, 255), 
+              -1px 1px 0 rgb(82, 214, 255), 
+              1px -1px 0 rgb(82, 214, 255);
+}
+#a08::before{
+  background-color: rgb(203, 144, 255);
+  z-index:0;
+}
+#a7 {
+  color: rgb(245, 162, 20);
+  box-shadow: 1px 1px 0 rgb(245, 162, 20), 
+              -1px -1px 0 rgb(245, 162, 20), 
+              -1px 1px 0 rgb(245, 162, 20), 
+              1px -1px 0 rgb(245, 162, 20);
+}
+#a7::before{
+  background-color: #5eb4e8;
+  z-index:0;
+}
+#a9 {
+  color: rgb(244,91,169);
+  box-shadow: 1px 1px 0 rgb(244,91,169), 
+              -1px -1px 0 rgb(244,91,169), 
+              -1px 1px 0 rgb(244,91,169), 
+              1px -1px 0 rgb(244,91,169);
+}
+#a9::before{
+  background-color: rgb(244,91,169);
+  z-index:0;
+}
+
 
 .animated-button1:hover::before {
   top: 0;
