@@ -34,17 +34,23 @@
         body {
             font-family: 'Poppins', sans-serif;
             line-height: 1.6;
-            background-color: var(--light-gray);
             color: var(--dark-gray);
+            background-image: url(Welcome.png);
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center;
+
         }
 
         .container {
             max-width: 800px;
             margin: 2rem auto;
             padding: 2rem;
-            background-color: var(--white);
-            border-radius: 10px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 20px;
             transition: var(--transition);
             position: relative;
         }
@@ -227,11 +233,12 @@
         }
 
         .qr-code-section {
-            background-color: var(--white);
-            border-radius: 10px;
-            padding: 2rem;
-            transition: var(--transition);
             text-align: center;
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 20px;
+            transition: var(--transition);
+            position: relative;
         }
 
         .qr-code-container {
@@ -488,7 +495,7 @@
             "event10": { name: "morphX", price: 150, maxTeamSize: 2 },
             "event11": { name: "MalQuest", price: 100, maxTeamSize: 2 },
             "event12": { name: "Forensic Triage Forum", price: 100, maxTeamSize: 2 },
-            "event13": {name: "Cinemagic", price:200, maxTeamSize:4}
+            "event13": { name: "Cinemagic", price: 200, maxTeamSize: 4 }
         };
 
         function updateTeamMembers() {
@@ -620,7 +627,7 @@
                 return;
             }
 
-            
+
             const formData = {
                 name: document.getElementById('name').value,
                 email: document.getElementById('email').value,
@@ -631,7 +638,7 @@
                 timestamp: firebase.firestore.FieldValue.serverTimestamp()
             };
 
-            
+
             db.collection("registrations").add(formData)
                 .then((docRef) => {
                     console.log("Document written with ID: ", docRef.id);
@@ -734,7 +741,7 @@
                     doc.setFont(undefined, 'normal');
                     doc.text('Event Registration Receipt', pageWidth / 2, 35, { align: 'center' });
 
-                    
+
                     doc.setFontSize(12);
                     const paragraphs = [
                         'Thank you for registering for our event. We are excited to have you join us for this amazing experience.',
@@ -872,6 +879,44 @@
             document.getElementById('event').addEventListener('change', updateEventInfo);
             document.getElementById('teamSize').addEventListener('change', updateTeamMembers);
         });
+    </script>
+    <!-- Code injected by live-server -->
+    <script>
+        // <![CDATA[  <-- For SVG support
+        if ('WebSocket' in window) {
+            (function () {
+                function refreshCSS() {
+                    var sheets = [].slice.call(document.getElementsByTagName("link"));
+                    var head = document.getElementsByTagName("head")[0];
+                    for (var i = 0; i < sheets.length; ++i) {
+                        var elem = sheets[i];
+                        var parent = elem.parentElement || head;
+                        parent.removeChild(elem);
+                        var rel = elem.rel;
+                        if (elem.href && typeof rel != "string" || rel.length == 0 || rel.toLowerCase() == "stylesheet") {
+                            var url = elem.href.replace(/(&|\?)_cacheOverride=\d+/, '');
+                            elem.href = url + (url.indexOf('?') >= 0 ? '&' : '?') + '_cacheOverride=' + (new Date().valueOf());
+                        }
+                        parent.appendChild(elem);
+                    }
+                }
+                var protocol = window.location.protocol === 'http:' ? 'ws://' : 'wss://';
+                var address = protocol + window.location.host + window.location.pathname + '/ws';
+                var socket = new WebSocket(address);
+                socket.onmessage = function (msg) {
+                    if (msg.data == 'reload') window.location.reload();
+                    else if (msg.data == 'refreshcss') refreshCSS();
+                };
+                if (sessionStorage && !sessionStorage.getItem('IsThisFirstTime_Log_From_LiveServer')) {
+                    console.log('Live reload enabled.');
+                    sessionStorage.setItem('IsThisFirstTime_Log_From_LiveServer', true);
+                }
+            })();
+        }
+        else {
+            console.error('Upgrade your browser. This Browser is NOT supported WebSocket for Live-Reloading.');
+        }
+        // ]]>
     </script>
 </body>
 
