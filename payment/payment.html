@@ -475,9 +475,6 @@
 
         initializeApp();
 
-        function updateFirebaseDocument(collection, document, data) {
-            return db.collection(collection).doc(document).set(data, { merge: true });
-        }
         let currentPage = 1;
         const totalPages = 3;
         const teamMembers = [];
@@ -538,7 +535,6 @@
                 }
                 teamMembers.push(memberName);
             }
-            updateFirebaseDocument({ teamMembers: teamMembers });
             return true;
         }
 
@@ -553,6 +549,7 @@
                 }
             }
         }
+
         function updateEventInfo() {
             const eventSelect = document.getElementById('event');
             const eventInfo = document.getElementById('eventInfo');
@@ -563,7 +560,6 @@
                 eventInfo.textContent = `Event: ${selectedEvent.name}, Price: ₹${selectedEvent.price}, Max Team Size: ${selectedEvent.maxTeamSize}`;
                 eventInfo.style.display = 'block';
 
-                // Update team size options based on max team size for the event
                 teamSizeSelect.innerHTML = '';
                 for (let i = 1; i <= selectedEvent.maxTeamSize; i++) {
                     const option = document.createElement('option');
@@ -580,8 +576,6 @@
             updatePaymentAmount();
         }
 
-
-
         function updatePaymentAmount() {
             const eventSelect = document.getElementById('event');
             const teamSizeSelect = document.getElementById('teamSize');
@@ -589,7 +583,6 @@
 
             if (eventSelect.value && teamSizeSelect.value) {
                 const eventPrice = events[eventSelect.value].price;
-                const teamSize = parseInt(teamSizeSelect.value);
                 const totalAmount = eventPrice;
                 paymentAmountSpan.textContent = totalAmount;
                 updateUPIQRCode(totalAmount);
@@ -599,8 +592,6 @@
             }
         }
 
-
-
         function prevPage() {
             if (currentPage > 1) {
                 document.getElementById(`page${currentPage}`).classList.add('hidden');
@@ -608,27 +599,6 @@
                 document.getElementById(`page${currentPage}`).classList.remove('hidden');
             }
         }
-
-        function updateFirebaseDocument(data) {
-            if (!db) {
-                console.error('Firestore is not initialized');
-                return;
-            }
-
-            if (registrationDocRef) {
-                registrationDocRef.update(data)
-                    .then(() => console.log("Document successfully updated"))
-                    .catch((error) => console.error("Error updating document: ", error));
-            } else {
-                db.collection("registrations").add(data)
-                    .then((docRef) => {
-                        console.log("Document written with ID: ", docRef.id);
-                        registrationDocRef = docRef;
-                    })
-                    .catch((error) => console.error("Error adding document: ", error));
-            }
-        }
-
 
         function submitForm() {
             const screenshot = document.getElementById('screenshot').files[0];
@@ -638,7 +608,28 @@
                 return;
             }
 
-            resizeAndUploadImage(screenshot);
+            // Gather all form data
+            const formData = {
+                name: document.getElementById('name').value,
+                email: document.getElementById('email').value,
+                event: document.getElementById('event').value,
+                teamSize: document.getElementById('teamSize').value,
+                teamMembers: teamMembers,
+                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            };
+
+            // Create the document in Firebase
+            db.collection("registrations").add(formData)
+                .then((docRef) => {
+                    console.log("Document written with ID: ", docRef.id);
+                    registrationDocRef = docRef;
+                    // Now that we have the document reference, upload the screenshot
+                    resizeAndUploadImage(screenshot);
+                })
+                .catch((error) => {
+                    console.error("Error adding document: ", error);
+                    alert("Error submitting form. Please try again.");
+                });
         }
 
         function resizeAndUploadImage(file) {
@@ -679,14 +670,15 @@
             };
             reader.readAsDataURL(file);
         }
+
         function uploadToFirebaseStorage(blob) {
-            if (!firebase.apps.length) {
-                console.error('Firebase is not initialized');
+            if (!registrationDocRef) {
+                console.error('Registration document reference is not set');
                 return;
             }
 
             const storage = firebase.storage();
-            const storageRef = firebase.storage().ref();
+            const storageRef = storage.ref();
             const filename = `payment_screenshots/${registrationDocRef.id}.jpg`;
             const fileRef = storageRef.child(filename);
 
@@ -694,14 +686,13 @@
                 console.log('Uploaded a blob or file!');
                 snapshot.ref.getDownloadURL().then((downloadURL) => {
                     console.log('File available at', downloadURL);
-                    updateFirebaseDocument({
+                    registrationDocRef.update({
                         screenshotUrl: downloadURL,
-                        registrationComplete: true,
-                        timestamp: firebase.firestore.FieldValue.serverTimestamp()
-                    });
-                    generatePDF(downloadURL, registrationDocRef.id).then(() => {
-
-                        window.location.href = '/events/2024/event-2024.html?registration=success';
+                        registrationComplete: true
+                    }).then(() => {
+                        generatePDF(downloadURL, registrationDocRef.id).then(() => {
+                            window.location.href = '/events/2024/event-2024.html?registration=success';
+                        });
                     });
                 });
             }).catch((error) => {
@@ -736,18 +727,6 @@
             });
         }
 
-        document.querySelectorAll('input[name="qrSelect"]').forEach(radio => {
-            radio.addEventListener('change', function () {
-                if (this.value === "1") {
-                    document.getElementById('upi-qr1').classList.remove('hidden');
-                    document.getElementById('upi-qr2').classList.add('hidden');
-                } else {
-                    document.getElementById('upi-qr1').classList.add('hidden');
-                    document.getElementById('upi-qr2').classList.remove('hidden');
-                }
-            });
-        });
-
         function updateUPIQRCode(amount) {
             const upiId1 = "saranya.gopu7-1@okhdfcbank";
             const upiId2 = "aravindmohan1883-1@okhdfcbank";
@@ -777,10 +756,8 @@
                 correctLevel: QRCode.CorrectLevel.H
             });
 
-            // Initially set the href to the first UPI URL
             document.getElementById("upi-link").href = upiUrl1;
 
-            // Attach click event listeners to open UPI URL directly when QR code is clicked
             document.getElementById("upi-qr1").addEventListener('click', () => {
                 window.open(upiUrl1, "_blank");
             });
@@ -818,7 +795,6 @@
             });
         }
 
-
         document.addEventListener('DOMContentLoaded', function () {
             document.getElementById('screenshot').addEventListener('change', function (event) {
                 const file = event.target.files[0];
@@ -831,22 +807,9 @@
                     reader.readAsDataURL(file);
                 }
             });
-        });
-        // Add event listeners
-        document.addEventListener('DOMContentLoaded', function () {
+
             document.getElementById('event').addEventListener('change', updateEventInfo);
             document.getElementById('teamSize').addEventListener('change', updateTeamMembers);
-
-            // Add listeners for all input fields
-            document.querySelectorAll('input, select').forEach(input => {
-                input.addEventListener('change', function () {
-                    const data = {
-                        [this.id]: this.value,
-                        timestamp: firebase.firestore.FieldValue.serverTimestamp()
-                    };
-                    updateFirebaseDocument(data);
-                });
-            });
         });
     </script>
 </body>
