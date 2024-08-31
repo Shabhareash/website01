@@ -16,6 +16,9 @@
 .col, .col-12, .col-md-4 {
   padding: 0 15px;
 }
+a{
+  text-decoration:none;
+}
 
 body {
   font-family: "Signika", sans-serif !important;
