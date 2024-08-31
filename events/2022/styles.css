@@ -675,6 +675,12 @@ html {
       right: 0;
       z-index: 1000;
     }
+    .box-images{
+        height:50%
+    }
+    .box-images img{
+        height:200px
+    }
   }
 
   @media (max-width: 768px) {
