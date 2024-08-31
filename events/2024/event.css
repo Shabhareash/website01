@@ -290,15 +290,15 @@ h1{
 }
 
 #a1 {
-  color: rgb(30,30,30);
-  box-shadow: 1px 1px 0 rgb(30,30,30), 
-              -1px -1px 0 rgb(30,30,30), 
-              -1px 1px 0 rgb(30,30,30), 
-              1px -1px 0 rgb(30,30,30);
+  color: rgb(217, 177, 78);
+  box-shadow: 1px 1px 0 rrgb(217, 177, 78), 
+              -1px -1px 0 rgb(217, 177, 78), 
+              -1px 1px 0 rgb(217, 177, 78), 
+              1px -1px 0 rgb(217, 177, 78);
 }
 
 #a1::before {
-  background-color: #b69033;
+  background-color: rgb(217, 177, 78);
   z-index: 0;
 }
 
@@ -329,7 +329,7 @@ h1{
 }
 
 #a5 {
-  color: rgb(115,189,233);
+  color: rgbrgb(115,189,233);
   box-shadow: 1px 1px 0 rgb(115,189,233), 
               -1px -1px 0 rgb(115,189,233), 
               -1px 1px 0 rgb(115,189,233), 
@@ -337,20 +337,20 @@ h1{
 }
 
 #a5::before {
-  background-color: #22d992;
+  background-color: rgb(115,189,233);
   z-index: 0;
 }
 
 #a6 {
-  color: rgb(115,189,233);
-  box-shadow: 1px 1px 0 rgb(115,189,233), 
-              -1px -1px 0 rgb(115,189,233), 
-              -1px 1px 0 rgb(115,189,233), 
-              1px -1px 0 rgb(115,189,233);
+  color: rgb(98, 240, 185);
+  box-shadow: 1px 1px 0 rgb(98, 240, 185), 
+              -1px -1px 0 rgb(98, 240, 185), 
+              -1px 1px 0 rgb(98, 240, 185), 
+              1px -1px 0 rgb(98, 240, 185);
 }
 
 #a6::before {
-  background-color: rgb(115,189,233);
+  background-color: rgb(98, 240, 185);
   z-index: 0;
 }
 
@@ -367,24 +367,24 @@ h1{
 }
 #a10 {
   color: rgb(141,119,189);
-  box-shadow: 1px 1px 0 rgb(155,219,243), 
-              -1px -1px 0 rgb(155,219,243), 
-              -1px 1px 0 rgb(155,219,243), 
-              1px -1px 0 rgb(155,219,243);
+  box-shadow: 1px 1px 0 rgb(141,119,189), 
+              -1px -1px 0 rgb(141,119,189), 
+              -1px 1px 0 rgb(141,119,189), 
+              1px -1px 0 rgb(141,119,189);
 }
 #a10::before{
   background-color: rgb(141,119,189);
   z-index:0;
 }
 #a08 {
-  color: rgb(82, 214, 255);
-  box-shadow: 1px 1px 0 rgb(82, 214, 255), 
-              -1px -1px 0 rgb(82, 214, 255), 
-              -1px 1px 0 rgb(82, 214, 255), 
-              1px -1px 0 rgb(82, 214, 255);
+  color: rgb(194,148,252);
+  box-shadow: 1px 1px 0 rgb(194,148,252), 
+              -1px -1px 0 rgb(194,148,252), 
+              -1px 1px 0 rgb(194,148,252), 
+              1px -1px 0 rgb(194,148,252);
 }
 #a08::before{
-  background-color: rgb(203, 144, 255);
+  background-color: rgb(194,148,252);
   z-index:0;
 }
 #a7 {
@@ -395,7 +395,7 @@ h1{
               1px -1px 0 rgb(245, 162, 20);
 }
 #a7::before{
-  background-color: #5eb4e8;
+  background-color: rgb(245, 162, 20);
   z-index:0;
 }
 #a9 {
