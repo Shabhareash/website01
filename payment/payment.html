@@ -701,31 +701,79 @@
             });
         }
 
-        function generatePDF(screenshotUrl, registrationId) {
-            return new Promise((resolve, reject) => {
-                try {
-                    const { jsPDF } = window.jspdf;
-                    const doc = new jsPDF();
+function generatePDF(screenshotUrl, registrationId) {
+    return new Promise((resolve, reject) => {
+        try {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            const pageWidth = doc.internal.pageSize.width;
+            const pageHeight = doc.internal.pageSize.height;
+            const margin = 10;
 
-                    doc.text('Event Registration Report', 10, 10);
-                    doc.text(`Registration ID: ${registrationId}`, 10, 20);
-                    doc.text(`Name: ${document.getElementById('name').value}`, 10, 30);
-                    doc.text(`Email: ${document.getElementById('email').value}`, 10, 40);
-                    doc.text(`Event: ${events[document.getElementById('event').value].name}`, 10, 50);
-                    doc.text(`Team Size: ${document.getElementById('teamSize').value}`, 10, 60);
-                    doc.text(`Payment Amount: ₹${document.getElementById('paymentAmount').textContent}`, 10, 70);
-                    doc.text(`Screenshot URL: ${screenshotUrl}`, 10, 80);
+            doc.setDrawColor(0);
+            doc.setLineWidth(2);
+            doc.rect(margin, margin, pageWidth - 2 * margin, pageHeight - 2 * margin);
 
-                    doc.save('event_registration_report.pdf');
+            doc.setFontSize(24);
+            doc.setFont(undefined, 'bold');
+            doc.text('ACN', pageWidth / 2, 25, { align: 'center' });
 
-                    console.log('Registration complete! Your report has been generated and downloaded.');
-                    resolve();
-                } catch (error) {
-                    console.error('Error generating PDF:', error);
-                    reject(error);
-                }
+            doc.setFontSize(16);
+            doc.setFont(undefined, 'normal');
+            doc.text('Event Registration Receipt', pageWidth / 2, 35, { align: 'center' });
+
+            // Add paragraphs
+            doc.setFontSize(12);
+            const paragraphs = [
+                'Thank you for registering for our event. We are excited to have you join us for this amazing experience.',
+                'This receipt serves as confirmation of your registration and payment. Please keep it for your records.',
+                'If you have any questions or need to make changes to your registration, please contact our support team.'
+            ];
+            let yPosition = 50;
+            paragraphs.forEach(paragraph => {
+                doc.text(paragraph, margin + 5, yPosition, { maxWidth: pageWidth - 2 * margin - 10 });
+                yPosition += 20;
             });
+
+            yPosition += 10;
+            doc.setDrawColor(0);
+            doc.setLineWidth(0.5);
+            doc.rect(margin + 5, yPosition, pageWidth - 2 * margin - 10, 80);
+
+            doc.setFontSize(14);
+            doc.setFont(undefined, 'bold');
+            doc.text('Event Registration Details', pageWidth / 2, yPosition - 5, { align: 'center' });
+            doc.setFontSize(12);
+            doc.setFont(undefined, 'normal');
+            const details = [
+                `Registration ID: ${registrationId}`,
+                `Name: ${document.getElementById('name').value}`,
+                `Email: ${document.getElementById('email').value}`,
+                `Event: ${events[document.getElementById('event').value].name}`,
+                `Team Size: ${document.getElementById('teamSize').value}`,
+                `Payment Amount: ₹${document.getElementById('paymentAmount').textContent}`,
+                `Screenshot URL: ${screenshotUrl}`
+            ];
+            yPosition += 10;
+            details.forEach(detail => {
+                doc.text(detail, margin + 10, yPosition);
+                yPosition += 10;
+            });
+
+            
+            doc.setFontSize(10);
+            doc.text('Contact: support@acn.com | Phone: +1 (123) 456-7890 | Website: www.amritacybernation.com', pageWidth / 2, pageHeight - 15, { align: 'center' });
+
+            doc.save(`event_registration_receipt_for_${events[document.getElementById('event').value].name}.pdf`);
+
+            console.log('Registration complete! Your receipt has been generated and downloaded.');
+            resolve();
+        } catch (error) {
+            console.error('Error generating PDF:', error);
+            reject(error);
         }
+    });
+}
 
         function updateUPIQRCode(amount) {
             const upiId1 = "saranya.gopu7-1@okhdfcbank";
