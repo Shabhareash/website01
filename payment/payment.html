@@ -834,6 +834,13 @@ function switchQR(option,amount){
         label.textContent = "UPI Option 2";
         link.href = `upi://pay?pa=aravindmohan1883-1@okhdfcbank&pn=ACN&am=${amount}&cu=INR&tn=Payment%20for%20Event%20Registration`;
     }
+    document.querySelectorAll(".qr-option").forEach((btn, index) => {
+        if (index + 1 === option) {
+            btn.classList.add("active");
+        } else {
+            btn.classList.remove("active");
+        }
+    });
 }
 
 
