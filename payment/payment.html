@@ -312,7 +312,7 @@
         /*team members*/
         .team-members-grid {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 20px;
             margin-bottom: 20px;
         }
@@ -497,7 +497,6 @@
             const grid = document.createElement('div');
             grid.className = 'team-members-grid';
             grid.style.display = 'grid';
-            grid.style.gridTemplateColumns = 'repeat(2, 1fr)';
             grid.style.gap = '10px';
             grid.style.marginBottom = '20px';
 
