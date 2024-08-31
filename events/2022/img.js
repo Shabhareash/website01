@@ -41,7 +41,7 @@ async function initializeApp() {
     }
 }
 
-initializeApp();
+
 
 
 async function fetchAndDisplayImages() {
