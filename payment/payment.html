@@ -416,7 +416,6 @@
         </div>
 
 
-        <!-- Page 3: Transaction Details -->
         <div id="page3" class="hidden">
             <form id="screenshotForm">
                 <label for="screenshot">Upload Payment Screenshot:</label>
@@ -619,7 +618,7 @@
                 return;
             }
 
-            // Gather all form data
+            
             const formData = {
                 name: document.getElementById('name').value,
                 email: document.getElementById('email').value,
@@ -630,12 +629,11 @@
                 timestamp: firebase.firestore.FieldValue.serverTimestamp()
             };
 
-            // Create the document in Firebase
+            
             db.collection("registrations").add(formData)
                 .then((docRef) => {
                     console.log("Document written with ID: ", docRef.id);
                     registrationDocRef = docRef;
-                    // Now that we have the document reference, upload the screenshot
                     resizeAndUploadImage(screenshot);
                 })
                 .catch((error) => {
@@ -734,7 +732,7 @@
                     doc.setFont(undefined, 'normal');
                     doc.text('Event Registration Receipt', pageWidth / 2, 35, { align: 'center' });
 
-                    // Add paragraphs
+                    
                     doc.setFontSize(12);
                     const paragraphs = [
                         'Thank you for registering for our event. We are excited to have you join us for this amazing experience.',
