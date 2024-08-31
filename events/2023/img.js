@@ -15,7 +15,7 @@ async function getToken() {
 
 // Function to fetch Firebase config using the token
 async function getFirebaseConfig(token) {
-    const response = await fetch('https://backend-server-black.vercel.app/api/firebase-config', {
+    const response = await fetch('https://backend-server-black.vercel.app/api/firebase-config?configType=config1', {
         headers: {
             'Authorization': token
         }
