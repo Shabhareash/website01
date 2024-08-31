@@ -211,11 +211,82 @@ button:hover {
     font-size: 14px;
 }
 
-.qr-code-container {
-    position: relative;
-    width: 200px;
-    height: 200px;
-}
+.qr-code-section {
+            background-color: var(--white);
+            border-radius: 10px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: var(--transition);
+            text-align: center;
+        }
+
+        .qr-code-section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .qr-code-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 2rem auto;
+            width: 200px;
+            height: 200px;
+            border: 2px solid var(--primary-color);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .qr-code {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: var(--white);
+            transition: opacity 0.3s ease;
+        }
+
+        .qr-code.hidden {
+            opacity: 0;
+            pointer-events: none;
+            position: absolute;
+        }
+
+        .qr-options {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 1rem;
+        }
+
+        .qr-option {
+            background-color: var(--light-gray);
+            border: none;
+            padding: 0.5rem 1rem;
+            margin: 0 0.5rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: var(--transition);
+            font-weight: 600;
+            color: var(--dark-gray);
+        }
+
+        .qr-option.active {
+            background-color: var(--primary-color);
+            color: var(--white);
+        }
+
+        .qr-label {
+            margin-top: 1rem;
+            font-weight: 600;
+            color: var(--primary-dark);
+        }
+
+        #paymentAmount {
+            font-size: 1.5em;
+            font-weight: 600;
+            color: var(--primary-color);
+        }
 
 .qr-codes {
     position: relative;
@@ -300,22 +371,23 @@ button:hover {
         </div>-->
         <!-- Page 2: Payment -->
 <div id="page2" class="hidden">
+    <div class="qr-code-section">
     <h2>Payment Information</h2>
     <p>Please make a payment of ₹<span id="paymentAmount">0</span> to complete your registration.</p>
     <div class="pay">
         <h1>Scan to Pay</h1>
-        <div class="qr-code-container">
-            <input type="radio" id="qr1" name="qrSelect" value="1" checked>
-            <label for="qr1">Option 1</label>
-            <input type="radio" id="qr2" name="qrSelect" value="2">
-            <label for="qr2">Option 2</label>
+        <div class="qr-options">
+            <button class="qr-option active" onclick="switchQR(1)">Option 1</button>
+                        <button class="qr-option" onclick="switchQR(2)">Option 2</button>
+            </div>
             
-            <div class="qr-codes">
+            <div class="qr-code-container">
                 <a id="upi-link" target="_blank">
                 <div id="upi-qr1" class="qr-code"></div></a>
                 <a id="upi-link1" target="_blank">
                 <div id="upi-qr2" class="qr-code hidden"></div></a>
             </div>
+            <div id="qr-label" class="qr-label">UPI Option 1</div>
         </div>
     </div>
     <button type="button" onclick="nextPage(3)">I've made the payment</button>
@@ -706,8 +778,32 @@ const transactionNote = "Payment for Event Registration";
 
     document.getElementById("upi-link").href = upiUrl1;
     document.getElementById("upi-link1").href = upiUrl2;
+    switchQR(1);
 }
+function switchQR(option) {
+            const qr1 = document.getElementById("upi-qr1");
+            const qr2 = document.getElementById("upi-qr2");
+            const label = document.getElementById("qr-label");
+            const buttons = document.querySelectorAll(".qr-option");
 
+            if (option === 1) {
+                qr1.classList.remove("hidden");
+                qr2.classList.add("hidden");
+                label.textContent = "UPI Option 1";
+            } else {
+                qr1.classList.add("hidden");
+                qr2.classList.remove("hidden");
+                label.textContent = "UPI Option 2";
+            }
+
+            buttons.forEach((btn, index) => {
+                if (index + 1 === option) {
+                    btn.classList.add("active");
+                } else {
+                    btn.classList.remove("active");
+                }
+            });
+        }
 document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('screenshot').addEventListener('change', function(event) {
         const file = event.target.files[0];
