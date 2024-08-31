@@ -25,6 +25,7 @@ async function getFirebaseConfig(token) {
 }
 
 let db;
+let storage;
 
 async function initializeApp() {
     try {
@@ -32,7 +33,7 @@ async function initializeApp() {
         const config = await getFirebaseConfig(token);
         firebase.initializeApp(config);
         db = firebase.firestore();
-        const storage = firebase.storage();
+        storage = firebase.storage();
         
         console.log("Firebase and Firestore initialized successfully");
     } catch (error) {
@@ -42,13 +43,19 @@ async function initializeApp() {
 
 initializeApp();
 
-function updateFirebaseDocument(collection, document, data) {
-    return db.collection(collection).doc(document).set(data, { merge: true });
-}
+
 async function fetchAndDisplayImages() {
     try {
+        if (!db) {
+            throw new Error("Firestore DB is not initialized");
+        }
         const collectionRef = db.collection('2022');
         const querySnapshot = await collectionRef.get();
+
+        if (querySnapshot.empty) {
+            console.warn('No documents found in the "history" collection');
+            return;
+        }
         const docs = querySnapshot.docs;
         for (let i = 0; i < docs.length; i++) {
             if (i < docs.length) {
@@ -77,4 +84,9 @@ function displayImage(imgElementId, imageUrl) {
 }
 
 
-document.addEventListener('DOMContentLoaded', fetchAndDisplayImages);
+async function initializeAppAndFetchImages() {
+    await initializeApp();
+    await fetchAndDisplayImages();
+}
+
+document.addEventListener('DOMContentLoaded', initializeAppAndFetchImages);

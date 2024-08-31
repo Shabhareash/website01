@@ -1,4 +1,3 @@
-// Function to fetch the token from the backend
 async function getToken() {
     const response = await fetch('https://backend-server-black.vercel.app/api/get-token', {
         method: 'POST',
@@ -13,7 +12,6 @@ async function getToken() {
     return data.token;
 }
 
-// Function to fetch Firebase config using the token
 async function getFirebaseConfig(token) {
     const response = await fetch('https://backend-server-black.vercel.app/api/firebase-config?configType=config1', {
         headers: {
@@ -29,7 +27,7 @@ async function getFirebaseConfig(token) {
 let db;
 let storage;
 
-// Function to initialize Firebase and Firestore
+
 async function initializeApp() {
     try {
         const token = await getToken();
@@ -44,7 +42,6 @@ async function initializeApp() {
     }
 }
 
-// Function to fetch images and display them on the page
 async function fetchAndDisplayImages() {
     try {
         if (!db) {
@@ -81,7 +78,6 @@ async function fetchAndDisplayImages() {
     }
 }
 
-// Helper function to display an image
 function displayImage(imgElementId, imageUrl) {
     const imgElement = document.getElementById(imgElementId);
     if (imgElement) {
@@ -92,7 +88,7 @@ function displayImage(imgElementId, imageUrl) {
     }
 }
 
-// Helper function to display another image
+
 function displayImage1(imgElementId1, imageUrl) {
     const imgElement = document.getElementById(imgElementId1);
     if (imgElement) {
@@ -103,7 +99,7 @@ function displayImage1(imgElementId1, imageUrl) {
     }
 }
 
-// Helper function to display text
+
 function displayText(textElementId, text) {
     const textElement = document.getElementById(textElementId);
     if (textElement) {
@@ -113,7 +109,7 @@ function displayText(textElementId, text) {
     }
 }
 
-// Helper function to display header text
+
 function displayHeader(headerElementId, head) {
     const headerElement = document.getElementById(headerElementId);
     if (headerElement) {
@@ -123,7 +119,7 @@ function displayHeader(headerElementId, head) {
     }
 }
 
-// Helper function to display events and event details
+
 function displayEvents(eventsElementId, eventdetailsElementId, events, eventdetails) {
     const eventsElement = document.getElementById(eventsElementId);
     const eventdetailsElement = document.getElementById(eventdetailsElementId);
@@ -141,7 +137,7 @@ function displayEvents(eventsElementId, eventdetailsElementId, events, eventdeta
     }
 }
 
-// Initialize the app and then fetch and display images
+
 async function initializeAppAndFetchImages() {
     await initializeApp();
     await fetchAndDisplayImages();
