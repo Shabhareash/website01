@@ -814,10 +814,10 @@ function updateUPIQRCode(amount) {
         window.open(upiUrl2, "_blank");
     });
 
-    switchQR(1);
+    switchQR(1,amount);
 }
 
-function switchQR(option) {
+function switchQR(option,amount){
     const qr1 = document.getElementById("upi-qr1");
     const qr2 = document.getElementById("upi-qr2");
     const label = document.getElementById("qr-label");
