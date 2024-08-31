@@ -288,10 +288,9 @@ h1{
   background-color: rgb(0,78,114);
   z-index: 0;
 }
-
 #a1 {
   color: rgb(217, 177, 78);
-  box-shadow: 1px 1px 0 rrgb(217, 177, 78), 
+  box-shadow: 1px 1px 0 rgb(217, 177, 78), 
               -1px -1px 0 rgb(217, 177, 78), 
               -1px 1px 0 rgb(217, 177, 78), 
               1px -1px 0 rgb(217, 177, 78);
@@ -301,6 +300,8 @@ h1{
   background-color: rgb(217, 177, 78);
   z-index: 0;
 }
+
+
 
 #a3 {
   color: rgb(73,151,43);
@@ -329,7 +330,7 @@ h1{
 }
 
 #a5 {
-  color: rgbrgb(115,189,233);
+  color: rgb(115,189,233);
   box-shadow: 1px 1px 0 rgb(115,189,233), 
               -1px -1px 0 rgb(115,189,233), 
               -1px 1px 0 rgb(115,189,233), 
@@ -507,6 +508,8 @@ h1{
   .learn-more-btn,
   .animated-button1 {
     margin: 10px auto;
+    text-decoration:none;
+    font-family:'Poppins';
   }
 
   /* Hide scrollbar for Chrome, Safari and Opera */
