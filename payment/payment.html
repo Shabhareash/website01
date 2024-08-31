@@ -764,7 +764,7 @@ function generatePDF(screenshotUrl, registrationId) {
             doc.setFontSize(10);
             doc.text('Contact: support@acn.com | Phone: +1 (123) 456-7890 | Website: www.amritacybernation.com', pageWidth / 2, pageHeight - 15, { align: 'center' });
 
-            doc.save(`event_registration_receipt_for_${events[document.getElementById('event').value].name}.pdf`);
+            doc.save(`event_registration_receipt_for_${events[document.getElementById('event').value].name.replace(/\s+/g, '_')}.pdf`);
 
             console.log('Registration complete! Your receipt has been generated and downloaded.');
             resolve();
