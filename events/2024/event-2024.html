@@ -353,12 +353,48 @@
         font-size: 18px;
         cursor: pointer;
       }
+      /*login*/
+      .login-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.login-box {
+  background-color: white;
+  padding: 2rem;
+  border-radius: 10px;
+  text-align: center;
+}
+
+.google-sign-in-button {
+  background-color: #4285F4;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  margin-top: 20px;
+}
     </style>
   </head>
 
   <body>
-
-
+    <div id="loginOverlay" class="login-overlay">
+      <div class="login-box">
+        <h2>Welcome to Events 3.0</h2>
+        <p>Please sign in with Google to access the content.</p>
+        <button id="googleSignInButton" class="google-sign-in-button">Sign in with Google</button>
+      </div>
+    </div>
     <header>
 
       <section id="home" class="section">
@@ -735,200 +771,210 @@
     })
     </script>
 <script>
-  document.addEventListener('DOMContentLoaded', () => {
-    const profileCircle = document.getElementById('profileCircle');
-    const profileDropdown = document.getElementById('profileDropdown');
-    const profileImage = document.getElementById('profileImage');
-    const userName = document.getElementById('userName');
-    const userEmail = document.getElementById('userEmail');
-    const purchaseList = document.getElementById('purchaseList');
-    const loginButton = document.getElementById('loginButton');
-    const logoutButton = document.getElementById('logoutButton');
-    const closeButton = document.getElementById('closeButton');
+document.addEventListener('DOMContentLoaded', () => {
+  const loginOverlay = document.getElementById('loginOverlay');
+  const googleSignInButton = document.getElementById('googleSignInButton');
+  const profileCircle = document.getElementById('profileCircle');
+  const profileDropdown = document.getElementById('profileDropdown');
+  const profileImage = document.getElementById('profileImage');
+  const userName = document.getElementById('userName');
+  const userEmail = document.getElementById('userEmail');
+  const purchaseList = document.getElementById('purchaseList');
+  const loginButton = document.getElementById('loginButton');
+  const logoutButton = document.getElementById('logoutButton');
+  const closeButton = document.getElementById('closeButton');
 
-    profileCircle.addEventListener('click', () => {
-      profileDropdown.style.display = profileDropdown.style.display === 'none' ? 'block' : 'none';
+  function showLoginOverlay() {
+    loginOverlay.style.display = 'flex';
+  }
+
+  function hideLoginOverlay() {
+    loginOverlay.style.display = 'none';
+  }
+
+  function signInWithGoogle() {
+    const provider = new firebase.auth.GoogleAuthProvider();
+    auth1.signInWithPopup(provider)
+      .then((result) => {
+        const user = result.user;
+        updateProfileInfo(user);
+        fetchPurchaseHistory(user.email);
+        hideLoginOverlay();
+      })
+      .catch((error) => {
+        console.error('Error during login:', error);
+      });
+  }
+
+  googleSignInButton.addEventListener('click', signInWithGoogle);
+  loginButton.addEventListener('click', signInWithGoogle);
+
+  profileCircle.addEventListener('click', () => {
+    profileDropdown.style.display = profileDropdown.style.display === 'none' ? 'block' : 'none';
+  });
+
+  closeButton.addEventListener('click', () => {
+    profileDropdown.style.display = 'none';
+  });
+
+  logoutButton.addEventListener('click', () => {
+    auth1.signOut().then(() => {
+      resetProfileInfo();
+      showLoginOverlay();
+    }).catch((error) => {
+      console.error('Error logging out:', error);
     });
+  });
 
-    closeButton.addEventListener('click', () => {
-      profileDropdown.style.display = 'none';
-    });
-
-    loginButton.addEventListener('click', () => {
-      const provider = new firebase.auth.GoogleAuthProvider();
-      auth1.signInWithPopup(provider)
-        .then((result) => {
-          const user = result.user;
+  document.addEventListener('firebaseInitialized', () => {
+    if (auth1) {
+      auth1.onAuthStateChanged(user => {
+        if (user) {
           updateProfileInfo(user);
           fetchPurchaseHistory(user.email);
-        })
-        .catch((error) => {
-          console.error('Error during login:', error);
-        });
-    });
-
-    logoutButton.addEventListener('click', () => {
-      auth1.signOut().then(() => {
-        resetProfileInfo();
-      }).catch((error) => {
-        console.error('Error logging out:', error);
+          hideLoginOverlay();
+        } else {
+          resetProfileInfo();
+          showLoginOverlay();
+        }
       });
-    });
-
-    document.addEventListener('firebaseInitialized', () => {
-      if (auth1) {
-        auth1.onAuthStateChanged(user => {
-          if (user) {
-            updateProfileInfo(user);
-            fetchPurchaseHistory(user.email);
-          } else {
-            resetProfileInfo();
-          }
-        });
-      } else {
-        console.error('Firebase Authentication not initialized properly.');
-      }
-    });
-
-    function updateProfileInfo(user) {
-      profileImage.src = user.photoURL || 'https://via.placeholder.com/50';
-      userName.textContent = user.displayName || 'Anonymous User';
-      userEmail.textContent = user.email || 'No email available';
-      loginButton.style.display = 'none';
-      logoutButton.style.display = 'block';
-    }
-
-    function resetProfileInfo() {
-      profileImage.src = 'https://via.placeholder.com/50';
-      userName.textContent = 'User Name';
-      userEmail.textContent = 'user@example.com';
-      loginButton.style.display = 'block';
-      logoutButton.style.display = 'none';
-      purchaseList.innerHTML = '';
-    }
-
-    function fetchPurchaseHistory(email) {
-      if (!db1) {
-        console.error('Firestore database not initialized.');
-        return;
-      }
-      db1.collection('registrations')
-        .where('email', '==', email)
-        .get()
-        .then((querySnapshot) => {
-          purchaseList.innerHTML = '';
-          querySnapshot.forEach((doc) => {
-            const data = doc.data();
-            const timestamp = data.timestamp.toDate();
-            const formattedDate = timestamp.toLocaleString();
-            const purchaseItem = document.createElement('div');
-            purchaseItem.classList.add('purchase-item');
-            purchaseItem.textContent = `Event: ${data.event}, Date: ${formattedDate}`;
-            purchaseList.appendChild(purchaseItem);
-          });
-        })
-        .catch((error) => {
-          console.error("Error fetching purchase history: ", error);
-        });
+    } else {
+      console.error('Firebase Authentication not initialized properly.');
     }
   });
+
+  function updateProfileInfo(user) {
+    profileImage.src = user.photoURL || 'https://via.placeholder.com/50';
+    userName.textContent = user.displayName || 'Anonymous User';
+    userEmail.textContent = user.email || 'No email available';
+    loginButton.style.display = 'none';
+    logoutButton.style.display = 'block';
+  }
+
+  function resetProfileInfo() {
+    profileImage.src = 'https://via.placeholder.com/50';
+    userName.textContent = 'User Name';
+    userEmail.textContent = 'user@example.com';
+    loginButton.style.display = 'block';
+    logoutButton.style.display = 'none';
+    purchaseList.innerHTML = '';
+  }
+
+  function fetchPurchaseHistory(email) {
+    if (!db1) {
+      console.error('Firestore database not initialized.');
+      return;
+    }
+    db1.collection('registrations')
+      .where('email', '==', email)
+      .get()
+      .then((querySnapshot) => {
+        purchaseList.innerHTML = '';
+        querySnapshot.forEach((doc) => {
+          const data = doc.data();
+          const timestamp = data.timestamp.toDate();
+          const formattedDate = timestamp.toLocaleString();
+          const purchaseItem = document.createElement('div');
+          purchaseItem.classList.add('purchase-item');
+          purchaseItem.textContent = `Event: ${data.event}, Date: ${formattedDate}`;
+          purchaseList.appendChild(purchaseItem);
+        });
+      })
+      .catch((error) => {
+        console.error("Error fetching purchase history: ", error);
+      });
+  }
+
+  // Popup and overlay functionality
+  const popupToggles = document.querySelectorAll('.popup-toggle');
+  const overlays = document.querySelectorAll('.overlay');
+  const boxes = document.querySelectorAll('.box');
+
+  popupToggles.forEach((toggle, index) => {
+    toggle.addEventListener('change', function () {
+      if (this.checked) {
+        boxes[index].style.display = 'block';
+        overlays[index].style.display = 'block';
+      } else {
+        boxes[index].style.display = 'none';
+        overlays[index].style.display = 'none';
+      }
+    });
+  });
+
+  overlays.forEach((overlay, index) => {
+    overlay.addEventListener('click', function () {
+      popupToggles[index].checked = false;
+      boxes[index].style.display = 'none';
+      this.style.display = 'none';
+    });
+  });
+
+  // Navbar functionality
+  $('.navbar-toggler').on('click', function () {
+    $(this).find('.navbar-toggler-icon').toggleClass('active');
+    if ($('.navbar-toggler-icon').hasClass('active')) {
+      $('.navbar-toggler-icon').html('&times;');
+    } else {
+      $('.navbar-toggler-icon').html('');
+      $('.navbar-toggler-icon').addClass('navbar-toggler-icon');
+    }
+  });
+
+  $(window).on('scroll', function () {
+    var navbar = $('#myNav');
+    var scrollTop = $(this).scrollTop();
+    var lastScrollTop = 0;
+
+    if (scrollTop > 0) {
+      navbar.addClass('shrink');
+    } else {
+      navbar.removeClass('shrink');
+    }
+
+    if (scrollTop > lastScrollTop) {
+      navbar.addClass('scrolledup');
+    } else {
+      navbar.removeClass('scrolledup');
+    }
+
+    lastScrollTop = scrollTop;
+  });
+
+  var dropdownTimeout;
+  $('.navbar-nav .dropdown').hover(
+    function () {
+      var $this = $(this);
+      clearTimeout(dropdownTimeout);
+      $this.addClass('show');
+      $this.find('.dropdown-menu').addClass('show');
+    },
+    function () {
+      var $this = $(this);
+      dropdownTimeout = setTimeout(function () {
+        $this.removeClass('show');
+        $this.find('.dropdown-menu').removeClass('show');
+      }, 200);
+    }
+  );
+
+  $('.navbar-nav .dropdown-menu').hover(
+    function () {
+      clearTimeout(dropdownTimeout);
+    },
+    function () {
+      var $dropdown = $(this).closest('.dropdown');
+      dropdownTimeout = setTimeout(function () {
+        $dropdown.removeClass('show');
+        $dropdown.find('.dropdown-menu').removeClass('show');
+      }, 200);
+    }
+  );
+
+  showLoginOverlay();
+});
 </script>
 
-    <script>
-      document.getElementById('closeButton').addEventListener('click', () => {
-        profileDropdown.style.display = 'none';
-      });
-    </script>
-
-    <script>
-      document.addEventListener('DOMContentLoaded', function () {
-        const popupToggles = document.querySelectorAll('.popup-toggle');
-        const overlays = document.querySelectorAll('.overlay');
-        const boxes = document.querySelectorAll('.box');
-
-        popupToggles.forEach((toggle, index) => {
-          toggle.addEventListener('change', function () {
-            if (this.checked) {
-              boxes[index].style.display = 'block';
-              overlays[index].style.display = 'block';
-            } else {
-              boxes[index].style.display = 'none';
-              overlays[index].style.display = 'none';
-            }
-          });
-        });
-
-        overlays.forEach((overlay, index) => {
-          overlay.addEventListener('click', function () {
-            popupToggles[index].checked = false;
-            boxes[index].style.display = 'none';
-            this.style.display = 'none';
-          });
-        });
-      });
-      $(document).ready(function () {
-        $('.navbar-toggler').on('click', function () {
-          $(this).find('.navbar-toggler-icon').toggleClass('active');
-          if ($('.navbar-toggler-icon').hasClass('active')) {
-            $('.navbar-toggler-icon').html('&times;');
-          } else {
-            $('.navbar-toggler-icon').html('');
-            $('.navbar-toggler-icon').addClass('navbar-toggler-icon');
-          }
-        });
-
-        $(window).on('scroll', function () {
-          var navbar = $('#myNav');
-          var scrollTop = $(this).scrollTop();
-          var lastScrollTop = 0;
-
-          if (scrollTop > 0) {
-            navbar.addClass('shrink');
-          } else {
-            navbar.removeClass('shrink');
-          }
-
-          if (scrollTop > lastScrollTop) {
-            navbar.addClass('scrolledup');
-          } else {
-            navbar.removeClass('scrolledup');
-          }
-
-          lastScrollTop = scrollTop;
-        });
-
-        var dropdownTimeout;
-        $('.navbar-nav .dropdown').hover(
-          function () {
-            var $this = $(this);
-            clearTimeout(dropdownTimeout);
-            $this.addClass('show');
-            $this.find('.dropdown-menu').addClass('show');
-          },
-          function () {
-            var $this = $(this);
-            dropdownTimeout = setTimeout(function () {
-              $this.removeClass('show');
-              $this.find('.dropdown-menu').removeClass('show');
-            }, 200);
-          }
-        );
-
-        $('.navbar-nav .dropdown-menu').hover(
-          function () {
-            clearTimeout(dropdownTimeout);
-          },
-          function () {
-            var $dropdown = $(this).closest('.dropdown');
-            dropdownTimeout = setTimeout(function () {
-              $dropdown.removeClass('show');
-              $dropdown.find('.dropdown-menu').removeClass('show');
-            }, 200);
-          }
-        );
-      });
-    </script>
   </body>
-</div>
 
 </html>
