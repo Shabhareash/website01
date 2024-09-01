@@ -546,18 +546,16 @@
         color: #ffffff;
         z-index: 0;
       }
-
       .image {
-        position: absolute;
-        width: 15px;
-        height: 15px;
-        background-size: cover;
-        background-position: center;
-      }
-
-      .vanta-canvas {
-        height: 2200px !important;
-      }
+            position: absolute;
+            width: 15px;
+            height: 15px;
+            background-size: cover;
+            background-position: center;
+        }
+    .vanta-canvas{
+  height:2200px !important;
+}
     </style>
   </head>
 
@@ -919,74 +917,74 @@
 
     </div>
     <script>
-      const imagePaths = [
-        "/events/2024/p3.png",
-        "/events/2024/p2.png",
-        "/events/2024/p1.png",
-        "/events/2024/p5.png",
-        "/events/2024/p4.png",
-        "/events/2024/p6.png",
-        "/events/2024/p7.png",
-        "/events/2024/p8.png",
-        "/events/2024/p9.png"
-      ];
+        const imagePaths = [
+            "/events/2024/p3.png",
+            "/events/2024/p2.png",
+            "/events/2024/p1.png",
+            "/events/2024/p5.png",
+            "/events/2024/p4.png",
+            "/events/2024/p6.png",
+            "/events/2024/p7.png",
+            "/events/2024/p8.png",
+            "/events/2024/p9.png"
+        ];
 
-      function shuffleArray(array) {
-        for (let i = array.length - 1; i > 0; i--) {
-          const j = Math.floor(Math.random() * (i + 1));
-          [array[i], array[j]] = [array[j], array[i]];
-        }
-      }
-
-      function createImage(path, x, y, fallSpeed) {
-        const img = document.createElement('img');
-        img.className = 'image';
-        img.src = path;
-        img.style.left = `${x}px`;
-        img.style.top = `${y}px`;
-        document.body.appendChild(img);
-
-        function fall() {
-          let topPosition = parseFloat(img.style.top);
-          if (topPosition < 2204) {
-            img.style.top = `${topPosition + fallSpeed}px`;
-            requestAnimationFrame(fall);
-          } else {
-            img.remove();
-          }
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
         }
 
-        fall();
-      }
+        function createImage(path, x, y, fallSpeed) {
+            const img = document.createElement('img');
+            img.className = 'image';
+            img.src = path;
+            img.style.left = `${x}px`;
+            img.style.top = `${y}px`;
+            document.body.appendChild(img);
 
-      function startFallingImages() {
-        const totalImages = 10;
-        let imagesToUse = [...imagePaths];
-        while (imagesToUse.length < totalImages) {
-          imagesToUse = imagesToUse.concat(imagePaths);
-        }
-        imagesToUse = imagesToUse.slice(0, totalImages);
+            function fall() {
+                let topPosition = parseFloat(img.style.top);
+                if (topPosition < 2204) {
+                    img.style.top = `${topPosition + fallSpeed}px`;
+                    requestAnimationFrame(fall);
+                } else {
+                    img.remove();
+                }
+            }
 
-        function createImageSet() {
-          shuffleArray(imagesToUse);
-
-          imagesToUse.forEach((path, index) => {
-            const x = Math.floor(Math.random() * (window.innerWidth - 15));
-            const y = -index * 20 + Math.floor(Math.random() * 10);
-            const fallSpeed = 1 + Math.random();
-            createImage(path, x, y, fallSpeed);
-          });
-        }
-
-        function loop() {
-          createImageSet();
-          setTimeout(loop, 3000);
+            fall();
         }
 
-        loop();
-      }
+        function startFallingImages() {
+            const totalImages = 10;
+            let imagesToUse = [...imagePaths];
+            while (imagesToUse.length < totalImages) {
+                imagesToUse = imagesToUse.concat(imagePaths);
+            }
+            imagesToUse = imagesToUse.slice(0, totalImages);
 
-      startFallingImages();
+            function createImageSet() {
+                shuffleArray(imagesToUse);
+
+                imagesToUse.forEach((path, index) => {
+                    const x = Math.floor(Math.random() * (window.innerWidth - 15));
+                    const y = -index * 20 + Math.floor(Math.random() * 10);
+                    const fallSpeed = 1 + Math.random();
+                    createImage(path, x, y, fallSpeed);
+                });
+            }
+
+            function loop() {
+                createImageSet();
+                setTimeout(loop, 3000);
+            }
+
+            loop();
+        }
+
+        startFallingImages();
     </script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
@@ -1043,7 +1041,6 @@
               updateProfileInfo(user);
               fetchPurchaseHistory(user.email);
               hideLoginOverlay();
-              localStorage.setItem('isLoggedIn', 'true'); // Mark as logged in
             })
             .catch((error) => {
               console.error('Error during login:', error);
@@ -1065,7 +1062,6 @@
           auth1.signOut().then(() => {
             resetProfileInfo();
             showLoginOverlay();
-            localStorage.removeItem('isLoggedIn'); // Mark as logged out
           }).catch((error) => {
             console.error('Error logging out:', error);
           });
@@ -1129,6 +1125,8 @@
               console.error("Error fetching purchase history: ", error);
             });
         }
+
+        // Navbar functionality
         window.addEventListener('scroll', function () {
           const navbar = document.querySelector('.navbar');
           if (window.scrollY > 50) {
@@ -1137,11 +1135,8 @@
             navbar.classList.remove('shrink');
           }
         });
-        if (!localStorage.getItem('isLoggedIn')) {
-          showLoginOverlay();
-        }
+        showLoginOverlay();
       });
-
     </script>
     </body>
     <footer>
