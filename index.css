@@ -350,7 +350,9 @@ img[src="/image/3rd edition.png"]
     z-index: 0;
   }
   footer h4 { 
-    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif; 
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    color: #ffffff;
+    text-align: center;
   }
   
   .logo2 img {
