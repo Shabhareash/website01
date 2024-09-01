@@ -349,6 +349,9 @@ img[src="/image/3rd edition.png"]
     /* Adjust font size */
     z-index: 0;
   }
+  footer h4 { 
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif; 
+  }
   
   .logo2 img {
     height: auto;
