@@ -77,6 +77,9 @@ body {
   height: 30px;
   font-size: 12px;
 }
+.navbar-toggler{
+  margin-left:5px !important;
+}
 .navbar-collapse {
   background-color: rgba(0, 0, 0, 0.9);
   position: absolute;
@@ -306,10 +309,7 @@ html {
     margin-top:0px !important
     ;
   }
-  .navbar-toggler{
-    margin-left:5px !important;
 }
-
 /* Responsive styles for mobile */
 @media screen and (max-width: 768px) {
   ul {
