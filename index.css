@@ -4,6 +4,9 @@ img[src="/image/2Z2A1194.JPG"]
 img[src="/image/2nd edition.png"]
 img[src="/image/abc.JPG"]
 img[src="/image/3rd edition.png"]
+
+
+/* old dont edit it 
 .navbar {
   background-color: #000000;
   height: 80px;
@@ -56,7 +59,7 @@ img[src="/image/3rd edition.png"]
   color: #ffffff;
 }
 
-/* Moving text */
+/* Moving text 
 .moving-text {
   white-space: nowrap;
   position: relative;
@@ -156,54 +159,53 @@ img[src="/image/3rd edition.png"]
   margin-left: auto;
 }
 
-/* Dropdown Menu Styles */
+/* Dropdown Menu Styles 
 .dropdown-menu {
-  background-color: rgba(0, 0, 0, 0.7); /* Black with transparency */
+  background-color: rgba(0, 0, 0, 0.7); /* Black with transparency 
   border: none;
   border-radius: 5px;
   padding: 10px;
 }
 
 .dropdown-menu .dropdown-item {
-  color: #fff; /* White text color */
+  color: #fff; /* White text color 
   transition: background-color 0.3s ease;
 }
 
 .dropdown-menu .dropdown-item:hover {
-  background-color: rgba(255, 255, 255, 0.2); /* Slight white hover effect */
+  background-color: rgba(255, 255, 255, 0.2);  Slight white hover effect 
 }
  
-/* Styles for the collapsed navbar menu */
+/* Styles for the collapsed navbar menu 
 .navbar-collapse {
-  background-color: rgba(0, 0, 0, 0.8); /* Black with some transparency */
-  border-radius: 5px; /* Rounded corners */
+  background-color: rgba(0, 0, 0, 0.8); /* Black with some transparency 
+  border-radius: 5px; /* Rounded corners 
 }
 
-/* Style for the dropdown menu items */
+/* Style for the dropdown menu items 
 .navbar-nav .nav-item .nav-link {
-  color: #ffffff; /* White text color */
-  padding: 10px 15px; /* Add padding for better spacing */
+  color: #ffffff; /* White text color 
+  padding: 10px 15px; /* Add padding for better spacing 
 }
 
 .navbar-nav .nav-item .nav-link:hover {
-  background-color: rgba(255, 255, 255, 0.2); /* Slight white hover effect */
-  color: #ffffff; /* Ensure text color remains white */
+  background-color: rgba(255, 255, 255, 0.2); /* Slight white hover effect 
+  color: #ffffff; /* Ensure text color remains white 
 }
 
 .navbar-toggler {
-  border: none; /* Remove border */
-  background: transparent; /* Ensure background is transparent */
+  border: none; /* Remove border 
+  background: transparent; /* Ensure background is transparent 
 }
 
 .navbar-toggler-icon {
   background-image: url('data:image/svg+xml;charset=utf8,<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 30 30"><path stroke="rgba(255, 255, 255, 0.5)" stroke-width="2" d="M5 7h20M5 15h20M5 23h20"/></svg>');
 }
 
-/* Adjust the dropdown menu visibility on mobile */
+/* Adjust the dropdown menu visibility on mobile 
 .navbar-collapse.show {
-  display: block; /* Ensure menu displays when toggled */
-}
-
+  display: block; /* Ensure menu displays when toggled 
+}*/
   body,
   html {
     margin: 0;
