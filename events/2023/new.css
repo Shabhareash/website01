@@ -305,6 +305,8 @@ html {
     margin-top:0px !important
     ;
   }
+  .navbar-toggler{
+    margin-left:5px !important;
 }
 /* Responsive styles for mobile */
 @media screen and (max-width: 768px) {
