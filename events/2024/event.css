@@ -187,6 +187,7 @@ button {
   border-radius: 30px;
   cursor: pointer;
   transition: background-color 0.3s, color 0.3s;
+  text-decoration: none;
 }
 
 .learn-more-btn:hover {
