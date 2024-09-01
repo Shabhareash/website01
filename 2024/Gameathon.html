@@ -3,7 +3,7 @@
 
 <head>
     <title>Gameathon</title>
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="icon" href="/2024/images/ACN (4).png" type="image/png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Libre+Barcode+39&display=swap" rel="stylesheet">
@@ -38,231 +38,214 @@
             font-style: normal;
         }
 
+            /*new */
+            .navbar {
+    background-color: #000000;
+    height: 80px;
+    width: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 30px;
+    transition: transform 1.5s ease, width 1s ease, border-radius 1s ease, margin-left 1s ease, margin-top 1s ease;
+    animation: textReveal 2s;
+}
 
-        .navbar {
-            background-color: rgba(0, 0, 0, 0.6);
-            backdrop-filter: blur(10px);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0 30px;
-            box-sizing: border-box;
-            z-index: 1000;
-            position: fixed;
-            top: 0;
-            left: 0;
-            height: 80px;
-            width: 100%;
-            animation: textReveal 2s;
-            transition: transform 1.5s ease, width 1s ease, border-radius 1s ease, margin-left 1s ease, margin-top 1s ease;
-        }
+.navbar.shrink {
+    height: 72px;
+    width: 90%;
+    margin-left: calc((100vw - 90vw) / 2);
+    margin-top: 20px;
+    border-radius: 70px;
+}
 
-        @keyframes textReveal {
-            0% {
-                opacity: 0;
-                transform: translateY(-100px);
-            }
+.navbar-toggler {
+    margin-left: auto;
+    border: none;
+    background: transparent;
+    margin-bottom: 3%;
+    width: 50px;
+    height: 50px;
+    border-color: rgba(255,255,255,0.5);
+}
 
-            100% {
-                opacity: 1;
-                transform: translateY(0px);
-            }
-        }
+.navbar-toggler-icon {
+    background-image: url('data:image/svg+xml;charset=utf8,<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 30 30"><path stroke="rgba(255, 255, 255, 0.5)" stroke-width="2" d="M4 7h22M4 15h22M4 23h22"/></svg>');
+}
 
-        .navbar.shrink {
-            height: 80px;
-            width: 90%;
-            margin-left: calc((100vw - 90vw) / 2);
-            margin-top: 20px;
-            border-radius: 70px;
-        }
+.navbar-brand img {
+    height: 60px;
+    transition: all 0.3s ease;
+}
 
-        .navbar.scrolledup {
-            transition: width 0.5s ease-out, border-radius 0.5s ease-out, margin-left 0.5s ease-out, margin-top 0.5s ease-out;
+.navbar-nav .nav-item .nav-link {
+    color: white;
+    padding: 7px;
+    border-radius: 10px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    font-size: 16px;
+}
 
-        }
+.navbar-nav .nav-item .nav-link:hover {
+    background-color: #b22049;
+    color: #ffffff;
+}
 
-        .navbar-nav .nav-item .nav-link {
-            color: white;
-            padding: 7px 7px;
-            border-radius: 10px;
-            transition: background-color 0.3s ease, color 0.3s ease;
-            font-size: 16px;
-            align-items: self-start;
-        }
+/* Moving Text */
+.moving-text {
+    white-space: nowrap;
+    position: relative;
+    font-size: 20px;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    color: white;
+    text-transform: uppercase;
+    letter-spacing: 5px;
+    overflow: hidden;
+    width: 51%;
+}
 
-        .navbar-nav .nav-item .nav-link:hover {
-            background-color: #05b4f1;
-            color: #ffffff;
-        }
+.text-slide {
+    display: inline-flex;
+    align-items: center;
+    animation: 10s slide infinite linear;
+}
 
-        .navbar-brand img {
-            height: 90px;
-        }
+@keyframes slide {
+    from {
+        transform: translateX(0%);
+    }
+    to {
+        transform: translateX(-50%);
+    }
+}
 
-        .moving-text {
-            white-space: nowrap;
-            position: relative;
-            font-size: 20px;
-            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-            color: white;
-            text-transform: uppercase;
-            letter-spacing: 5px;
-            overflow: hidden;
-            width: 51%;
-        }
+.moving-text:hover .text-slide {
+    animation-play-state: paused;
+}
 
-        .moving-text:before,
-        .moving-text:after {
-            position: absolute;
-            top: 0;
-            width: 50px;
-            height: 100%;
-            content: "";
-            z-index: 2;
-        }
+/* Button Styles */
+.animated-button {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    width: 130px;
+    height: 35px;
+    background-color: #b22049;
+    color: white;
+    border: none;
+    font-size: 15px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: color 0.3s, background-color 0.3s;
+    border-radius: 40px;
+    margin: 0 10px;
+    text-decoration: none;
+    box-sizing: border-box;
+}
 
-        .moving-text:hover .text-slide {
-            animation-play-state: paused;
-        }
+.animated-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: white;
+    z-index: 1;
+    transition: top 0.3s;
+    top: 100%;
+    box-sizing: border-box;
+}
 
-        .text-slide {
-            display: inline-flex;
-            align-items: center;
-            animation: 10s slide infinite linear;
-        }
+.animated-button:hover::before {
+    top: 0;
+}
 
-        .text-slide span {
-            margin: 0 10px;
-        }
+.animated-button span {
+    position: relative;
+    z-index: 2;
+    transition: color 0.3s;
+    white-space: nowrap;
+}
 
-        @keyframes slide {
-            from {
-                transform: translateX(0%);
-            }
+.animated-button:hover {
+    background-color: black;
+}
 
-            to {
-                transform: translateX(-50%);
-            }
-        }
+.animated-button:hover span {
+    color: #b22049;
+}
 
-        .animated-button {
-            display: inline-flex;
-            justify-content: center;
-            align-items: center;
-            width: 130px;
-            height: 35px;
-            background-color: #05b4f1;
-            color: white;
-            border: none;
-            font-size: 15px;
-            cursor: pointer;
-            position: relative;
-            overflow: hidden;
-            transition: color 0.3s, background-color 0.3s;
-            border-radius: 40px;
-            margin: 0 10px;
-            text-decoration: none;
-            /* Remove underline from the link */
-            box-sizing: border-box;
-            /* Include padding and border in the element's total width and height */
-        }
+/* Dropdown Menu Styles */
+.dropdown-menu {
+    background-color: rgba(0, 0, 0, 0.7);
+    border: none;
+    border-radius: 5px;
+    padding: 10px;
+}
 
-        .animated-button::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: white;
-            z-index: 1;
-            transition: top 0.3s;
-            top: 100%;
-            box-sizing: border-box;
-            /* Ensure pseudo-element respects padding */
-        }
+.dropdown-item {
+    color: white;
+    transition: background-color 0.3s ease;
+}
 
-        .animated-button:hover::before {
-            top: 0;
-        }
+.dropdown-item:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
 
-        .animated-button span {
-            position: relative;
-            z-index: 2;
-            transition: color 0.3s;
-            white-space: nowrap;
-            font-family: Arial, sans-serif !important;
-        }
+.navbar-nav .dropdown:hover .dropdown-menu {
+    display: block;
+}
+.dropdown-toggle::after {
+      transition: transform 0.3s ease;
+    }
 
-        .animated-button:hover {
-            background-color: black;
-        }
+    .nav-item.dropdown:hover .dropdown-toggle::after {
+      transform: rotate(180deg);
+    }
 
-        .animated-button:hover span {
-            color: #05b4f1;
-        }
+/* Responsive Styles */
+@media (max-width: 992px) {
+    .navbar-collapse {
+        background-color: rgba(0, 0, 0, 0.9);
+        padding: 10px;
+        position: absolute;
+        top: 80px;
+        left: 0;
+        right: 0;
+        z-index: 1000;
+    }
 
-        .navbar-toggler {
-            margin-left: auto;
-            border: none;
-            background: transparent;
-            margin-bottom: 3%;
-            width: 50px;
-            height: 50px;
-        }
+    .navbar-nav .nav-item .nav-link {
+        padding-right: .5rem;
+        padding-left: .5rem;
+        font-size: 30px;
+        text-align: left;
+        margin-left: 20px;
+    }
 
-        .navbar-toggler-icon {
-            background-image: url('data:image/svg+xml;charset=utf8,<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 30 30"><path stroke="rgba(255, 255, 255, 0.5)" stroke-width="2" d="M4 7h22M4 15h22M4 23h22"/></svg>');
-        }
+    .dropdown-item {
+        font-size: 20px;
+    }
 
-        .navigation__menu {
-            font-size: 20px;
-            gap: 12px;
-        }
+    .moving-text {
+        margin-bottom: 20px;
+        width: 75%;
+        font-size: 16px;
+    }
 
-        .dropdown-menu.navigation__submenu,
-        .dropdown-menu.navigation__submenu.show {
-            background-color: #000000;
-            padding: 10px;
-        }
+    .animated-button {
+        width: 100px;
+        height: 30px;
+        font-size: 12px;
+    }
+}
 
-        .dropdown-menu.navigation__submenu .dropdown-item {
-            color: white;
-        }
-
-        .dropdown-menu.navigation__submenu .dropdown-item:hover,
-        .dropdown-menu.navigation__submenu .dropdown-item:focus {
-            background-color: #05b4f1;
-            color: white;
-            display: block;
-            margin-left: 5px;
-        }
-
-        .navbar-nav .dropdown {
-            position: relative;
-        }
-
-        .navbar-nav .dropdown-menu {
-            margin-top: 0;
-        }
-
-        .navbar-nav .dropdown:hover .dropdown-menu {
-            display: block;
-        }
-
-        .navbar-nav .dropdown-menu {
-            display: none;
-        }
-
-        .navbar-nav .dropdown-menu:hover {
-            display: block;
-        }
-
-        .navbar-nav .dropdown-menu {
-            top: 100%;
-            left: 0;
-        }
 
         @media (max-width: 992px) {
             .navbar-expand-lg .navbar-nav .nav-link {
@@ -295,7 +278,16 @@
                 left: 0;
                 right: 0;
                 z-index: 1000;
+                border-radius: 5px;
             }
+
+
+            .navbar-collapse {
+                flex-basis: 100%;
+                flex-grow: 1;
+                align-items: center;
+            }
+
         }
 
         @media (max-width: 768px) {
@@ -309,25 +301,6 @@
             .moving-text {
                 width: 51%;
                 margin-bottom: 20px;
-            }
-        }
-
-        .dropdown-toggle::after {
-            transition: transform 0.3s ease;
-        }
-
-        .nav-item.dropdown:hover .dropdown-toggle::after {
-            transform: rotate(180deg);
-        }
-
-        .navbar-nav .dropdown:hover .dropdown-menu {
-            display: block;
-        }
-
-        @media (max-width: 992px) {
-            .navbar-nav .dropdown-menu {
-                position: static;
-                float: none;
             }
         }
 
@@ -998,82 +971,81 @@
 <body>
     <header>
         <section id="home" class="section">
-            <nav class="navbar navbar-expand-lg" id="myNav">
-                <a href="/index.html" class="logo navbar-brand">
-                    <img src="/image/Amrita_CyberNation_Logo___1_-removebg-preview (1).png" alt="Logo"
-                        style="height: 90px;">
+            <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+                <a class="navbar-brand" href="index.html#home">
+                    <img src="/image/Amrita_CyberNation_Logo___1_-removebg-preview%20(1).png" alt="Logo" style="height: 90px;">
                 </a>
-
-                <div class="moving-text" style="width: 80%;">
+                <div class="moving-text " style="width: 80%;" >
                     <div class="text-slide">
-                        <span>ACN 3rd edition</span>
-                        <span>|</span>
-                        <a href="/events/2024/event-2024.html"><button class="animated-button"><span>Register
-                                    Now</span></button></a>
-                        <span>|</span>
-                        <span>ACN 3rd edition</span>
-                        <span>|</span>
-                        <a href="/events/2024/event-2024.html"><button class="animated-button"><span>Register
-                                    Now</span></button></a>
-                        <span>|</span>
-                        <span>ACN 3rd edition</span>
-                        <span>|</span>
-                        <a href="/events/2024/event-2024.html"><button class="animated-button"><span>Register
-                                    Now</span></button></a>
-                        <span>|</span>
-                        <span>ACN 3rd edition</span>
-                        <span>|</span>
-                        <a href="/events/2024/event-2024.html"><button class="animated-button"><span>Register
-                                    Now</span></button></a>
-                        <span>|</span>
+                      <span>ACN 3rd edition</span>
+                      <span>|</span>
+                      <a href="/events/2024/event-2024.html"><button class="animated-button"><span>Register
+                            Now</span></button></a>
+                      <span>|</span>
+                      <span>ACN 3rd edition</span>
+                      <span>|</span>
+                      <a href="/events/2024/event-2024.html"><button class="animated-button"><span>Register
+                            Now</span></button></a>
+                      <span>|</span>
+                      <span>ACN 3rd edition</span>
+                      <span>|</span>
+                      <a href="/events/2024/event-2024.html"><button class="animated-button"><span>Register
+                            Now</span></button></a>
+                      <span>|</span>
+                      <span>ACN 3rd edition</span>
+                      <span>|</span>
+                      <a href="/events/2024/event-2024.html"><button class="animated-button"><span>Register
+                            Now</span></button></a>
+                      <span>|</span>
                     </div>
-                </div>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
-                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                  </div>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="collapse navbar-collapse navigation" id="navbarNav">
-                    <ul class="navbar-nav ml-auto navigation__menu">
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto">
                         <li class="nav-item">
-                            <a class="nav-link" href="/index.html">Home<span></span></a>
+                            <a class="nav-link" href="index.html#home">Home</a>
                         </li>
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="editionsDropdown" role="button"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Events 3.0</a>
-                            <div class="dropdown-menu navigation__submenu" aria-labelledby="editionsDropdown">
-                                <a class="dropdown-item" href="/coming-soon.html">ACN Cyber conclave</a>
-                                <a class="dropdown-item" href="/coming-soon.html">ACN Cyber Workshop</a>
-                                <a class="dropdown-item" href="/amrita_developers.html">Amrita Developers Group</a>
-                                <a class="dropdown-item" href="/events/2024/event-2024.html">ACN Cyber Tech Fest</a>
-                                <a class="dropdown-item" href="/Editions/cyber-awareness-page/index.html">ACN Cyber
-                                    Awareness</a>
-                            </div>
+                            <a class="nav-link dropdown-toggle" href="#" id="eventsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Events 3.0
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="eventsDropdown">
+                                <li><a class="dropdown-item" href="/coming-soon.html">ACN Cyber conclave</a></li>
+                                <li><a class="dropdown-item" href="/coming-soon.html">ACN Cyber Workshop</a></li>
+                                <li><a class="dropdown-item" href="/amrita_developers.html">Amrita Developers Group</a></li>
+                                <li><a class="dropdown-item" href="/events/2024/event-2024.html">ACN Cyber Tech Fest</a></li>
+                                <li><a class="dropdown-item" href="/Editions/cyber-awareness-page/index.html">ACN Cyber Awareness</a></li>
+                            </ul>
                         </li>
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="editionsDropdown" role="button"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Editions</a>
-                            <div class="dropdown-menu navigation__submenu" aria-labelledby="editionsDropdown">
-                                <a class="dropdown-item" href="/events/2022/event-2022.html">2022</a>
-                                <a class="dropdown-item" href="/events/2023/event-2023.html">2023</a>
-                            </div>
+                            <a class="nav-link dropdown-toggle" href="#" id="editionsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Editions
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="editionsDropdown">
+                                <li><a class="dropdown-item" href="/events/2022/event-2022.html">2022</a></li>
+                                <li><a class="dropdown-item" href="/events/2023/event-2023.html">2023</a></li>
+                            </ul>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="/sponsors/spon.html">Sponsors<span></span></a>
+                            <a class="nav-link" href="/sponsors/spon.html">Sponsors</a>
                         </li>
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="galleryDropdown" role="button"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Gallery</a>
-                            <div class="dropdown-menu navigation__submenu" aria-labelledby="galleryDropdown">
-                                <a class="dropdown-item" href="/gallery-by-year/2022/2022.html">2022</a>
-                                <a class="dropdown-item" href="/gallery-by-year/2023/2023.html">2023</a>
-                            </div>
+                            <a class="nav-link dropdown-toggle" href="#" id="galleryDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Gallery
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="galleryDropdown">
+                                <li><a class="dropdown-item" href="/gallery-by-year/2022/2022.html">2022</a></li>
+                                <li><a class="dropdown-item" href="/gallery-by-year/2023/2023.html">2023</a></li>
+                            </ul>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="/meetup/meetup.html">Team<span></span></a>
+                            <a class="nav-link" href="/meetup/meetup.html">Team</a>
                         </li>
                     </ul>
                 </div>
-            </nav>
+        </nav>
         </section>
     </header>
     <div class="container scroll-fade">
@@ -1434,10 +1406,6 @@
         </div>
         <h4> For any Queries, Mail at <bold style="color: #b22049;">amritacybernation.ch.amrita.edu</bold>.</h4>
     </footer>
-
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const elements = document.querySelectorAll('.scroll-fade');
@@ -1484,74 +1452,19 @@
 
 
     </script>
+       <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
+       <script>
+           window.addEventListener('scroll', function () {
+               const navbar = document.querySelector('.navbar');
+               if (window.scrollY > 50) {
+                   navbar.classList.add('shrink');
+               } else {
+                   navbar.classList.remove('shrink');
+               }
+           });
+       </script>
     <script>
-        $(document).ready(function () {
-            $('.navbar-toggler').on('click', function () {
-                $(this).find('.navbar-toggler-icon').toggleClass('active');
-                if ($('.navbar-toggler-icon').hasClass('active')) {
-                    $('.navbar-toggler-icon').html('&times;');
-                } else {
-                    $('.navbar-toggler-icon').html('');
-                    $('.navbar-toggler-icon').addClass('navbar-toggler-icon');
-                }
-            });
-
-            $(window).on('scroll', function () {
-                var navbar = $('#myNav');
-                var scrollTop = $(this).scrollTop();
-                var lastScrollTop = 0;
-
-                if (scrollTop > 0) {
-                    navbar.addClass('shrink');
-                } else {
-                    navbar.removeClass('shrink');
-                }
-
-                if (scrollTop > lastScrollTop) {
-                    navbar.addClass('scrolledup');
-                } else {
-                    navbar.removeClass('scrolledup');
-                }
-
-                lastScrollTop = scrollTop;
-            });
-
-            // New dropdown hover functionality
-            var dropdownTimeout;
-            $('.navbar-nav .dropdown').hover(
-                function () {
-                    var $this = $(this);
-                    clearTimeout(dropdownTimeout);
-                    $this.addClass('show');
-                    $this.find('.dropdown-menu').addClass('show');
-                },
-                function () {
-                    var $this = $(this);
-                    dropdownTimeout = setTimeout(function () {
-                        $this.removeClass('show');
-                        $this.find('.dropdown-menu').removeClass('show');
-                    }, 200); // 200ms delay before closing
-                }
-            );
-
-            $('.navbar-nav .dropdown-menu').hover(
-                function () {
-                    clearTimeout(dropdownTimeout);
-                },
-                function () {
-                    var $dropdown = $(this).closest('.dropdown');
-                    dropdownTimeout = setTimeout(function () {
-                        $dropdown.removeClass('show');
-                        $dropdown.find('.dropdown-menu').removeClass('show');
-                    }, 200); // 200ms delay before closing
-                }
-            );
-        });
         const textElement = document.getElementById('text');
         const texts = [
             "Unleash Your Creativity!",
