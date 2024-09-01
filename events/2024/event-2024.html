@@ -556,6 +556,13 @@
     .vanta-canvas{
   height:2200px !important;
 }
+.disabled-button {
+    pointer-events: none;
+    color: gray;
+    background-color: lightgray;
+    cursor: not-allowed; 
+    opacity: 0.6; 
+  }
     </style>
   </head>
 
@@ -722,7 +729,7 @@
                 </strong>
               </div>
             </div>
-            <a href="/payment/payment.html" class="animated-button1" id="a2"><span>Register</span></a>
+            <a href="/payment/payment.html" class="animated-button1 disabled-button" id="a2"><span>Register</span></a>
           </div>
         </div>
       </div>
