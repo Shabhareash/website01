@@ -1011,133 +1011,140 @@
         zoom: 0.35
       })
     </script>
-    <script>
-      document.addEventListener('DOMContentLoaded', () => {
-        const loginOverlay = document.getElementById('loginOverlay');
-        const googleSignInButton = document.getElementById('googleSignInButton');
-        const profileCircle = document.getElementById('profileCircle');
-        const profileDropdown = document.getElementById('profileDropdown');
-        const profileImage = document.getElementById('profileImage');
-        const userName = document.getElementById('userName');
-        const userEmail = document.getElementById('userEmail');
-        const purchaseList = document.getElementById('purchaseList');
-        const loginButton = document.getElementById('loginButton');
-        const logoutButton = document.getElementById('logoutButton');
-        const closeButton = document.getElementById('closeButton');
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const loginOverlay = document.getElementById('loginOverlay');
+    const googleSignInButton = document.getElementById('googleSignInButton');
+    const profileCircle = document.getElementById('profileCircle');
+    const profileDropdown = document.getElementById('profileDropdown');
+    const profileImage = document.getElementById('profileImage');
+    const userName = document.getElementById('userName');
+    const userEmail = document.getElementById('userEmail');
+    const purchaseList = document.getElementById('purchaseList');
+    const loginButton = document.getElementById('loginButton');
+    const logoutButton = document.getElementById('logoutButton');
+    const closeButton = document.getElementById('closeButton');
 
-        function showLoginOverlay() {
-          loginOverlay.style.display = 'flex';
-        }
+    function showLoginOverlay() {
+      loginOverlay.style.display = 'flex';
+    }
 
-        function hideLoginOverlay() {
-          loginOverlay.style.display = 'none';
-        }
+    function hideLoginOverlay() {
+      loginOverlay.style.display = 'none';
+      localStorage.setItem('popupShown', 'true');
+    }
 
-        function signInWithGoogle() {
-          const provider = new firebase.auth.GoogleAuthProvider();
-          auth1.signInWithPopup(provider)
-            .then((result) => {
-              const user = result.user;
-              updateProfileInfo(user);
-              fetchPurchaseHistory(user.email);
-              hideLoginOverlay();
-            })
-            .catch((error) => {
-              console.error('Error during login:', error);
-            });
-        }
-
-        googleSignInButton.addEventListener('click', signInWithGoogle);
-        loginButton.addEventListener('click', signInWithGoogle);
-
-        profileCircle.addEventListener('click', () => {
-          profileDropdown.style.display = profileDropdown.style.display === 'none' ? 'block' : 'none';
+    function signInWithGoogle() {
+      const provider = new firebase.auth.GoogleAuthProvider();
+      auth1.signInWithPopup(provider)
+        .then((result) => {
+          const user = result.user;
+          updateProfileInfo(user);
+          fetchPurchaseHistory(user.email);
+          hideLoginOverlay();
+        })
+        .catch((error) => {
+          console.error('Error during login:', error);
         });
+    }
 
-        closeButton.addEventListener('click', () => {
-          profileDropdown.style.display = 'none';
-        });
+    googleSignInButton.addEventListener('click', signInWithGoogle);
+    loginButton.addEventListener('click', signInWithGoogle);
 
-        logoutButton.addEventListener('click', () => {
-          auth1.signOut().then(() => {
-            resetProfileInfo();
-            showLoginOverlay();
-          }).catch((error) => {
-            console.error('Error logging out:', error);
-          });
-        });
+    profileCircle.addEventListener('click', () => {
+      profileDropdown.style.display = profileDropdown.style.display === 'none' ? 'block' : 'none';
+    });
 
-        document.addEventListener('firebaseInitialized', () => {
-          if (auth1) {
-            auth1.onAuthStateChanged(user => {
-              if (user) {
-                updateProfileInfo(user);
-                fetchPurchaseHistory(user.email);
-                hideLoginOverlay();
-              } else {
-                resetProfileInfo();
-                showLoginOverlay();
-              }
-            });
-          } else {
-            console.error('Firebase Authentication not initialized properly.');
-          }
-        });
+    closeButton.addEventListener('click', () => {
+      profileDropdown.style.display = 'none';
+    });
 
-        function updateProfileInfo(user) {
-          profileImage.src = user.photoURL || 'https://via.placeholder.com/50';
-          userName.textContent = user.displayName || 'Anonymous User';
-          userEmail.textContent = user.email || 'No email available';
-          loginButton.style.display = 'none';
-          logoutButton.style.display = 'block';
-        }
-
-        function resetProfileInfo() {
-          profileImage.src = 'https://via.placeholder.com/50';
-          userName.textContent = 'User Name';
-          userEmail.textContent = 'user@example.com';
-          loginButton.style.display = 'block';
-          logoutButton.style.display = 'none';
-          purchaseList.innerHTML = '';
-        }
-
-        function fetchPurchaseHistory(email) {
-          if (!db1) {
-            console.error('Firestore database not initialized.');
-            return;
-          }
-          db1.collection('registrations')
-            .where('email', '==', email)
-            .get()
-            .then((querySnapshot) => {
-              purchaseList.innerHTML = '';
-              querySnapshot.forEach((doc) => {
-                const data = doc.data();
-                const timestamp = data.timestamp.toDate();
-                const formattedDate = timestamp.toLocaleString();
-                const purchaseItem = document.createElement('div');
-                purchaseItem.classList.add('purchase-item');
-                purchaseItem.textContent = `Event: ${data.event}, Date: ${formattedDate}`;
-                purchaseList.appendChild(purchaseItem);
-              });
-            })
-            .catch((error) => {
-              console.error("Error fetching purchase history: ", error);
-            });
-        }
-
-        // Navbar functionality
-        window.addEventListener('scroll', function () {
-          const navbar = document.querySelector('.navbar');
-          if (window.scrollY > 50) {
-            navbar.classList.add('shrink');
-          } else {
-            navbar.classList.remove('shrink');
-          }
-        });
+    logoutButton.addEventListener('click', () => {
+      auth1.signOut().then(() => {
+        resetProfileInfo();
         showLoginOverlay();
+        localStorage.removeItem('popupShown');
+      }).catch((error) => {
+        console.error('Error logging out:', error);
       });
-    </script>
+    });
+
+    document.addEventListener('firebaseInitialized', () => {
+      if (auth1) {
+        auth1.onAuthStateChanged(user => {
+          if (user) {
+            updateProfileInfo(user);
+            fetchPurchaseHistory(user.email);
+            hideLoginOverlay();
+          } else {
+            resetProfileInfo();
+            if (!localStorage.getItem('popupShown')) {
+              showLoginOverlay();
+            }
+          }
+        });
+      } else {
+        console.error('Firebase Authentication not initialized properly.');
+      }
+    });
+
+    function updateProfileInfo(user) {
+      profileImage.src = user.photoURL || 'https://via.placeholder.com/50';
+      userName.textContent = user.displayName || 'Anonymous User';
+      userEmail.textContent = user.email || 'No email available';
+      loginButton.style.display = 'none';
+      logoutButton.style.display = 'block';
+    }
+
+    function resetProfileInfo() {
+      profileImage.src = 'https://via.placeholder.com/50';
+      userName.textContent = 'User Name';
+      userEmail.textContent = 'user@example.com';
+      loginButton.style.display = 'block';
+      logoutButton.style.display = 'none';
+      purchaseList.innerHTML = '';
+    }
+
+    function fetchPurchaseHistory(email) {
+      if (!db1) {
+        console.error('Firestore database not initialized.');
+        return;
+      }
+      db1.collection('registrations')
+        .where('email', '==', email)
+        .get()
+        .then((querySnapshot) => {
+          purchaseList.innerHTML = '';
+          querySnapshot.forEach((doc) => {
+            const data = doc.data();
+            const timestamp = data.timestamp.toDate();
+            const formattedDate = timestamp.toLocaleString();
+            const purchaseItem = document.createElement('div');
+            purchaseItem.classList.add('purchase-item');
+            purchaseItem.textContent = `Event: ${data.event}, Date: ${formattedDate}`;
+            purchaseList.appendChild(purchaseItem);
+          });
+        })
+        .catch((error) => {
+          console.error("Error fetching purchase history: ", error);
+        });
+    }
+
+    // Navbar functionality
+    window.addEventListener('scroll', function () {
+      const navbar = document.querySelector('.navbar');
+      if (window.scrollY > 50) {
+        navbar.classList.add('shrink');
+      } else {
+        navbar.classList.remove('shrink');
+      }
+    });
+
+    if (!localStorage.getItem('popupShown')) {
+      showLoginOverlay();
+    }
+  });
+</script>
     </body>
     <footer>
       <div class="footer-content" id="footer">
