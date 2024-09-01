@@ -946,11 +946,11 @@
 
             function fall() {
                 let topPosition = parseFloat(img.style.top);
-                if (topPosition < window.innerHeight) {
+                if (topPosition < 2204) {
                     img.style.top = `${topPosition + fallSpeed}px`;
                     requestAnimationFrame(fall);
                 } else {
-                    img.remove(); 
+                    img.remove();
                 }
             }
 
@@ -958,7 +958,7 @@
         }
 
         function startFallingImages() {
-            const totalImages = 25;
+            const totalImages = 10;
             let imagesToUse = [...imagePaths];
             while (imagesToUse.length < totalImages) {
                 imagesToUse = imagesToUse.concat(imagePaths);
@@ -970,16 +970,15 @@
 
                 imagesToUse.forEach((path, index) => {
                     const x = Math.floor(Math.random() * (window.innerWidth - 15));
-                    const y = -index * 20 + Math.floor(Math.random() * 10); // Vary the vertical distance slightly
-                    const fallSpeed = 1 + Math.random(); // Vary the fall speed
+                    const y = -index * 20 + Math.floor(Math.random() * 10);
+                    const fallSpeed = 1 + Math.random();
                     createImage(path, x, y, fallSpeed);
                 });
             }
 
             function loop() {
                 createImageSet();
-
-                setTimeout(loop, 3000); // Start a new set every 3 seconds (adjust as needed)
+                setTimeout(loop, 3000);
             }
 
             loop();
@@ -987,7 +986,6 @@
 
         startFallingImages();
     </script>
-
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
