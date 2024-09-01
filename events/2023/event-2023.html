@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,15 +8,17 @@
     <link rel="stylesheet" href="new.css">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        body, html {
+        body,
+        html {
             margin: 0;
             padding: 0;
             font-family: 'Roboto', sans-serif;
             background-color: #f7fafc;
         }
 
+        /*new */
         .navbar {
             background-color: #000000;
             height: 80px;
@@ -32,23 +35,47 @@
             animation: textReveal 2s;
         }
 
-        @keyframes textReveal {
-            0% { opacity: 0; transform: translateY(-100px); }
-            100% { opacity: 1; transform: translateY(0px); }
-        }
-
         .navbar.shrink {
-            height: 80px;
+            height: 72px;
             width: 90%;
             margin-left: calc((100vw - 90vw) / 2);
             margin-top: 20px;
             border-radius: 70px;
         }
 
-        .navbar-brand img {
-            height: 90px;
+        .navbar-toggler {
+            margin-left: auto;
+            border: none;
+            background: transparent;
+            margin-bottom: 3%;
+            width: 50px;
+            height: 50px;
+            border-color: rgba(255, 255, 255, 0.5);
         }
 
+        .navbar-toggler-icon {
+            background-image: url('data:image/svg+xml;charset=utf8,<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 30 30"><path stroke="rgba(255, 255, 255, 0.5)" stroke-width="2" d="M4 7h22M4 15h22M4 23h22"/></svg>');
+        }
+
+        .navbar-brand img {
+            height: 60px;
+            transition: all 0.3s ease;
+        }
+
+        .navbar-nav .nav-item .nav-link {
+            color: white;
+            padding: 7px;
+            border-radius: 10px;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            font-size: 16px;
+        }
+
+        .navbar-nav .nav-item .nav-link:hover {
+            background-color: #b22049;
+            color: #ffffff;
+        }
+
+        /* Moving Text */
         .moving-text {
             white-space: nowrap;
             position: relative;
@@ -67,16 +94,25 @@
             animation: 10s slide infinite linear;
         }
 
-        .text-slide:hover {
+        @keyframes slide {
+            from {
+                transform: translateX(0%);
+            }
+
+            to {
+                transform: translateX(-50%);
+            }
+        }
+
+        .moving-text:hover .text-slide {
             animation-play-state: paused;
         }
 
-        @keyframes slide {
-            from { transform: translateX(0%); }
-            to { transform: translateX(-50%); }
-        }
-
+        /* Button Styles */
         .animated-button {
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
             width: 130px;
             height: 35px;
             background-color: #b22049;
@@ -87,88 +123,172 @@
             position: relative;
             overflow: hidden;
             transition: color 0.3s, background-color 0.3s;
-            display: flex;
-            justify-content: center;
-            align-items: center;
             border-radius: 40px;
             margin: 0 10px;
+            text-decoration: none;
+            box-sizing: border-box;
+        }
+
+        .animated-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: white;
+            z-index: 1;
+            transition: top 0.3s;
+            top: 100%;
+            box-sizing: border-box;
+        }
+
+        .animated-button:hover::before {
+            top: 0;
+        }
+
+        .animated-button span {
+            position: relative;
+            z-index: 2;
+            transition: color 0.3s;
+            white-space: nowrap;
         }
 
         .animated-button:hover {
-            background-color: white;
+            background-color: black;
         }
 
         .animated-button:hover span {
             color: #b22049;
         }
 
-        .navigation__menu {
-            list-style: none;
-            margin: 0;
-            padding: 0;
-            display: flex;
-        }
-
-        .navigation__menu > li {
-            position: relative;
-            margin-right: 20px;
-        }
-
-        .navigation__menu > li > a {
-            color: white;
-            text-decoration: none;
-            padding: 7px 7px;
-            border-radius: 10px;
-            transition: background-color 0.3s ease, color 0.3s ease;
-        }
-
-        .navigation__menu > li > a:hover {
-            background-color: #b22049;
-            color: #ffffff;
-        }
-
-        .navigation__submenu {
-            position: absolute;
-            top: 100%;
-            left: 0;
-            background-color: #000000;
-            min-width: 200px;
-            display: none;
-            z-index: 1;
-        }
-
-        .navigation__menu > li:hover .navigation__submenu {
-            display: block;
-        }
-
-        .navigation__submenu li {
+        /* Dropdown Menu Styles */
+        .dropdown-menu {
+            background-color: rgba(0, 0, 0, 0.7);
+            border: none;
+            border-radius: 5px;
             padding: 10px;
         }
 
-        .navigation__submenu li a {
+        .dropdown-item {
             color: white;
-            text-decoration: none;
+            transition: background-color 0.3s ease;
         }
 
-        .navigation__submenu li a:hover {
-            color: #b22049;
+        .dropdown-item:hover {
+            background-color: rgba(255, 255, 255, 0.2);
         }
 
-        .hamburger {
-            display: none;
-            cursor: pointer;
-        }
-
-        .hamburger span {
+        .navbar-nav .dropdown:hover .dropdown-menu {
             display: block;
-            width: 25px;
-            height: 3px;
-            background-color: white;
-            margin: 5px 0;
+        }
+
+        .dropdown-toggle::after {
+            transition: transform 0.3s ease;
+        }
+
+        .nav-item.dropdown:hover .dropdown-toggle::after {
+            transform: rotate(180deg);
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 992px) {
+            .navbar-collapse {
+                background-color: rgba(0, 0, 0, 0.9);
+                padding: 10px;
+                position: absolute;
+                top: 80px;
+                left: 0;
+                right: 0;
+                z-index: 1000;
+            }
+
+            .navbar-nav .nav-item .nav-link {
+                padding-right: .5rem;
+                padding-left: .5rem;
+                font-size: 30px;
+                text-align: left;
+                margin-left: 20px;
+            }
+
+            .dropdown-item {
+                font-size: 20px;
+            }
+
+            .moving-text {
+                margin-bottom: 20px;
+                width: 75%;
+                font-size: 16px;
+            }
+
+            .animated-button {
+                width: 100px;
+                height: 30px;
+                font-size: 12px;
+            }
+        }
+
+
+        @media (max-width: 992px) {
+            .navbar-expand-lg .navbar-nav .nav-link {
+                padding-right: .5rem;
+                padding-left: .5rem;
+                font-size: 40px !important;
+            }
+
+            .dropdown-menu.navigation__submenu .dropdown-item {
+                color: white;
+                font-size: 30px;
+            }
+
+            .moving-text {
+                margin-bottom: 20px;
+                width: 80%;
+                font-size: 16px;
+            }
+
+            .animated-button {
+                width: 100px;
+                height: 30px;
+                font-size: 12px;
+            }
+
+            .navbar-collapse {
+                background-color: rgba(0, 0, 0, 0.9);
+                position: absolute;
+                top: 80px;
+                left: 0;
+                right: 0;
+                z-index: 1000;
+                border-radius: 5px;
+            }
+
+
+            .navbar-collapse {
+                flex-basis: 100%;
+                flex-grow: 1;
+                align-items: center;
+            }
+
+        }
+
+        @media (max-width: 768px) {
+            .moving-text {
+                width: 75%;
+                margin-bottom: 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .moving-text {
+                width: 51%;
+                margin-bottom: 20px;
+            }
         }
 
         /* Day sections */
-        .day1, .day2 {
+        .day1,
+        .day2 {
             background-color: black;
             color: white;
             text-align: center;
@@ -181,7 +301,8 @@
             margin: 0 auto;
         }
 
-        #list, #list1 {
+        #list,
+        #list1 {
             list-style: none;
             display: grid;
             grid-template-columns: 1fr;
@@ -240,7 +361,8 @@
             color: white;
         }
 
-        .box-text h2, .box-text h3 {
+        .box-text h2,
+        .box-text h3 {
             font-family: 'Montserrat', sans-serif;
             margin: 0 0 10px 0;
         }
@@ -295,7 +417,7 @@
                 flex-direction: column;
             }
 
-            .navigation__menu > li {
+            .navigation__menu>li {
                 margin: 10px 0;
             }
 
@@ -322,7 +444,8 @@
             .box-images {
                 width: 100%;
             }
-            .box-text{
+
+            .box-text {
                 width: 104%;
             }
 
@@ -342,103 +465,117 @@
     <div id="main-content" style="display: none;">
         <header>
             <section id="home" class="section">
-                <nav class="navbar navbar-expand-lg" id="myNav">
-                    <a href="/index.html#home" class="logo navbar-brand">
-                      <img src="/image/Amrita_CyberNation_Logo___1_-removebg-preview (1).png" alt="Logo" style="height: 90px;">
+                <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+                    <a class="navbar-brand" href="index.html#home">
+                        <img src="/image/Amrita_CyberNation_Logo___1_-removebg-preview%20(1).png" alt="Logo"
+                            style="height: 90px;">
                     </a>
-        
-                <div class="moving-text" style="width: 80%;">
-                  <div class="text-slide">
-                    <span>ACN 3rd edition</span>
-                    <span>|</span>
-                    <a href="/events/2024/event-2024.html"><button class="animated-button"><span>Register
-                          Now</span></button></a>
-                    <span>|</span>
-                    <span>ACN 3rd edition</span>
-                    <span>|</span>
-                    <a href="/events/2024/event-2024.html"><button class="animated-button"><span>Register
-                          Now</span></button></a>
-                    <span>|</span>
-                    <span>ACN 3rd edition</span>
-                    <span>|</span>
-                    <a href="/events/2024/event-2024.html"><button class="animated-button"><span>Register
-                          Now</span></button></a>
-                    <span>|</span>
-                    <span>ACN 3rd edition</span>
-                    <span>|</span>
-                    <a href="/events/2024/event-2024.html"><button class="animated-button"><span>Register
-                          Now</span></button></a>
-                    <span>|</span>
-                  </div>
-                </div>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                  </button>
-                  
-                  <div class="collapse navbar-collapse" id="navbarNav">
-                    <ul class="navbar-nav ml-auto navigation__menu">
-                    <li class="nav-item">
-                      <a class="nav-link" href="/index.html#home">Home<span></span></a>
-                    </li>
-                    <li class="nav-item dropdown">
-                      <a class="nav-link dropdown-toggle" href="#" id="editionsDropdown" role="button" data-toggle="dropdown"
-                        aria-haspopup="true" aria-expanded="false">Events 3.0</a>
-                      <div class="dropdown-menu navigation__submenu" aria-labelledby="editionsDropdown">
-                        <a class="dropdown-item" href="/coming-soon.html">ACN Cyber conclave</a>
-                        <a class="dropdown-item" href="/coming-soon.html">ACN Cyber Workshop</a>
-                        <a class="dropdown-item" href="/coming-soon.html">Amrita Developers Group</a>
-                        <a class="dropdown-item" href="/events/2024/event-2024.html">ACN Cyber Tech Fest</a>
-                        <a class="dropdown-item" href="/Editions/cyber-awareness-page/index.html">ACN Cyber Awareness</a>
-                      </div>
-                    </li>
-                    <li class="nav-item dropdown">
-                      <a class="nav-link dropdown-toggle" href="#" id="editionsDropdown" role="button" data-toggle="dropdown"
-                        aria-haspopup="true" aria-expanded="false">Editions</a>
-                      <div class="dropdown-menu navigation__submenu" aria-labelledby="editionsDropdown">
-                        <a class="dropdown-item" href="/events/2022/event-2022.html">2022</a>
-                        <a class="dropdown-item" href="/events/2023/event-2023.html">2023</a>
-                      </div>
-                    </li>
-                    <li class="nav-item">
-                      <a class="nav-link" href="/sponsors/spon.html">Sponsors<span></span></a>
-                    </li>
-                    <li class="nav-item dropdown">
-                      <a class="nav-link dropdown-toggle" href="#" id="galleryDropdown" role="button" data-toggle="dropdown"
-                        aria-haspopup="true" aria-expanded="false">Gallery</a>
-                      <div class="dropdown-menu navigation__submenu" aria-labelledby="galleryDropdown">
-                        <a class="dropdown-item" href="/gallery-by-year/2022/2022.html">2022</a>
-                        <a class="dropdown-item" href="/gallery-by-year/2023/2023.html">2023</a>
-                      </div>
-                    </li>
-                    <li class="nav-item">
-                      <a class="nav-link" href="/meetup/meetup.html">Team<span></span></a>
-                    </li>
-                  </ul>
-                </div>
-              </nav>
+                    <div class="moving-text " style="width: 80%;">
+                        <div class="text-slide">
+                            <span>ACN 3rd edition</span>
+                            <span>|</span>
+                            <a href="/events/2024/event-2024.html"><button class="animated-button"><span>Register
+                                        Now</span></button></a>
+                            <span>|</span>
+                            <span>ACN 3rd edition</span>
+                            <span>|</span>
+                            <a href="/events/2024/event-2024.html"><button class="animated-button"><span>Register
+                                        Now</span></button></a>
+                            <span>|</span>
+                            <span>ACN 3rd edition</span>
+                            <span>|</span>
+                            <a href="/events/2024/event-2024.html"><button class="animated-button"><span>Register
+                                        Now</span></button></a>
+                            <span>|</span>
+                            <span>ACN 3rd edition</span>
+                            <span>|</span>
+                            <a href="/events/2024/event-2024.html"><button class="animated-button"><span>Register
+                                        Now</span></button></a>
+                            <span>|</span>
+                        </div>
+                    </div>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarNav">
+                        <ul class="navbar-nav ms-auto">
+                            <li class="nav-item">
+                                <a class="nav-link" href="index.html#home">Home</a>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="eventsDropdown" role="button"
+                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                    Events 3.0
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="eventsDropdown">
+                                    <li><a class="dropdown-item" href="/coming-soon.html">ACN Cyber conclave</a></li>
+                                    <li><a class="dropdown-item" href="/coming-soon.html">ACN Cyber Workshop</a></li>
+                                    <li><a class="dropdown-item" href="/amrita_developers.html">Amrita Developers
+                                            Group</a></li>
+                                    <li><a class="dropdown-item" href="/events/2024/event-2024.html">ACN Cyber Tech
+                                            Fest</a></li>
+                                    <li><a class="dropdown-item" href="/Editions/cyber-awareness-page/index.html">ACN
+                                            Cyber Awareness</a></li>
+                                </ul>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="editionsDropdown" role="button"
+                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                    Editions
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="editionsDropdown">
+                                    <li><a class="dropdown-item" href="/events/2022/event-2022.html">2022</a></li>
+                                    <li><a class="dropdown-item" href="/events/2023/event-2023.html">2023</a></li>
+                                </ul>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/sponsors/spon.html">Sponsors</a>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="galleryDropdown" role="button"
+                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                    Gallery
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="galleryDropdown">
+                                    <li><a class="dropdown-item" href="/gallery-by-year/2022/2022.html">2022</a></li>
+                                    <li><a class="dropdown-item" href="/gallery-by-year/2023/2023.html">2023</a></li>
+                                </ul>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/meetup/meetup.html">Team</a>
+                            </li>
+                        </ul>
+                    </div>
+                </nav>
             </section>
-          </header>
+        </header>
 
-          <div class="day1">
+        <div class="day1">
             <h1>Cyber Conclave</h1>
         </div>
-        
+
         <div class="custom-container">
             <ul id="list">
                 <li id="item1" class="box">
                     <div class="box-body">
                         <div class="box-images">
-                            <img id="img1" src="" alt="Image 1" onmouseover="showtext('Text for Image 1')" onmouseleave="resettext()">
-                            <img id="img2" src="" alt="Image 2" onmouseover="showtext('Text for Image 2')" onmouseleave="resettext()">
-                            <img id="img3" src="" alt="Image 3" onmouseover="showtext('Text for Image 3')" onmouseleave="resettext()">
-                            <img id="img4" src="" alt="Image 4" onmouseover="showtext('Text for Image 4')" onmouseleave="resettext()">
+                            <img id="img1" src="" alt="Image 1" onmouseover="showtext('Text for Image 1')"
+                                onmouseleave="resettext()">
+                            <img id="img2" src="" alt="Image 2" onmouseover="showtext('Text for Image 2')"
+                                onmouseleave="resettext()">
+                            <img id="img3" src="" alt="Image 3" onmouseover="showtext('Text for Image 3')"
+                                onmouseleave="resettext()">
+                            <img id="img4" src="" alt="Image 4" onmouseover="showtext('Text for Image 4')"
+                                onmouseleave="resettext()">
                         </div>
                         <div class="box-text">
                             <h3>Cultivating Innovation in Cybersecurity to Fuel Entrepreneurship</h3>
                             <p>Panel members:</p>
                             <p>1. Dr. Subramanian, the Executive Director of SETS, Chennai</p>
                             <p>2. Mr. K. Sibi: A stalwart in Data Analytics, Generative AI, and Cyber Security.</p>
-                            <p>3. Mr. Natarajan Elangovan: A visionary leader in Cyber Security Strategy, Architecture, and Framework</p>
+                            <p>3. Mr. Natarajan Elangovan: A visionary leader in Cyber Security Strategy, Architecture,
+                                and Framework</p>
                             <p>4. Ms. Nalini Kannan: Zero Trust Solution expert</p>
                             <p>5. Dr. N. Gopalakrishnan: Former DRDO structural engineering committee member</p>
                         </div>
@@ -460,11 +597,11 @@
                 </li>
             </ul>
         </div>
-        
+
         <div class="day2">
             <h1>Club Inauguration</h1>
         </div>
-        
+
         <div class="custom-container">
             <ul id="list">
                 <li id="item3" class="box">
@@ -478,7 +615,11 @@
                         <div class="box-text">
                             <h2 id="header">AMIGOS</h2>
                             <h3>Amrita Intelligent Gaming and Opti-verse Sports</h3>
-                            <p id="card-tex">We feel privileged to have had Mr. Raghuraman R as our Chief Guest, who graciously unveiled the club’s logo to mark the commencement of our journey. This was followed by the badging ceremony, in which the Chief Guest handed out badges to the club’s office bearers. Following this, our Club’s President, K. Sabari Kumar, elaborated on the vision and mission of AMIGOS.</p>
+                            <p id="card-tex">We feel privileged to have had Mr. Raghuraman R as our Chief Guest, who
+                                graciously unveiled the club’s logo to mark the commencement of our journey. This was
+                                followed by the badging ceremony, in which the Chief Guest handed out badges to the
+                                club’s office bearers. Following this, our Club’s President, K. Sabari Kumar, elaborated
+                                on the vision and mission of AMIGOS.</p>
                         </div>
                     </div>
                 </li>
@@ -487,7 +628,12 @@
                         <div class="box-text">
                             <h2 id="h">Fact</h2>
                             <h3>Forensic Analysis Club Triage</h3>
-                            <p>The club's inauguration was graced by Mr. Palanikumar Arumugam, Vice President - Information Security, Equitas Small Finance Bank, who was our esteemed chief guest. He took center stage to unveil the club logo, symbolizing the beginning of an exciting journey into the world of forensics. Following this significant moment was a Badging Ceremony, where Mr. Palanikumar Arumugam presented badges to the club members, officially welcoming them into FACT.</p>
+                            <p>The club's inauguration was graced by Mr. Palanikumar Arumugam, Vice President -
+                                Information Security, Equitas Small Finance Bank, who was our esteemed chief guest. He
+                                took center stage to unveil the club logo, symbolizing the beginning of an exciting
+                                journey into the world of forensics. Following this significant moment was a Badging
+                                Ceremony, where Mr. Palanikumar Arumugam presented badges to the club members,
+                                officially welcoming them into FACT.</p>
                         </div>
                         <div class="box-images">
                             <img id="img13" src="" alt="Image 21">
@@ -499,11 +645,11 @@
                 </li>
             </ul>
         </div>
-        
+
         <div class="day2">
             <h1>Cyber Techfest'23</h1>
         </div>
-        
+
         <div class="custom-container">
             <ul id="list1">
                 <li id="item5" class="box">
@@ -516,7 +662,9 @@
                         </div>
                         <div class="box-text">
                             <h2 id="heade5">Mystery unveiled</h2>
-                            <p id="card-te5">A cryptic and complicated case mimicking real world scenarios is presented to the participants who are required to use their expertise in physical/cyber forensics to solve the case created by the crafty minds of the FACT club.</p>
+                            <p id="card-te5">A cryptic and complicated case mimicking real world scenarios is presented
+                                to the participants who are required to use their expertise in physical/cyber forensics
+                                to solve the case created by the crafty minds of the FACT club.</p>
                         </div>
                     </div>
                 </li>
@@ -525,7 +673,11 @@
                         <div class="box-text">
                             <h2 id="headr6">ACN CTF</h2>
                             <h3>Amrita Cyber Nation CTF</h3>
-                            <p id="card-text">This is a national level Capture The Flag (CTF) tournament conducted by the department of cyber security which focuses on various aspects such as Cyber Forensics, Reverse Engineering, Cryptography, Web exploitation, and Binary exploitation providing a fun and fulfilling experience for participants. Sponsored by HACK THE BOX.</p>
+                            <p id="card-text">This is a national level Capture The Flag (CTF) tournament conducted by
+                                the department of cyber security which focuses on various aspects such as Cyber
+                                Forensics, Reverse Engineering, Cryptography, Web exploitation, and Binary exploitation
+                                providing a fun and fulfilling experience for participants. Sponsored by HACK THE BOX.
+                            </p>
                         </div>
                         <div class="box-images">
                             <img id="img21" src="" alt="Image 21">
@@ -545,7 +697,9 @@
                         </div>
                         <div class="box-text">
                             <h2 id="heade7">Game Fusion 3.0</h2>
-                            <p id="card-tet7">Dive into the gaming extravaganza of Game Fusion 3.0 with BGMI, CODM, and Valorant. Showcase your gaming finesse and aim to be the champion in the virtual battlegrounds.</p>
+                            <p id="card-tet7">Dive into the gaming extravaganza of Game Fusion 3.0 with BGMI, CODM, and
+                                Valorant. Showcase your gaming finesse and aim to be the champion in the virtual
+                                battlegrounds.</p>
                         </div>
                     </div>
                 </li>
@@ -553,7 +707,9 @@
                     <div class="box-body">
                         <div class="box-text">
                             <h2 id="heaer8">Meta-Verse Experience</h2>
-                            <p id="card-txt8">Swirl into the world of AR-VR technology provided by the Meta-Quest 3 in this event conducted by the AMIGOS club. Test out beta features, gaming, fitness and more.</p>
+                            <p id="card-txt8">Swirl into the world of AR-VR technology provided by the Meta-Quest 3 in
+                                this event conducted by the AMIGOS club. Test out beta features, gaming, fitness and
+                                more.</p>
                         </div>
                         <div class="box-images">
                             <img id="img29" src="" alt="Image 29">
@@ -565,88 +721,33 @@
                 </li>
             </ul>
         </div>
-        </div>
-        
+    </div>
 
 
-<!-- Firebase scripts -->
-<script defer src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
-<script defer src="https://www.gstatic.com/firebasejs/8.6.8/firebase-storage.js"></script>
-<script defer src="https://www.gstatic.com/firebasejs/8.6.8/firebase-firestore.js"></script>
 
-<!-- Custom scripts -->
-<script defer src="script.js"></script>
-<script defer src="img.js"></script>
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <!-- Firebase scripts -->
+    <script defer src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
+    <script defer src="https://www.gstatic.com/firebasejs/8.6.8/firebase-storage.js"></script>
+    <script defer src="https://www.gstatic.com/firebasejs/8.6.8/firebase-firestore.js"></script>
 
-<script>
-    $(document).ready(function(){
-      $('.navbar-toggler').on('click', function() {
-        $(this).find('.navbar-toggler-icon').toggleClass('active');
-        if ($('.navbar-toggler-icon').hasClass('active')) {
-          $('.navbar-toggler-icon').html('&times;');
-        } else {
-          $('.navbar-toggler-icon').html('');
-          $('.navbar-toggler-icon').addClass('navbar-toggler-icon');
-        }
-      });
-  
-      $(window).on('scroll', function() {
-        var navbar = $('#myNav');
-        var scrollTop = $(this).scrollTop();
-        var lastScrollTop = 0;
-        
-        if (scrollTop > 0) {
-          navbar.addClass('shrink');
-        } else {
-          navbar.removeClass('shrink');
-        }
-  
-        if (scrollTop > lastScrollTop) {
-          navbar.addClass('scrolledup');
-        } else {
-          navbar.removeClass('scrolledup');
-        }
-  
-        lastScrollTop = scrollTop;
-      });
-  
-      // New dropdown hover functionality
-      var dropdownTimeout;
-      $('.navbar-nav .dropdown').hover(
-        function() {
-          var $this = $(this);
-          clearTimeout(dropdownTimeout);
-          $this.addClass('show');
-          $this.find('.dropdown-menu').addClass('show');
-        },
-        function() {
-          var $this = $(this);
-          dropdownTimeout = setTimeout(function() {
-            $this.removeClass('show');
-            $this.find('.dropdown-menu').removeClass('show');
-          }, 200); // 200ms delay before closing
-        }
-      );
-  
-      $('.navbar-nav .dropdown-menu').hover(
-        function() {
-          clearTimeout(dropdownTimeout);
-        },
-        function() {
-          var $dropdown = $(this).closest('.dropdown');
-          dropdownTimeout = setTimeout(function() {
-            $dropdown.removeClass('show');
-            $dropdown.find('.dropdown-menu').removeClass('show');
-          }, 200); // 200ms delay before closing
-        }
-      );
-    });
-  </script>
+    <!-- Custom scripts -->
+    <script defer src="script.js"></script>
+    <script defer src="img.js"></script>
 
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        window.addEventListener('scroll', function () {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('shrink');
+            } else {
+                navbar.classList.remove('shrink');
+            }
+        });
+    </script>
 
 
 </body>
+
 </html>
