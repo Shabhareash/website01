@@ -58,7 +58,7 @@ body{
   display: flex;
   flex-direction: column;
   width: 100%;
-  max-width: 500px;
+  max-width: 350px;
   margin: 0 auto 50px;
   border-radius: 40px;
   overflow: hidden;
