@@ -353,6 +353,7 @@ img[src="/image/3rd edition.png"]
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
     color: #ffffff;
     text-align: center;
+    margin-bottom:0;
   }
   
   .logo2 img {
