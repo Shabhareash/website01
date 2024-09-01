@@ -57,8 +57,7 @@ body{
 .box-body {
   display: flex;
   flex-direction: column;
-  width: 100%;
-  max-width: 350px;
+  width: 350px;
   margin: 0 auto 50px;
   border-radius: 40px;
   overflow: hidden;
@@ -66,19 +65,26 @@ body{
 }
 
 .box-images img {
-    border-top-left-radius: 40px;
-    border-top-right-radius: 40px;
-    height: 250px;
-    width:350px;
-    object-fit: fill;
-   
+  border-top-left-radius: 40px;
+  border-top-right-radius: 40px;
+  height: 250px;
+  width: 350px;
+  object-fit: cover; 
 }
 
 .box-text {
   padding: 20px;
   background-color: white;
+  width: 100%; 
 }
 
+
+@media (max-width: 576px) {
+  .box-body {
+    width: 100%;
+    max-width: 350px;
+  }
+}
 .box-text h2 {
     font-family:'Poppins';
     text-align: center;
