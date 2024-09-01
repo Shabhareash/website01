@@ -631,8 +631,8 @@
             const formData = {
                 name: document.getElementById('name').value,
                 email: document.getElementById('email').value,
-                event: document.getElementById('event').value,
-                teamName: document.getElementById('teamName').value.name,
+                event: events[document.getElementById('event').value].name,
+                teamName: document.getElementById('teamName').value,
                 teamSize: document.getElementById('teamSize').value,
                 teamMembers: teamMembers,
                 timestamp: firebase.firestore.FieldValue.serverTimestamp()
