@@ -546,6 +546,16 @@
         color: #ffffff;
         z-index: 0;
       }
+      .image {
+            position: absolute;
+            width: 15px;
+            height: 15px;
+            background-size: cover;
+            background-position: center;
+        }
+    .vanta-canvas{
+  height:2200px !important;
+}
     </style>
   </head>
 
@@ -906,7 +916,77 @@
       </div>
 
     </div>
+    <script>
+        const imagePaths = [
+            "/events/2024/p3.png",
+            "/events/2024/p2.png",
+            "/events/2024/p1.png",
+            "/events/2024/p5.png",
+            "/events/2024/p4.png",
+            "/events/2024/p6.png",
+            "/events/2024/p7.png",
+            "/events/2024/p8.png",
+            "/events/2024/p9.png"
+        ];
 
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+        function createImage(path, x, y, fallSpeed) {
+            const img = document.createElement('img');
+            img.className = 'image';
+            img.src = path;
+            img.style.left = `${x}px`;
+            img.style.top = `${y}px`;
+            document.body.appendChild(img);
+
+            function fall() {
+                let topPosition = parseFloat(img.style.top);
+                if (topPosition < window.innerHeight) {
+                    img.style.top = `${topPosition + fallSpeed}px`;
+                    requestAnimationFrame(fall);
+                } else {
+                    img.remove(); 
+                }
+            }
+
+            fall();
+        }
+
+        function startFallingImages() {
+            const totalImages = 25;
+            let imagesToUse = [...imagePaths];
+            while (imagesToUse.length < totalImages) {
+                imagesToUse = imagesToUse.concat(imagePaths);
+            }
+            imagesToUse = imagesToUse.slice(0, totalImages);
+
+            function createImageSet() {
+                shuffleArray(imagesToUse);
+
+                imagesToUse.forEach((path, index) => {
+                    const x = Math.floor(Math.random() * (window.innerWidth - 15));
+                    const y = -index * 20 + Math.floor(Math.random() * 10); // Vary the vertical distance slightly
+                    const fallSpeed = 1 + Math.random(); // Vary the fall speed
+                    createImage(path, x, y, fallSpeed);
+                });
+            }
+
+            function loop() {
+                createImageSet();
+
+                setTimeout(loop, 3000); // Start a new set every 3 seconds (adjust as needed)
+            }
+
+            loop();
+        }
+
+        startFallingImages();
+    </script>
 
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
