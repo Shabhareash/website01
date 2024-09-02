@@ -477,6 +477,31 @@ h1{
     overflow-x: hidden;
     width: 100%;
   }
+  .logo2 img{
+    margin-left:-40px !important;
+  }
+
+  .address h4{
+    margin-left:-50px;
+    margin-right:-20px;
+    font-size:12px !important
+  }
+  .address p{
+    width:450%;
+    margin-left:-35px;
+    font-size:8px !important;
+  }
+  .footer-nav ul {
+    font-size:8px !important;
+  }
+  .footer-right{
+    gap:2px !important;
+    margin-left:-20px;
+    
+  }
+  .footer-right a{
+    s
+  }
 
   .cards {
     display: flex;
@@ -511,6 +536,8 @@ h1{
   .box-text {
     width: 100%;
   }
+
+.foot {}
 
   .box-text h2 {
     font-size: 24px;
