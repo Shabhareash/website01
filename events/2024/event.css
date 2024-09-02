@@ -476,6 +476,7 @@ h1{
   .container {
     overflow-x: hidden;
     width: 100%;
+    margin-left:10 px !important;
   }
   .logo2 img{
     margin-left:-40px !important;
