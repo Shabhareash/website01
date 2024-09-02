@@ -554,7 +554,7 @@
             background-position: center;
         }
     .vanta-canvas{
-  height:2200px !important;
+  height: calc(window.innerHeight * 2) !important;
 }
 .disabled-button {
     pointer-events: none;
@@ -1008,7 +1008,7 @@
         mouseControls: true,
         touchControls: true,
         gyroControls: false,
-        minHeight: 1000.00,
+        minHeight: window.innerHeight*2,
         minWidth: 200.00,
         highlightColor: 0x212127,
         midtoneColor: 0xb35ca9,
