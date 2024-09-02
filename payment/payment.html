@@ -353,6 +353,7 @@
             justify-content: center;
             align-items: center;
         }
+
         .button {
             padding: 15px 30px;
             margin: 10px;
@@ -366,32 +367,38 @@
             text-align: center;
             width: 200px;
         }
+
         .button:hover {
             background-color: #28a7e0;
         }
+
         .paytm {
             background-color: #003399;
         }
+
         .paytm:hover {
             background-color: #002366;
         }
+
         .phonepe {
             background-color: #5c2d91;
         }
+
         .phonepe:hover {
             background-color: #4a2176;
         }
-        @media (max-width: 768px) {
-    .paycon {
-        flex-direction: column;
-    }
-    .button {
-        width: 100%;
-        max-width: 300px;
-        margin: 10px auto;
-    }
-}
 
+        @media (max-width: 768px) {
+            .paycon {
+                flex-direction: column;
+            }
+
+            .button {
+                width: 100%;
+                max-width: 300px;
+                margin: 10px auto;
+            }
+        }
     </style>
 </head>
 
@@ -467,10 +474,10 @@
                 </div>
             </div>
             <div class="paycon">
-            <a id="gpay-button" class="button" target="_blank">Pay with Google Pay</a>
-            <a id="phonepe-button" class="button phonepe" target="_blank">Pay with PhonePe</a>
-            <a id="paytm-button" class="button paytm" target="_blank">Pay with Paytm</a>
-        </div>
+                <a id="gpay-button" class="button" target="_blank">Pay with Google Pay</a>
+                <a id="phonepe-button" class="button phonepe" target="_blank">Pay with PhonePe</a>
+                <a id="paytm-button" class="button paytm" target="_blank">Pay with Paytm</a>
+            </div>
             <button type="button" onclick="nextPage(3)">I've made the payment</button>
             <p class="info">Do not refresh the page, After Payment Upload the Screenshot</p>
         </div>
@@ -576,10 +583,12 @@
 
         function validateBasicInfo() {
             const form = document.getElementById('basicInfoForm');
+            const emailInput = document.getElementById(`email`);
             if (!form.checkValidity()) {
                 alert('Please fill out all required fields.');
                 return false;
             }
+
             const teamName = document.getElementById('teamName').value.trim();
             if (!teamName) {
                 alert('Please enter a team name.');
@@ -595,17 +604,28 @@
             teamMembers.length = 0;
             for (let i = 1; i <= teamSize; i++) {
                 const memberInput = document.getElementById(`teamMember${i}`);
+
                 if (!memberInput) {
                     alert(`Team member input fields are missing. Please select the team size again.`);
                     return false;
                 }
+
                 const memberName = memberInput.value.trim();
                 if (!memberName) {
                     alert(`Please enter a name for Team Member ${i}`);
                     return false;
                 }
+
+                const email = emailInput.value.trim();
+                const emailPattern = /^[a-zA-Z0-9._%+-]+@(gmail\.com)$/;
+                if (!emailPattern.test(email)) {
+                    alert(`Please enter a valid email (only gmail.com are allowed).`);
+                    return false;
+                }
+
                 teamMembers.push(memberName);
             }
+
             return true;
         }
 
