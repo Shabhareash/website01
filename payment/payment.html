@@ -417,8 +417,11 @@
                 <input type="email" id="email" required placeholder="example@gmail.com">
 
                 <label for="phoneno">Phone Number:</label>
-                <input type="tel" id="phoneno" placeholder="+91 123 456 7890" pattern="\+91 \d{3} \d{3} \d{4}"
-                    title="Enter phone number in the format: +91 123 456 7890" required>
+                <input type="tel" id="phoneno" placeholder="1234567890" 
+       pattern="\d{3}[-\s]?\d{3}[-\s]?\d{4}" 
+       title="Enter a 10-digit phone number, optionally using dashes or spaces as separators." 
+       required>
+
 
                 <label for="event">Select Event:</label>
                 <select id="event" required onchange="updateEventInfo()">
