@@ -345,6 +345,46 @@
                 grid-template-columns: 1fr;
             }
         }
+
+        /*paymentbutton*/
+        .paycon {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f5f5f5;
+        }
+        .button {
+            padding: 15px 30px;
+            margin: 10px;
+            font-size: 16px;
+            color: #fff;
+            background-color: #34b7f1;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            text-align: center;
+            width: 200px;
+        }
+        .button:hover {
+            background-color: #28a7e0;
+        }
+        .paytm {
+            background-color: #003399;
+        }
+        .paytm:hover {
+            background-color: #002366;
+        }
+        .phonepe {
+            background-color: #5c2d91;
+        }
+        .phonepe:hover {
+            background-color: #4a2176;
+        }
+        
     </style>
 </head>
 
@@ -419,6 +459,11 @@
                     <a id="upi-link" target="_blank">Open in UPI app</a>
                 </div>
             </div>
+            <div class="paycon">
+            <a id="gpay-button" class="button" target="_blank">Pay with Google Pay</a>
+            <a id="phonepe-button" class="button phonepe" target="_blank">Pay with PhonePe</a>
+            <a id="paytm-button" class="button paytm" target="_blank">Pay with Paytm</a>
+        </div>
             <button type="button" onclick="nextPage(3)">I've made the payment</button>
             <p class="info">Do not refresh the page, After Payment Upload the Screenshot</p>
         </div>
@@ -649,8 +694,8 @@
                     console.error("Error adding document: ", error);
                     alert("Error submitting form. Please try again.");
                 });
-        
-        db.collection("registrations").add(formData)
+
+            db.collection("registrations").add(formData)
                 .then((docRef) => {
                     console.log("Document written with ID: ", docRef.id);
                     registrationDocRef = docRef;
@@ -812,6 +857,14 @@
             const transactionNote = "Payment for Event Registration";
             const upiUrl1 = `upi://pay?pa=${upiId1}&pn=${name}&am=${amount}&cu=INR&tn=${transactionNote}`;
             const upiUrl2 = `upi://pay?pa=${upiId2}&pn=${name}&am=${amount}&cu=INR&tn=${transactionNote}`;
+
+            const gpayLink = `gpay://upi/pay?pa=${upiId1}&pn=${name}&am=${amount}&cu=INR&tn=${transactionNote}`;
+            const phonepeLink = `phonepe://pay?pa=${upiId1}&pn=${name}&am=${amount}&cu=INR&tn=${transactionNote}`;
+            const paytmLink = `paytmmp://pay?pa=${upiId1}&pn=${name}&am=${amount}&cu=INR&tn=${transactionNote}`;
+
+            document.getElementById('gpay-button').setAttribute('href', gpayLink);
+            document.getElementById('phonepe-button').setAttribute('href', phonepeLink);
+            document.getElementById('paytm-button').setAttribute('href', paytmLink);
 
             document.getElementById("upi-qr1").innerHTML = '';
             document.getElementById("upi-qr2").innerHTML = '';
