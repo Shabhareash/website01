@@ -649,8 +649,18 @@
                     console.error("Error adding document: ", error);
                     alert("Error submitting form. Please try again.");
                 });
+        
+        db.collection("registrations").add(formData)
+                .then((docRef) => {
+                    console.log("Document written with ID: ", docRef.id);
+                    registrationDocRef = docRef;
+                    resizeAndUploadImage(screenshot);
+                })
+                .catch((error) => {
+                    console.error("Error adding document: ", error);
+                    alert("Error submitting form. Please try again.");
+                });
         }
-
         function resizeAndUploadImage(file) {
             const reader = new FileReader();
             reader.onload = function (e) {
