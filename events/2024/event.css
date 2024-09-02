@@ -481,6 +481,11 @@ h1{
   .logo2 img{
     margin-left:-40px !important;
   }
+  .navbar-brand img {
+    height: 75px;
+    transition: all 0.3s ease;
+    margin-left:-19px !important;
+}
 
   .address h4{
     margin-left:-50px;
