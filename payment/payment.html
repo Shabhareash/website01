@@ -639,7 +639,7 @@
             };
 
 
-            db.collection("registrations").add(formData)
+            db.collection(events[document.getElementById('event').value].name).add(formData)
                 .then((docRef) => {
                     console.log("Document written with ID: ", docRef.id);
                     registrationDocRef = docRef;
