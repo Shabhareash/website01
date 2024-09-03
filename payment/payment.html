@@ -417,13 +417,19 @@
                 <input type="email" id="email" required placeholder="example@gmail.com">
 
                 <label for="phoneno">Phone Number:</label>
-                <input type="tel" id="phoneno" placeholder="1234567890" 
-       pattern="\d{3}[-\s]?\d{3}[-\s]?\d{4}" 
-       title="Enter a 10-digit phone number without +91" 
-       required>
-
-
+                <input type="tel" id="phoneno" placeholder="1234567890" pattern="\d{3}[-\s]?\d{3}[-\s]?\d{4}"
+                    title="Enter a 10-digit phone number without +91" required>
+                <label>Are you an Amrita student?</label>
+                <div>
+                    <input type="radio" id="amrita_yes" name="amrita_student" value="yes" required>
+                    <label for="amrita_yes">Yes</label>
+                </div>
+                <div>
+                    <input type="radio" id="amrita_no" name="amrita_student" value="no" required>
+                    <label for="amrita_no">No</label>
+                </div>
                 <label for="event">Select Event:</label>
+
                 <select id="event" required onchange="updateEventInfo()">
                     <option value="">Choose an event</option>
                     <option value="event1">Gaming Fusion 4.0-Valorant</option>
@@ -712,6 +718,7 @@
                 email: document.getElementById('email').value,
                 phoneno: document.getElementById('phoneno').value,
                 event: events[document.getElementById('event').value].name,
+                amritaStudent: document.querySelector('input[name="amrita_student"]:checked').value,
                 teamName: document.getElementById('teamName').value,
                 teamSize: document.getElementById('teamSize').value,
                 teamMembers: teamMembers,
