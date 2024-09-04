@@ -9,6 +9,7 @@
     <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-firestore.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-storage.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-auth.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
@@ -399,13 +400,195 @@
                 margin: 10px auto;
             }
         }
+
+              /* Profile Container */
+      .profile-container {
+        position: relative;
+      }
+
+      .profile-circle {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background-color: #ddd;
+        cursor: pointer;
+        overflow: hidden;
+      }
+
+      .profile-circle img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      /* Profile Dropdown */
+      .profile-dropdown {
+        display: none;
+        position: absolute;
+        top: 60px;
+        right: 0;
+        background-color: #1f1f1f;
+        border-radius: 10px;
+        width: 320px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        padding: 20px;
+        z-index: 1000;
+        color: white;
+      }
+
+      .profile-dropdown h2,
+      .profile-dropdown p {
+        margin: 0;
+        color: white;
+      }
+
+      .profile-dropdown h2 {
+        font-size: 18px;
+        font-weight: normal;
+        margin-bottom: 5px;
+      }
+
+      .profile-dropdown p {
+        font-size: 14px;
+        color: #bbb;
+      }
+
+      /* Account Actions */
+      .account-actions {
+        margin-top: 20px;
+        display: flex;
+        justify-content: space-between;
+      }
+
+      .account-actions button {
+        background-color: #333;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        padding: 10px;
+        width: 48%;
+        cursor: pointer;
+        text-align: center;
+      }
+
+      .account-actions button:hover {
+        background-color: #555;
+      }
+
+      /* Close Button */
+      .close-button {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background: none;
+        border: none;
+        color: white;
+        font-size: 18px;
+        cursor: pointer;
+      }
+
+      /* Login Overlay */
+      .login-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.8);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 9999;
+      }
+
+      .login-box {
+        background-color: white;
+        padding: 2rem;
+        border-radius: 10px;
+        text-align: center;
+      }
+
+      .google-sign-in-button {
+        background-color: #b22049;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+        margin-top: 20px;
+      }
+
+      /* Purchase History */
+      .purchase-history {
+        max-height: 200px;
+        overflow: hidden;
+      }
+
+      .purchase-list-container {
+        max-height: 150px;
+        overflow-y: auto;
+        padding-right: 10px;
+      }
+
+      .purchase-item {
+        margin-bottom: 10px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid #444;
+      }
+
+      .purchase-list-container::-webkit-scrollbar {
+        width: 8px;
+      }
+
+      .purchase-list-container::-webkit-scrollbar-track {
+        background: #f1f1f1;
+      }
+
+      .purchase-list-container::-webkit-scrollbar-thumb {
+        background: #888;
+        border-radius: 4px;
+      }
+
+      .purchase-list-container::-webkit-scrollbar-thumb:hover {
+        background: #555;
+      }
     </style>
 </head>
 
 <body>
+    <div id="loginOverlay" class="login-overlay">
+        <div class="login-box">
+          <h2>Welcome to Events 3.0</h2>
+          <p>Please sign in with Google to access the content.</p>
+          <button id="googleSignInButton" class="google-sign-in-button">Sign in with Google</button>
+        </div>
+      </div>
     <div id="arrow">
         <i class="fas fa-arrow-left nav-arrow left" onclick="prevPage()"></i>
     </div>
+    <div class="profile-container">
+        <div class="profile-circle" id="profileCircle">
+          <img id="profileImage" src="https://via.placeholder.com/50" alt="Profile">
+        </div>
+        <div class="profile-dropdown" id="profileDropdown" style="display: none;">
+          <button class="close-button" id="closeButton">&times;</button>
+          <div class="profile-info">
+            <h2 id="userName">User Name</h2>
+            <p id="userEmail">user@example.com</p>
+          </div>
+          <div class="purchase-history">
+            <h3 style="color: #4285F4;">Purchase History</h3>
+            <div class="purchase-list-container">
+              <div id="purchaseList"></div>
+            </div>
+          </div>
+          <div class="account-actions">
+            <button id="logoutButton" class="logout-button" style="display: none;">Sign out</button>
+            <button id="loginButton" class="login-button">Log in with Gmail</button>
+          </div>
+        </div>
+      </div>
     <div class="container">
         <h1>Event Registration</h1>
         <div id="page1">
@@ -1008,7 +1191,109 @@
             document.getElementById('event').addEventListener('change', updateEventInfo);
             document.getElementById('teamSize').addEventListener('change', updateTeamMembers);
         });
-    </script>
-</body>
 
+        document.addEventListener('DOMContentLoaded', () => {
+          const googleSignInButton = document.getElementById('googleSignInButton');
+          const profileCircle = document.getElementById('profileCircle');
+          const profileDropdown = document.getElementById('profileDropdown');
+          const profileImage = document.getElementById('profileImage');
+          const userName = document.getElementById('userName');
+          const userEmail = document.getElementById('userEmail');
+          const purchaseList = document.getElementById('purchaseList');
+          const loginButton = document.getElementById('loginButton');
+          const logoutButton = document.getElementById('logoutButton');
+          const closeButton = document.getElementById('closeButton'); // Keep the close button functionality
+      
+          function signInWithGoogle() {
+            const provider = new firebase.auth.GoogleAuthProvider();
+            auth.signInWithPopup(provider)
+              .then((result) => {
+                const user = result.user;
+                updateProfileInfo(user);
+                fetchPurchaseHistory(user.email);
+              })
+              .catch((error) => {
+                console.error('Error during login:', error);
+              });
+          }
+      
+          googleSignInButton.addEventListener('click', signInWithGoogle);
+          loginButton.addEventListener('click', signInWithGoogle);
+      
+          profileCircle.addEventListener('click', () => {
+            profileDropdown.style.display = profileDropdown.style.display === 'none' ? 'block' : 'none';
+          });
+      
+          closeButton.addEventListener('click', () => {
+            profileDropdown.style.display = 'none'; // Keep the close button functionality
+          });
+      
+          logoutButton.addEventListener('click', () => {
+            auth.signOut().then(() => {
+              resetProfileInfo();
+              localStorage.removeItem('popupShown');
+            }).catch((error) => {
+              console.error('Error logging out:', error);
+            });
+          });
+      
+          document.addEventListener('firebaseInitialized', () => {
+            if (auth) {
+              auth.onAuthStateChanged(user => {
+                if (user) {
+                  updateProfileInfo(user);
+                  fetchPurchaseHistory(user.email);
+                } else {
+                  resetProfileInfo();
+                }
+              });
+            } else {
+              console.error('Firebase Authentication not initialized properly.');
+            }
+          });
+      
+          function updateProfileInfo(user) {
+            profileImage.src = user.photoURL || 'https://via.placeholder.com/50';
+            userName.textContent = user.displayName || 'Anonymous User';
+            userEmail.textContent = user.email || 'No email available';
+            loginButton.style.display = 'none';
+            logoutButton.style.display = 'block';
+          }
+      
+          function resetProfileInfo() {
+            profileImage.src = 'https://via.placeholder.com/50';
+            userName.textContent = 'User Name';
+            userEmail.textContent = 'user@example.com';
+            loginButton.style.display = 'block';
+            logoutButton.style.display = 'none';
+            purchaseList.innerHTML = '';
+          }
+      
+          function fetchPurchaseHistory(email) {
+            if (!db1) {
+              console.error('Firestore database not initialized.');
+              return;
+            }
+            db1.collection('registrations')
+              .where('email', '==', email)
+              .get()
+              .then((querySnapshot) => {
+                purchaseList.innerHTML = '';
+                querySnapshot.forEach((doc) => {
+                  const data = doc.data();
+                  const timestamp = data.timestamp.toDate();
+                  const formattedDate = timestamp.toLocaleString();
+                  const purchaseItem = document.createElement('div');
+                  purchaseItem.classList.add('purchase-item');
+                  purchaseItem.textContent = `Event: ${data.event}, Date: ${formattedDate}`;
+                  purchaseList.appendChild(purchaseItem);
+                });
+              })
+              .catch((error) => {
+                console.error("Error fetching purchase history: ", error);
+              });
+          }
+        });
+      </script>     
+</body>
 </html>
