@@ -566,7 +566,7 @@
     </style>
   </head>
 <body>
-  
+
   <header>
     <section id="home" class="section">
       <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="myNav">
@@ -1015,7 +1015,6 @@
     </script>
 <script>
   document.addEventListener('DOMContentLoaded', () => {
-    const googleSignInButton = document.getElementById('googleSignInButton');
     const profileCircle = document.getElementById('profileCircle');
     const profileDropdown = document.getElementById('profileDropdown');
     const profileImage = document.getElementById('profileImage');
@@ -1039,7 +1038,7 @@
         });
     }
 
-    googleSignInButton.addEventListener('click', signInWithGoogle);
+  
     loginButton.addEventListener('click', signInWithGoogle);
 
     profileCircle.addEventListener('click', () => {
