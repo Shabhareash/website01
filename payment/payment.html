@@ -729,7 +729,7 @@
                 db = firebase.firestore();
                 auth = firebase.auth();
                 console.log("Firebase and Firestore initialized successfully");
-                
+                document.dispatchEvent(new Event('firebaseInitialized'));
             } catch (error) {
                 console.error("Error initializing app:", error);
             }
