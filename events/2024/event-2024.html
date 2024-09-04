@@ -565,7 +565,7 @@
   }
     </style>
   </head>
-
+<body>
   <div id="loginOverlay" class="login-overlay">
     <div class="login-box">
       <h2>Welcome to Events 3.0</h2>
@@ -1044,7 +1044,7 @@
 
     function signInWithGoogle() {
       const provider = new firebase.auth.GoogleAuthProvider();
-      auth1.signInWithPopup(provider)
+      auth.signInWithPopup(provider)
         .then((result) => {
           const user = result.user;
           updateProfileInfo(user);
@@ -1068,7 +1068,7 @@
     });
 
     logoutButton.addEventListener('click', () => {
-      auth1.signOut().then(() => {
+      auth.signOut().then(() => {
         resetProfileInfo();
         showLoginOverlay();
         localStorage.removeItem('popupShown');
@@ -1078,8 +1078,8 @@
     });
 
     document.addEventListener('firebaseInitialized', () => {
-      if (auth1) {
-        auth1.onAuthStateChanged(user => {
+      if (auth) {
+        auth.onAuthStateChanged(user => {
           if (user) {
             updateProfileInfo(user);
             fetchPurchaseHistory(user.email);
@@ -1187,5 +1187,5 @@
       </div>
     </footer>
   </div>
-
+</body>
 </html>

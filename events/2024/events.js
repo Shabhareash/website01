@@ -1,5 +1,5 @@
 async function getToken() {
-    const response = await fetch('https://us-central1-acn-2024-9779f.cloudfunctions.net/api/get-token', {
+    const response = await fetch('https://backend-server-black.vercel.app/api/get-token', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -13,7 +13,7 @@ async function getToken() {
 }
 
 async function getFirebaseConfig(token, configEndpoint) {
-    const response = await fetch(`https://us-central1-acn-2024-9779f.cloudfunctions.net/api/${configEndpoint}`, {
+    const response = await fetch(`https://backend-server-black.vercel.app/api/${configEndpoint}`, {
         headers: {
             'Authorization': token
         }
@@ -24,27 +24,26 @@ async function getFirebaseConfig(token, configEndpoint) {
     return await response.json();
 }
 
-let db, db1, auth1, storage;
+let db, db1, auth, storage;
 
 async function initializeApp() {
     try {
         const token = await getToken();
 
-        // Fetch and initialize the first Firebase app
         const config1 = await getFirebaseConfig(token, 'firebase-config');
         const app = firebase.initializeApp(config1, "app");
         db = app.firestore();
         storage = app.storage();
 
-        // Fetch and initialize the second Firebase app
+    
         const config2 = await getFirebaseConfig(token, 'firebase-config?configType=config1');
         const app1 = firebase.initializeApp(config2, "app1");
         db1 = app1.firestore();
-        auth1 = app1.auth();  // Ensure auth1 is properly initialized
+        auth = app1.auth();  
 
         console.log("Both Firebase apps initialized successfully");
 
-        // Now that Firebase is initialized, call your fetch function
+    
         fetchAndDisplayImages();
         document.dispatchEvent(new Event('firebaseInitialized'));
 
