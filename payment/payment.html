@@ -403,7 +403,10 @@
 
         /* Profile Container */
         .profile-container {
-            position: relative;
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            z-index: 1000;
         }
 
         .profile-circle {
@@ -726,6 +729,7 @@
                 db = firebase.firestore();
                 auth = firebase.auth();
                 console.log("Firebase and Firestore initialized successfully");
+                document.dispatchEvent(new Event('firebaseInitialized'));
             } catch (error) {
                 console.error("Error initializing app:", error);
             }
@@ -1311,16 +1315,6 @@
                         console.error("Error fetching purchase history: ", error);
                     });
             }
-
-            // Navbar functionality
-            window.addEventListener('scroll', function () {
-                const navbar = document.querySelector('.navbar');
-                if (window.scrollY > 50) {
-                    navbar.classList.add('shrink');
-                } else {
-                    navbar.classList.remove('shrink');
-                }
-            });
 
             if (!localStorage.getItem('popupShown')) {
                 showLoginOverlay();

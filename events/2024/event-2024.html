@@ -553,9 +553,7 @@
             background-size: cover;
             background-position: center;
         }
-    .vanta-canvas{
-  height: calc(window.innerHeight * 2) !important;
-}
+
 .disabled-button {
     pointer-events: none;
     color: gray;
@@ -1012,6 +1010,7 @@
         speed: 1.20,
         zoom: 0.35
       })
+      document.querySelector('.vanta-canvas').style.height = `${window.innerHeight * 2}px`;
     </script>
 <script>
   document.addEventListener('DOMContentLoaded', () => {
