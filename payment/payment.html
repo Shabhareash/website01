@@ -724,6 +724,7 @@
                 const config = await getFirebaseConfig(token);
                 firebase.initializeApp(config);
                 db = firebase.firestore();
+                auth = firebase.auth(); 
                 console.log("Firebase and Firestore initialized successfully");
             } catch (error) {
                 console.error("Error initializing app:", error);
@@ -1270,11 +1271,11 @@
           }
       
           function fetchPurchaseHistory(email) {
-            if (!db1) {
+            if (!db) {
               console.error('Firestore database not initialized.');
               return;
             }
-            db1.collection('registrations')
+            db.collection('registrations')
               .where('email', '==', email)
               .get()
               .then((querySnapshot) => {
