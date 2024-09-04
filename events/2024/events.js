@@ -1,5 +1,5 @@
 async function getToken() {
-    const response = await fetch('https://backend-server-black.vercel.app/api/get-token', {
+    const response = await fetch('https://us-central1-acn-2024-9779f.cloudfunctions.net/api/get-token', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -13,7 +13,7 @@ async function getToken() {
 }
 
 async function getFirebaseConfig(token, configEndpoint) {
-    const response = await fetch(`https://backend-server-black.vercel.app/api/${configEndpoint}`, {
+    const response = await fetch(`https://us-central1-acn-2024-9779f.cloudfunctions.net/api/${configEndpoint}`, {
         headers: {
             'Authorization': token
         }
