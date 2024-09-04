@@ -1021,7 +1021,6 @@
     </script>
 <script>
   document.addEventListener('DOMContentLoaded', () => {
-    const loginOverlay = document.getElementById('loginOverlay');
     const googleSignInButton = document.getElementById('googleSignInButton');
     const profileCircle = document.getElementById('profileCircle');
     const profileDropdown = document.getElementById('profileDropdown');
@@ -1031,16 +1030,7 @@
     const purchaseList = document.getElementById('purchaseList');
     const loginButton = document.getElementById('loginButton');
     const logoutButton = document.getElementById('logoutButton');
-    const closeButton = document.getElementById('closeButton');
-
-    function showLoginOverlay() {
-      loginOverlay.style.display = 'flex';
-    }
-
-    function hideLoginOverlay() {
-      loginOverlay.style.display = 'none';
-      localStorage.setItem('popupShown', 'true');
-    }
+    const closeButton = document.getElementById('closeButton'); // Keep the close button functionality
 
     function signInWithGoogle() {
       const provider = new firebase.auth.GoogleAuthProvider();
@@ -1049,7 +1039,6 @@
           const user = result.user;
           updateProfileInfo(user);
           fetchPurchaseHistory(user.email);
-          hideLoginOverlay();
         })
         .catch((error) => {
           console.error('Error during login:', error);
@@ -1064,13 +1053,12 @@
     });
 
     closeButton.addEventListener('click', () => {
-      profileDropdown.style.display = 'none';
+      profileDropdown.style.display = 'none'; // Keep the close button functionality
     });
 
     logoutButton.addEventListener('click', () => {
       auth.signOut().then(() => {
         resetProfileInfo();
-        showLoginOverlay();
         localStorage.removeItem('popupShown');
       }).catch((error) => {
         console.error('Error logging out:', error);
@@ -1083,12 +1071,8 @@
           if (user) {
             updateProfileInfo(user);
             fetchPurchaseHistory(user.email);
-            hideLoginOverlay();
           } else {
             resetProfileInfo();
-            if (!localStorage.getItem('popupShown')) {
-              showLoginOverlay();
-            }
           }
         });
       } else {
@@ -1147,12 +1131,9 @@
         navbar.classList.remove('shrink');
       }
     });
-
-    if (!localStorage.getItem('popupShown')) {
-      showLoginOverlay();
-    }
   });
 </script>
+
 
     <footer>
       <div class="footer-content" id="footer">

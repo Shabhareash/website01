@@ -839,10 +839,13 @@
                     const pageHeight = doc.internal.pageSize.height;
                     const margin = 10;
 
+                    doc.setFillColor(255, 255, 255);
+                    doc.rect(0, 0, pageWidth, pageHeight, 'F');
                     doc.setDrawColor(0);
                     doc.setLineWidth(2);
                     doc.rect(margin, margin, pageWidth - 2 * margin, pageHeight - 2 * margin);
 
+                    doc.setTextColor(178, 32, 73);
                     doc.setFontSize(24);
                     doc.setFont(undefined, 'bold');
                     doc.text('ACN', pageWidth / 2, 25, { align: 'center' });
@@ -852,6 +855,7 @@
                     doc.text('Event Registration Receipt', pageWidth / 2, 35, { align: 'center' });
 
 
+                    doc.setTextColor(0, 0, 0);
                     doc.setFontSize(12);
                     const paragraphs = [
                         'Thank you for registering for our event. We are excited to have you join us for this amazing experience.',
@@ -869,9 +873,14 @@
                     doc.setLineWidth(0.5);
                     doc.rect(margin + 5, yPosition, pageWidth - 2 * margin - 10, 80);
 
+                    
+                    doc.setTextColor(178, 32, 73);
                     doc.setFontSize(14);
                     doc.setFont(undefined, 'bold');
                     doc.text('Event Registration Details', pageWidth / 2, yPosition - 5, { align: 'center' });
+
+                    
+                    doc.setTextColor(0, 0, 0);
                     doc.setFontSize(12);
                     doc.setFont(undefined, 'normal');
                     const details = [
@@ -887,11 +896,12 @@
                     ];
                     yPosition += 10;
                     details.forEach(detail => {
-                        doc.text(detail, margin + 10, yPosition);
-                        yPosition += 10;
+                        const lines = doc.splitTextToSize(detail, pageWidth - 2 * margin - 20);
+                        doc.text(lines, margin + 10, yPosition);
+                        yPosition += lines.length * 10;
                     });
 
-
+                  
                     doc.setFontSize(10);
                     doc.text('Contact: amritacybernation@ch.amrita.edu | Phone: 8110036667 | Website: www.amritacybernation.com', pageWidth / 2, pageHeight - 15, { align: 'center' });
 
