@@ -72,7 +72,7 @@ async function fetchAndDisplayImages() {
             const header = doc.data().name;
 
             displayImage(`day${i + 1}Image`, imageUrl);
-            displayText(`card-text${i + 1}`, text);
+            displayText(`box-text${i + 1}`, text);
             displayHeader(`header${i + 1}`, header);
         });
 
