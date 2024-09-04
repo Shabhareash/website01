@@ -91,15 +91,7 @@ function displayImage(imgElementId, imageUrl) {
     }
 }
 
-function displayText(textElementId, text) {
-    const textElement = document.getElementById(textElementId);
-    if (textElement) {
-        textElement.textContent = text;
-        console.info("done")
-    } else {
-        console.error(`No element found with ID: ${textElementId}`);
-    }
-}
+
 
 function displayHeader(headerElementId, head) {
     const headerElement = document.getElementById(headerElementId);
