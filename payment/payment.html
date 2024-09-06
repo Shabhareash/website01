@@ -189,6 +189,7 @@
         }
 
         .nav-arrow {
+            z-index: 1000 !important;
             position: absolute;
             top: 50%;
             transform: translateY(-50%);
@@ -556,6 +557,32 @@
         .purchase-list-container::-webkit-scrollbar-thumb:hover {
             background: #555;
         }
+
+        #highlightedMarquee {
+            background-color: #b22049;
+            font-weight: bold;
+            color: white;
+            padding: 10px;
+            display: inline-block;
+            white-space: nowrap;
+            animation: marquee 10s linear infinite;
+        }
+
+        @keyframes marquee {
+            0% {
+                transform: translateX(100%);
+            }
+
+            100% {
+                transform: translateX(-100%);
+            }
+        }
+
+        .marqueetext {
+            width: 100%;
+            overflow: hidden;
+            align-items: center;
+        }
     </style>
 </head>
 
@@ -603,8 +630,10 @@
                 <input type="email" id="email" required placeholder="example@gmail.com">
 
                 <label for="phoneno">Phone Number:</label>
-                <input type="tel" id="phoneno" placeholder="1234567890" pattern="\d{3}[-\s]?\d{3}[-\s]?\d{4}"
-                    title="Enter a 10-digit phone number without +91" required>
+                <input type="tel" id="phoneno" placeholder="1234567890" pattern="\d{10}"
+                    title="Enter a 10-digit phone number in the format 1234567890 without +91 and without spaces or special characters"
+                    required>
+
                 <label>Are you an Amrita student?</label>
                 <div>
                     <input type="radio" id="amrita_yes" name="amrita_student" value="yes" required>
@@ -657,16 +686,27 @@
             <div class="qr-code-section">
                 <h2>Payment Information</h2>
                 <p>Please make a payment of ₹<span id="paymentAmount">0</span> to complete your registration.</p>
+                <br>
+                <div class="marqueetext">
+                    <p id="highlightedMarquee">For issues in registration, please contact Aravind[ph-no:7397412269]</p>
+                </div>
                 <div class="pay">
                     <h1>Scan to Pay</h1>
+                    <p style="font-size: 20px;" style="text-align: center;">if one of the options fails use other
+                        options</p>
+                    <br>
                     <div class="qr-options">
                         <button class="qr-option active" onclick="switchQR(1)">Option 1</button>
                         <button class="qr-option" onclick="switchQR(2)">Option 2</button>
+                        <button class="qr-option" onclick="switchQR(3)">Option 3</button>
+                        <button class="qr-option" onclick="switchQR(4)">Option 4</button>
                     </div>
 
                     <div class="qr-code-container">
                         <div id="upi-qr1" class="qr-code"></div>
                         <div id="upi-qr2" class="qr-code hidden"></div>
+                        <div id="upi-qr3" class="qr-code hidden"></div>
+                        <div id="upi-qr4" class="qr-code hidden"></div>
                     </div>
                     <div id="qr-label" class="qr-label">UPI Option 1</div>
                     <a id="upi-link" target="_blank">Open in UPI app</a>
@@ -741,6 +781,7 @@
         const totalPages = 3;
         const teamMembers = [];
         let registrationDocRef = null;
+        let currentAmount = 0;
 
         const events = {
             "event1": { name: "Gaming Fusion 4.0-Valorant", price: 250, maxTeamSize: 5 },
@@ -877,9 +918,11 @@
                 const eventPrice = events[eventSelect.value].price;
                 const totalAmount = eventPrice;
                 paymentAmountSpan.textContent = totalAmount;
+                currentAmount = totalAmount;
                 updateUPIQRCode(totalAmount);
             } else {
                 paymentAmountSpan.textContent = '0';
+                currentAmount = 0;
                 updateUPIQRCode(0);
             }
         }
@@ -891,7 +934,6 @@
                 document.getElementById(`page${currentPage}`).classList.remove('hidden');
             }
         }
-
         function submitForm() {
             const screenshot = document.getElementById('screenshot').files[0];
             const submitButton = document.querySelector('#page3 button');
@@ -904,7 +946,7 @@
             submitButton.disabled = true;
             submitButton.textContent = 'Submitting...';
 
-
+            // Gather form data
             const formData = {
                 name: document.getElementById('name').value,
                 email: document.getElementById('email').value,
@@ -917,33 +959,38 @@
                 timestamp: firebase.firestore.FieldValue.serverTimestamp()
             };
 
+            // Submit to event-specific collection
+            db.collection(events[document.getElementById('event').value].name)
+                .add(formData)
+                .then((eventDocRef) => {
+                    console.log("Document written in event-specific collection with ID: ", eventDocRef.id);
 
-            db.collection(events[document.getElementById('event').value].name).add(formData)
-                .then((docRef) => {
-                    console.log("Document written with ID: ", docRef.id);
-                    registrationDocRef = docRef;
-                    resizeAndUploadImage(screenshot, submitButton);
+                    // Submit to the general "registrations" collection
+                    db.collection("registrations").add(formData)
+                        .then((regDocRef) => {
+                            console.log("Document written in 'registrations' collection with ID: ", regDocRef.id);
+
+                            // Save event doc reference globally for image upload
+                            registrationDocRef = eventDocRef;
+
+                            // Proceed with the image upload after both submissions
+                            resizeAndUploadImage(screenshot, submitButton);
+                        })
+                        .catch((error) => {
+                            console.error("Error adding document to 'registrations': ", error);
+                            alert("Error submitting form to 'registrations'. Please try again.");
+                            submitButton.disabled = false;
+                            submitButton.textContent = 'Submit';
+                        });
                 })
                 .catch((error) => {
-                    console.error("Error adding document: ", error);
-                    alert("Error submitting form. Please try again.");
-                    submitButton.disabled = false;
-                    submitButton.textContent = 'Submit';
-                });
-
-            db.collection("registrations").add(formData)
-                .then((docRef) => {
-                    console.log("Document written with ID: ", docRef.id);
-                    registrationDocRef = docRef;
-                    resizeAndUploadImage(screenshot, submitButton);
-                })
-                .catch((error) => {
-                    console.error("Error adding document: ", error);
-                    alert("Error submitting form. Please try again.");
+                    console.error("Error adding document to event collection: ", error);
+                    alert("Error submitting form to event collection. Please try again.");
                     submitButton.disabled = false;
                     submitButton.textContent = 'Submit';
                 });
         }
+
         function resizeAndUploadImage(file, submitButton) {
             const reader = new FileReader();
             reader.onload = function (e) {
@@ -989,9 +1036,10 @@
                 return;
             }
 
+            const eventName = events[document.getElementById('event').value].name.replace(/\s+/g, '-');
             const storage = firebase.storage();
             const storageRef = storage.ref();
-            const filename = `payment_screenshots/${registrationDocRef.id}.jpg`;
+            const filename = `payment_screenshots/${eventName}/${registrationDocRef.id}.jpg`;
             const fileRef = storageRef.child(filename);
 
             fileRef.put(blob).then((snapshot) => {
@@ -1042,7 +1090,6 @@
                     doc.setFont(undefined, 'normal');
                     doc.text('Event Registration Receipt', pageWidth / 2, 35, { align: 'center' });
 
-
                     doc.setTextColor(0, 0, 0);
                     doc.setFontSize(12);
                     const paragraphs = [
@@ -1057,16 +1104,14 @@
                     });
 
                     yPosition += 10;
+                    const detailBoxHeight = 120;
                     doc.setDrawColor(0);
                     doc.setLineWidth(0.5);
-                    doc.rect(margin + 5, yPosition, pageWidth - 2 * margin - 10, 80);
-
-
+                    doc.rect(margin + 5, yPosition, pageWidth - 2 * margin - 10, detailBoxHeight);
                     doc.setTextColor(178, 32, 73);
                     doc.setFontSize(14);
                     doc.setFont(undefined, 'bold');
                     doc.text('Event Registration Details', pageWidth / 2, yPosition - 5, { align: 'center' });
-
 
                     doc.setTextColor(0, 0, 0);
                     doc.setFontSize(12);
@@ -1079,8 +1124,7 @@
                         `Event: ${events[document.getElementById('event').value].name}`,
                         `Team Name: ${document.getElementById('teamName').value}`,
                         `Team Size: ${document.getElementById('teamSize').value}`,
-                        `Payment Amount: ₹${document.getElementById('paymentAmount').textContent}`,
-                        `Screenshot URL: ${screenshotUrl}`
+                        `Payment Amount: ₹${document.getElementById('paymentAmount').textContent}`
                     ];
                     yPosition += 10;
                     details.forEach(detail => {
@@ -1088,11 +1132,17 @@
                         doc.text(lines, margin + 10, yPosition);
                         yPosition += lines.length * 10;
                     });
+                    yPosition += 10;
+                    doc.setTextColor(0, 0, 0);
+                    doc.text('Screenshot URL:', margin + 10, yPosition);
 
-
+                    const linkText = 'Click here to view the payment screenshot';
+                    yPosition += 5;
+                    doc.setTextColor(0, 0, 255);
+                    doc.textWithLink(linkText, margin + 10, yPosition, { url: screenshotUrl });
+                    doc.setTextColor(0, 0, 0);
                     doc.setFontSize(10);
                     doc.text('Contact: amritacybernation@ch.amrita.edu | Phone: 8110036667 | Website: www.amritacybernation.com', pageWidth / 2, pageHeight - 15, { align: 'center' });
-
                     doc.save(`event_registration_receipt_for_${events[document.getElementById('event').value].name.replace(/\s+/g, '_')}.pdf`);
 
                     console.log('Registration complete! Your receipt has been generated and downloaded.');
@@ -1105,72 +1155,78 @@
         }
 
         function updateUPIQRCode(amount) {
-            const upiId1 = "saranya.gopu7-1@okhdfcbank";
-            const upiId2 = "aravindmohan1883-1@okhdfcbank";
+            const upiIds = [
+                "saranya.gopu7-1@okhdfcbank",
+                "aravindmohan1883-1@okhdfcbank",
+                "aravindmohan1883@okhdfcbank",
+                "saravanan2003cr7@okhdfcbank"
+            ];
+
             const name = "ACN";
             const transactionNote = "Payment for Event Registration";
-            const upiUrl1 = `upi://pay?pa=${upiId1}&pn=${name}&am=${amount}&cu=INR&tn=${transactionNote}`;
-            const upiUrl2 = `upi://pay?pa=${upiId2}&pn=${name}&am=${amount}&cu=INR&tn=${transactionNote}`;
 
-            const gpayLink = `gpay://upi/pay?pa=${upiId1}&pn=${name}&am=${amount}&cu=INR&tn=${transactionNote}`;
-            const phonepeLink = `phonepe://pay?pa=${upiId1}&pn=${name}&am=${amount}&cu=INR&tn=${transactionNote}`;
-            const paytmLink = `paytmmp://pay?pa=${upiId1}&pn=${name}&am=${amount}&cu=INR&tn=${transactionNote}`;
+            const upiUrls = upiIds.map(upiId => `upi://pay?pa=${upiId}&pn=${name}&am=${amount}&cu=INR&tn=${transactionNote}`);
+            const gpayLinks = upiIds.map(upiId => `gpay://upi/pay?pa=${upiId}&pn=${name}&am=${amount}&cu=INR&tn=${transactionNote}`);
+            const phonepeLinks = upiIds.map(upiId => `phonepe://pay?pa=${upiId}&pn=${name}&am=${amount}&cu=INR&tn=${transactionNote}`);
+            const paytmLinks = upiIds.map(upiId => `paytmmp://pay?pa=${upiId}&pn=${name}&am=${amount}&cu=INR&tn=${transactionNote}`);
 
-            document.getElementById('gpay-button').setAttribute('href', gpayLink);
-            document.getElementById('phonepe-button').setAttribute('href', phonepeLink);
-            document.getElementById('paytm-button').setAttribute('href', paytmLink);
+            document.getElementById('gpay-button').setAttribute('href', gpayLinks[0]);
+            document.getElementById('phonepe-button').setAttribute('href', phonepeLinks[0]);
+            document.getElementById('paytm-button').setAttribute('href', paytmLinks[0]);
 
-            document.getElementById("upi-qr1").innerHTML = '';
-            document.getElementById("upi-qr2").innerHTML = '';
+            const qrContainers = [
+                document.getElementById("upi-qr1"),
+                document.getElementById("upi-qr2"),
+                document.getElementById("upi-qr3"),
+                document.getElementById("upi-qr4")
+            ];
 
-            new QRCode(document.getElementById("upi-qr1"), {
-                text: upiUrl1,
-                width: 200,
-                height: 200,
-                colorDark: "#000000",
-                colorLight: "#ffffff",
-                correctLevel: QRCode.CorrectLevel.H
+            qrContainers.forEach((qrContainer, index) => {
+                qrContainer.innerHTML = '';
+                new QRCode(qrContainer, {
+                    text: upiUrls[index],
+                    width: 200,
+                    height: 200,
+                    colorDark: "#000000",
+                    colorLight: "#ffffff",
+                    correctLevel: QRCode.CorrectLevel.H
+                });
+
+                qrContainer.addEventListener('click', () => {
+                    window.open(upiUrls[index], "_blank");
+                });
             });
-
-            new QRCode(document.getElementById("upi-qr2"), {
-                text: upiUrl2,
-                width: 200,
-                height: 200,
-                colorDark: "#000000",
-                colorLight: "#ffffff",
-                correctLevel: QRCode.CorrectLevel.H
-            });
-
-            document.getElementById("upi-link").href = upiUrl1;
-
-            document.getElementById("upi-qr1").addEventListener('click', () => {
-                window.open(upiUrl1, "_blank");
-            });
-
-            document.getElementById("upi-qr2").addEventListener('click', () => {
-                window.open(upiUrl2, "_blank");
-            });
-
-            switchQR(1, amount);
+            switchQR(1);
         }
 
-        function switchQR(option, amount) {
-            const qr1 = document.getElementById("upi-qr1");
-            const qr2 = document.getElementById("upi-qr2");
+        function switchQR(option) {
+            const qrContainers = [
+                document.getElementById("upi-qr1"),
+                document.getElementById("upi-qr2"),
+                document.getElementById("upi-qr3"),
+                document.getElementById("upi-qr4")
+            ];
             const label = document.getElementById("qr-label");
             const link = document.getElementById("upi-link");
 
-            if (option === 1) {
-                qr1.classList.remove("hidden");
-                qr2.classList.add("hidden");
-                label.textContent = "UPI Option 1";
-                link.href = `upi://pay?pa=saranya.gopu7-1@okhdfcbank&pn=ACN&am=${amount}&cu=INR&tn=Payment%20for%20Event%20Registration`;
-            } else {
-                qr1.classList.add("hidden");
-                qr2.classList.remove("hidden");
-                label.textContent = "UPI Option 2";
-                link.href = `upi://pay?pa=aravindmohan1883-1@okhdfcbank&pn=ACN&am=${amount}&cu=INR&tn=Payment%20for%20Event%20Registration`;
-            }
+            qrContainers.forEach(qr => qr.classList.add("hidden"));
+
+            const upiIds = [
+                "saranya.gopu7-1@okhdfcbank",
+                "aravindmohan1883-1@okhdfcbank",
+                "aravindmohan1883@okhdfcbank",
+                "saravanan2003cr7@okhdfcbank"
+            ];
+            const selectedUpiId = upiIds[option - 1];
+
+            qrContainers[option - 1].classList.remove("hidden");
+            label.textContent = `UPI Option ${option}`;
+            link.href = `upi://pay?pa=${selectedUpiId}&pn=ACN&am=${currentAmount}&cu=INR&tn=Payment%20for%20Event%20Registration`;
+
+            document.getElementById('gpay-button').setAttribute('href', `gpay://upi/pay?pa=${selectedUpiId}&pn=ACN&am=${currentAmount}&cu=INR&tn=Payment%20for%20Event%20Registration`);
+            document.getElementById('phonepe-button').setAttribute('href', `phonepe://pay?pa=${selectedUpiId}&pn=ACN&am=${currentAmount}&cu=INR&tn=Payment%20for%20Event%20Registration`);
+            document.getElementById('paytm-button').setAttribute('href', `paytmmp://pay?pa=${selectedUpiId}&pn=ACN&am=${currentAmount}&cu=INR&tn=Payment%20for%20Event%20Registration`);
+
             document.querySelectorAll(".qr-option").forEach((btn, index) => {
                 if (index + 1 === option) {
                     btn.classList.add("active");
