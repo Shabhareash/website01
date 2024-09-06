@@ -583,6 +583,28 @@
             overflow: hidden;
             align-items: center;
         }
+
+        .download-button {
+            background-color: #008CBA;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin-top: 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+
+        .download-button:hover {
+            background-color: #007B9E;
+        }
+
+        .instructions {
+            font-size: 14px;
+            color: #555;
+            margin-top: 10px;
+        }
     </style>
 </head>
 
@@ -681,19 +703,18 @@
             </form>
         </div>
 
-
         <div id="page2" class="hidden">
             <div class="qr-code-section">
                 <h2>Payment Information</h2>
                 <p>Please make a payment of ₹<span id="paymentAmount">0</span> to complete your registration.</p>
                 <br>
                 <div class="marqueetext">
-                    <p id="highlightedMarquee">For issues in registration, please contact Aravind[ph-no:7397412269]</p>
+                    <p id="highlightedMarquee">For issues in registration, please contact Aravind [ph-no: 7397412269]
+                    </p>
                 </div>
                 <div class="pay">
                     <h1>Scan to Pay</h1>
-                    <p style="font-size: 20px;" style="text-align: center;">if one of the options fails use other
-                        options</p>
+                    <p style="font-size: 20px; text-align: center;">If one of the options fails, use other options.</p>
                     <br>
                     <div class="qr-options">
                         <button class="qr-option active" onclick="switchQR(1)">Option 1</button>
@@ -708,17 +729,19 @@
                         <div id="upi-qr3" class="qr-code hidden"></div>
                         <div id="upi-qr4" class="qr-code hidden"></div>
                     </div>
-                    <div id="qr-label" class="qr-label">UPI Option 1</div>
-                    <a id="upi-link" target="_blank">Open in UPI app</a>
+
+                    <br>
+                    <button id="download-button" class="download-button">Download QR Code</button>
+
+                    <p class="info">Do not refresh the page. After payment, upload the screenshot.</p>
+                    <button type="button" onclick="nextPage(3)">I've made the payment</button>
+                    <p class="instructions">
+                        <strong>Instructions:</strong> Once you download the QR code, you can open Google Pay, click on
+                        the "Scan any QR Code" option, and select "Scan from Gallery" to upload the downloaded QR code.
+                        The payment will be processed after selecting the amount.
+                    </p>
                 </div>
             </div>
-            <div class="paycon">
-                <a id="gpay-button" class="button" target="_blank">Pay with Google Pay</a>
-                <a id="phonepe-button" class="button phonepe" target="_blank">Pay with PhonePe</a>
-                <a id="paytm-button" class="button paytm" target="_blank">Pay with Paytm</a>
-            </div>
-            <button type="button" onclick="nextPage(3)">I've made the payment</button>
-            <p class="info">Do not refresh the page, After Payment Upload the Screenshot</p>
         </div>
 
 
@@ -1165,25 +1188,10 @@
             const name = "ACN";
             const transactionNote = "Payment for Event Registration";
 
+            // Generate UPI URLs
             const upiUrls = upiIds.map(upiId =>
-                `intent://upi/pay?pa=${upiId}&pn=${name}&am=${amount}&cu=INR&tn=${transactionNote}#Intent;scheme=upi;end;`
+                `upi://pay?pa=${upiId}&pn=${name}&am=${amount}&cu=INR&tn=${transactionNote}`
             );
-
-            const gpayLinks = upiIds.map(upiId =>
-                `intent://upi/pay?pa=${upiId}&pn=${name}&am=${amount}&cu=INR&tn=${transactionNote}#Intent;scheme=upi;package=com.google.android.apps.nbu.paisa.user;end;`
-            );
-
-            const phonepeLinks = upiIds.map(upiId =>
-                `intent://upi/pay?pa=${upiId}&pn=${name}&am=${amount}&cu=INR&tn=${transactionNote}#Intent;scheme=upi;package=com.phonepe.app;end;`
-            );
-
-            const paytmLinks = upiIds.map(upiId =>
-                `intent://upi/pay?pa=${upiId}&pn=${name}&am=${amount}&cu=INR&tn=${transactionNote}#Intent;scheme=upi;package=net.one97.paytm;end;`
-            );
-
-            document.getElementById('gpay-button').setAttribute('href', gpayLinks[0]);
-            document.getElementById('phonepe-button').setAttribute('href', phonepeLinks[0]);
-            document.getElementById('paytm-button').setAttribute('href', paytmLinks[0]);
 
             const qrContainers = [
                 document.getElementById("upi-qr1"),
@@ -1192,8 +1200,9 @@
                 document.getElementById("upi-qr4")
             ];
 
+            // Generate and render QR codes for each option
             qrContainers.forEach((qrContainer, index) => {
-                qrContainer.innerHTML = '';
+                qrContainer.innerHTML = '';  // Clear any previous QR code
                 new QRCode(qrContainer, {
                     text: upiUrls[index],
                     width: 200,
@@ -1202,11 +1211,9 @@
                     colorLight: "#ffffff",
                     correctLevel: QRCode.CorrectLevel.H
                 });
-
-                qrContainer.addEventListener('click', () => {
-                    window.open(upiUrls[index], "_blank");
-                });
             });
+
+            // Show the first QR by default
             switchQR(1);
         }
 
@@ -1218,38 +1225,15 @@
                 document.getElementById("upi-qr4")
             ];
             const label = document.getElementById("qr-label");
-            const link = document.getElementById("upi-link");
 
+            // Hide all QR codes
             qrContainers.forEach(qr => qr.classList.add("hidden"));
 
-            const upiIds = [
-                "saranya.gopu7-1@okhdfcbank",
-                "aravindmohan1883-1@okhdfcbank",
-                "aravindmohan1883@okhdfcbank",
-                "saravanan2003cr7@okhdfcbank"
-            ];
-            const selectedUpiId = upiIds[option - 1];
-
+            // Show the selected QR code
             qrContainers[option - 1].classList.remove("hidden");
             label.textContent = `UPI Option ${option}`;
-            // General UPI link
-            link.href = `intent://upi/pay?pa=${selectedUpiId}&pn=ACN&am=${currentAmount}&cu=INR&tn=Payment%20for%20Event%20Registration#Intent;scheme=upi;end;`;
 
-            // Google Pay link
-            document.getElementById('gpay-button').setAttribute('href',
-                `intent://upi/pay?pa=${selectedUpiId}&pn=ACN&am=${currentAmount}&cu=INR&tn=Payment%20for%20Event%20Registration#Intent;scheme=upi;package=com.google.android.apps.nbu.paisa.user;end;`
-            );
-
-            // PhonePe link
-            document.getElementById('phonepe-button').setAttribute('href',
-                `intent://upi/pay?pa=${selectedUpiId}&pn=ACN&am=${currentAmount}&cu=INR&tn=Payment%20for%20Event%20Registration#Intent;scheme=upi;package=com.phonepe.app;end;`
-            );
-
-            // Paytm link
-            document.getElementById('paytm-button').setAttribute('href',
-                `intent://upi/pay?pa=${selectedUpiId}&pn=ACN&am=${currentAmount}&cu=INR&tn=Payment%20for%20Event%20Registration#Intent;scheme=upi;package=net.one97.paytm;end;`
-            );
-
+            // Update the active class for buttons
             document.querySelectorAll(".qr-option").forEach((btn, index) => {
                 if (index + 1 === option) {
                     btn.classList.add("active");
@@ -1258,6 +1242,33 @@
                 }
             });
         }
+
+        function downloadQR(option) {
+            const qrContainers = [
+                document.getElementById("upi-qr1"),
+                document.getElementById("upi-qr2"),
+                document.getElementById("upi-qr3"),
+                document.getElementById("upi-qr4")
+            ];
+            const qrCanvas = qrContainers[option - 1].querySelector('canvas');
+
+            // Check if QR code is present, then download it
+            if (qrCanvas) {
+                const link = document.createElement('a');
+                link.href = qrCanvas.toDataURL('image/png');
+                link.download = `upi-qr-option-${option}.png`;  // File name based on option
+                link.click();
+            } else {
+                alert("QR code not available for download.");
+            }
+        }
+
+        // Attach event listener to download button
+        document.getElementById('download-button').addEventListener('click', () => {
+            const activeOption = document.querySelector('.qr-option.active').textContent.split(' ')[1];
+            downloadQR(activeOption); 
+        });
+
 
         document.addEventListener('DOMContentLoaded', function () {
             document.getElementById('screenshot').addEventListener('change', function (event) {
