@@ -1165,10 +1165,21 @@
             const name = "ACN";
             const transactionNote = "Payment for Event Registration";
 
-            const upiUrls = upiIds.map(upiId => `upi://pay?pa=${upiId}&pn=${name}&am=${amount}&cu=INR&tn=${transactionNote}`);
-            const gpayLinks = upiIds.map(upiId => `gpay://upi/pay?pa=${upiId}&pn=${name}&am=${amount}&cu=INR&tn=${transactionNote}`);
-            const phonepeLinks = upiIds.map(upiId => `phonepe://pay?pa=${upiId}&pn=${name}&am=${amount}&cu=INR&tn=${transactionNote}`);
-            const paytmLinks = upiIds.map(upiId => `paytmmp://pay?pa=${upiId}&pn=${name}&am=${amount}&cu=INR&tn=${transactionNote}`);
+            const upiUrls = upiIds.map(upiId =>
+                `intent://upi/pay?pa=${upiId}&pn=${name}&am=${amount}&cu=INR&tn=${transactionNote}#Intent;scheme=upi;end;`
+            );
+
+            const gpayLinks = upiIds.map(upiId =>
+                `intent://upi/pay?pa=${upiId}&pn=${name}&am=${amount}&cu=INR&tn=${transactionNote}#Intent;scheme=upi;package=com.google.android.apps.nbu.paisa.user;end;`
+            );
+
+            const phonepeLinks = upiIds.map(upiId =>
+                `intent://upi/pay?pa=${upiId}&pn=${name}&am=${amount}&cu=INR&tn=${transactionNote}#Intent;scheme=upi;package=com.phonepe.app;end;`
+            );
+
+            const paytmLinks = upiIds.map(upiId =>
+                `intent://upi/pay?pa=${upiId}&pn=${name}&am=${amount}&cu=INR&tn=${transactionNote}#Intent;scheme=upi;package=net.one97.paytm;end;`
+            );
 
             document.getElementById('gpay-button').setAttribute('href', gpayLinks[0]);
             document.getElementById('phonepe-button').setAttribute('href', phonepeLinks[0]);
@@ -1221,11 +1232,23 @@
 
             qrContainers[option - 1].classList.remove("hidden");
             label.textContent = `UPI Option ${option}`;
-            link.href = `upi://pay?pa=${selectedUpiId}&pn=ACN&am=${currentAmount}&cu=INR&tn=Payment%20for%20Event%20Registration`;
+            // General UPI link
+            link.href = `intent://upi/pay?pa=${selectedUpiId}&pn=ACN&am=${currentAmount}&cu=INR&tn=Payment%20for%20Event%20Registration#Intent;scheme=upi;end;`;
 
-            document.getElementById('gpay-button').setAttribute('href', `gpay://upi/pay?pa=${selectedUpiId}&pn=ACN&am=${currentAmount}&cu=INR&tn=Payment%20for%20Event%20Registration`);
-            document.getElementById('phonepe-button').setAttribute('href', `phonepe://pay?pa=${selectedUpiId}&pn=ACN&am=${currentAmount}&cu=INR&tn=Payment%20for%20Event%20Registration`);
-            document.getElementById('paytm-button').setAttribute('href', `paytmmp://pay?pa=${selectedUpiId}&pn=ACN&am=${currentAmount}&cu=INR&tn=Payment%20for%20Event%20Registration`);
+            // Google Pay link
+            document.getElementById('gpay-button').setAttribute('href',
+                `intent://upi/pay?pa=${selectedUpiId}&pn=ACN&am=${currentAmount}&cu=INR&tn=Payment%20for%20Event%20Registration#Intent;scheme=upi;package=com.google.android.apps.nbu.paisa.user;end;`
+            );
+
+            // PhonePe link
+            document.getElementById('phonepe-button').setAttribute('href',
+                `intent://upi/pay?pa=${selectedUpiId}&pn=ACN&am=${currentAmount}&cu=INR&tn=Payment%20for%20Event%20Registration#Intent;scheme=upi;package=com.phonepe.app;end;`
+            );
+
+            // Paytm link
+            document.getElementById('paytm-button').setAttribute('href',
+                `intent://upi/pay?pa=${selectedUpiId}&pn=ACN&am=${currentAmount}&cu=INR&tn=Payment%20for%20Event%20Registration#Intent;scheme=upi;package=net.one97.paytm;end;`
+            );
 
             document.querySelectorAll(".qr-option").forEach((btn, index) => {
                 if (index + 1 === option) {
