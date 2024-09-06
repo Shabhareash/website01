@@ -1177,6 +1177,8 @@
             });
         }
 
+        let currentSelectedOption = 1; // Keep track of the current selected option
+
         function updateUPIQRCode(amount) {
             const upiIds = [
                 "saranya.gopu7-1@okhdfcbank",
@@ -1188,7 +1190,6 @@
             const name = "ACN";
             const transactionNote = "Payment for Event Registration";
 
-            // Generate UPI URLs
             const upiUrls = upiIds.map(upiId =>
                 `upi://pay?pa=${upiId}&pn=${name}&am=${amount}&cu=INR&tn=${transactionNote}`
             );
@@ -1200,9 +1201,8 @@
                 document.getElementById("upi-qr4")
             ];
 
-            // Generate and render QR codes for each option
             qrContainers.forEach((qrContainer, index) => {
-                qrContainer.innerHTML = '';  // Clear any previous QR code
+                qrContainer.innerHTML = '';
                 new QRCode(qrContainer, {
                     text: upiUrls[index],
                     width: 200,
@@ -1213,8 +1213,7 @@
                 });
             });
 
-            // Show the first QR by default
-            switchQR(1);
+            switchQR(1); // Initialize with option 1
         }
 
         function switchQR(option) {
@@ -1233,7 +1232,10 @@
             qrContainers[option - 1].classList.remove("hidden");
             label.textContent = `UPI Option ${option}`;
 
-            // Update the active class for buttons
+            // Update the currently selected option
+            currentSelectedOption = option;
+
+            // Update the active state of the buttons
             document.querySelectorAll(".qr-option").forEach((btn, index) => {
                 if (index + 1 === option) {
                     btn.classList.add("active");
@@ -1277,12 +1279,11 @@
             }
         }
 
-
-        // Attach event listener to download button
+        // Attach event listener to the download button
         document.getElementById('download-button').addEventListener('click', () => {
-            const activeOption = document.querySelector('.qr-option.active').textContent.split(' ')[1];
-            downloadQR(activeOption);
+            downloadQR(currentSelectedOption);
         });
+
 
 
         document.addEventListener('DOMContentLoaded', function () {
