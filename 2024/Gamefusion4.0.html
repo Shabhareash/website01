@@ -1003,7 +1003,7 @@
             }
 
             .tournament-item {
-                width: 40%;
+                width: 90%;
                 /* Adjust width for smaller screens */
                 margin: 0 auto;
                 /* Center the item horizontally */
@@ -1014,32 +1014,177 @@
 
             .panel {
                 width: 100%;
+                position: relative;
+                left: 0;
+                top: 0;
+                transform: none;
+                opacity: 1;
+                max-height: none;
+                margin-top: 10px;
             }
 
             .tournament-item img {
                 width: 100%;
                 /* Allow the image to scale with its container */
+                height: 200px;
+                object-fit: cover;
             }
 
             .panel h2 {
-                font-size: 4em;
+                font-size: 2em;
             }
 
             .panel h4 {
-                font-size: 1.2em;
+                font-size: 1em;
             }
 
             .panel p {
-                font-size: 1.1em;
+                font-size: 0.9em;
             }
 
             .tournament-item:hover {
-                transform: translateX(-50%);
+                transform: none;
             }
 
             .tournament-item:hover~.tournament-item {
-                transform: translate3d(0px, 0, 0);
+                transform: none;
                 /* Space out other items */
+            }
+
+            .container {
+                flex-direction: column;
+                padding: 20px;
+            }
+
+            .left-section,
+            .right-section {
+                width: 100%;
+                padding: 20px;
+                text-align: center;
+            }
+
+            .logo h1 {
+                font-size: 3rem;
+            }
+
+            .right-section .robot-hand img {
+                height: 250px;
+                margin-left: 0;
+            }
+
+            .countdown {
+                width: 100%;
+                margin-left: 0;
+                flex-wrap: wrap;
+            }
+
+            .about-container {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .about-image-container,
+            .about-content {
+                width: 100%;
+                padding: 10px;
+            }
+
+            .about-image-container img {
+                max-width: 100%;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .logo h1 {
+                font-size: 2.5rem;
+            }
+
+            .right-section .robot-hand img {
+                height: 200px;
+            }
+
+            .countdown-item .number {
+                font-size: 2rem;
+            }
+
+            .tournament-item {
+                width: 100%;
+            }
+
+            .panel h2 {
+                font-size: 1.5em;
+            }
+
+            .panel h4 {
+                font-size: 0.9em;
+            }
+
+            .panel p {
+                font-size: 0.8em;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .navbar-brand img {
+                height: 50px;
+            }
+
+            .logo h1 {
+                font-size: 2rem;
+            }
+
+            .apply-button {
+                padding: 10px 20px;
+                font-size: 0.9rem;
+            }
+
+            .right-section .robot-hand img {
+                height: 150px;
+            }
+
+            .countdown-item {
+                min-width: 50px;
+            }
+
+            .countdown-item .number {
+                font-size: 1.5rem;
+            }
+
+            .countdown-item .label {
+                font-size: 0.8rem;
+            }
+
+            .about-section h1 {
+                font-size: 1.2em;
+            }
+
+            .about-section span {
+                font-size: 1.2em;
+            }
+
+            .about-section p {
+                font-size: 0.9em;
+            }
+
+            .tournament-item {
+                width: 100%;
+                margin: 10px 0;
+            }
+
+            .panel {
+                padding: 10px;
+            }
+
+            .panel h2 {
+                font-size: 1.2em;
+            }
+
+            .panel h4 {
+                font-size: 0.8em;
+            }
+
+            .panel p {
+                font-size: 0.7em;
             }
         }
     </style>
