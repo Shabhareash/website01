@@ -652,6 +652,188 @@ body {
 }
 
 @media(max-width:992px) {
+  .navbar-expand-lg .navbar-nav .nav-link {
+    padding-right: .5rem;
+    padding-left: .5rem;
+    font-size: 40px !important;
+  }
+
+  .dropdown-menu.navigation__submenu .dropdown-item {
+    color: white;
+    font-size: 30px;
+  }
+
+  .moving-text {
+    margin-bottom: 20px;
+    width: 80%;
+    font-size: 16px;
+  }
+
+  .animated-button {
+    width: 100px;
+    height: 30px;
+    font-size: 12px;
+  }
+
+  .navbar-collapse {
+    background-color: rgba(0, 0, 0, 0.9);
+    position: absolute;
+    top: 80px;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    border-radius: 5px;
+  }
+
+  .container-flex {
+    flex-direction: column;
+    padding: 10px;
+  }
+
+  .text {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  .video {
+    width: 100%;
+    height: auto;
+  }
+
+  .ACN1 {
+    width: 100%;
+    height: auto;
+  }
+
+  .countdown-wrapper {
+    position: relative;
+    top: auto;
+    left: auto;
+    transform: none;
+    margin-top: 20px;
+    background: rgba(255, 255, 255, 0.9);
+    padding: 15px;
+    border-radius: 8px;
+  }
+
+  .countdown {
+    flex-wrap: wrap;
+    gap: 5px;
+  }
+
+  .countdown-item {
+    width: 80px;
+    padding: 10px;
+  }
+
+  .number {
+    font-size: 24px;
+  }
+
+  .chief-guest {
+    width: 200px;
+    height: 300px;
+  }
+
+  .chief-guest-info h3 {
+    font-size: 14px;
+  }
+
+  .chief-guest-info p {
+    font-size: 12px;
+  }
+
+  .events {
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .events .event {
+    max-width: 100%;
+    width: 100%;
+  }
+
+  .galleries {
+    height: auto;
+    padding: 20px;
+    margin: 20px 10px;
+  }
+
+  .gallery-text {
+    position: relative;
+    width: 100%;
+    height: auto;
+    font-size: 2rem;
+    margin-bottom: 20px;
+    background-color: transparent;
+  }
+
+  #image-track {
+    position: relative;
+    left: 0;
+    top: 0;
+    transform: none;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .galleries .image {
+    width: 100%;
+    height: 200px;
+  }
+
+  .arrow {
+    display: none;
+  }
+
+  .logo-sponsor-logos {
+    padding: 10px;
+  }
+
+  .logo-sponsor-slide img {
+    height: 60px;
+    width: auto;
+    margin: 0 20px;
+  }
+
+  .footer-content {
+    flex-direction: column;
+    text-align: center;
+    padding: 20px;
+  }
+
+  .footer-divider {
+    width: 100%;
+    height: 1px;
+    margin: 10px 0;
+  }
+
+  .footer-nav ul {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 15px;
+  }
+
+  .footer-nav ul li {
+    margin: 5px;
+  }
+
+  .footer-right {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+    margin-top: 15px;
+  }
+
+  .logo2 img {
+    width: 80vw;
+  }
+
+  .address {
+    text-align: center;
+    margin: 15px 0;
+  }
 
   .img-cont {
     background-color: rgb(0, 0, 0);
@@ -682,6 +864,133 @@ body {
 
   .chief-img h4 {
     margin-top: 15% !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .moving-text {
+    width: 75%;
+    margin-bottom: 20px;
+  }
+
+  .backimage-container h1 {
+    font-size: 3rem;
+  }
+
+  .img-cont {
+    flex-direction: column;
+    width: 95%;
+    height: auto;
+    padding: 20px;
+  }
+
+  .chief-img {
+    margin-bottom: 20px;
+  }
+
+  .backimage-chief {
+    width: 150px !important;
+    height: 200px !important;
+  }
+
+  .chief-img h4 {
+    margin-top: 10px !important;
+    font-size: 16px;
+  }
+
+  .chief-img p {
+    font-size: 14px;
+  }
+
+  .container .text h2 {
+    font-size: 28px;
+  }
+
+  .container .text p {
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .moving-text {
+    width: 60%;
+    margin-bottom: 20px;
+    font-size: 14px;
+  }
+
+  .navbar-brand img {
+    height: 50px;
+  }
+
+  .backimage-container h1 {
+    font-size: 2rem;
+    margin-top: 20px;
+  }
+
+  .countdown-item {
+    width: 60px;
+    padding: 8px;
+  }
+
+  .number {
+    font-size: 18px;
+  }
+
+  .label {
+    font-size: 10px;
+  }
+
+  .chief-guest {
+    width: 150px;
+    height: 200px;
+  }
+
+  .chief-guest-info h3 {
+    font-size: 12px;
+  }
+
+  .chief-guest-info p {
+    font-size: 10px;
+  }
+
+  .logo-sponsor-text {
+    font-size: 30px;
+    margin-top: 50px;
+  }
+
+  .logo-sponsor-slide img {
+    height: 40px;
+    margin: 0 10px;
+  }
+
+  .container .text h2 {
+    font-size: 24px;
+  }
+
+  .container .text p {
+    font-size: 14px;
+  }
+
+  .gallery-text {
+    font-size: 1.5rem;
+  }
+
+  .img-cont {
+    width: 100%;
+    padding: 15px;
+  }
+
+  .backimage-chief {
+    width: 120px !important;
+    height: 160px !important;
+  }
+
+  .chief-img h4 {
+    font-size: 14px;
+  }
+
+  .chief-img p {
+    font-size: 12px;
   }
 }
 
